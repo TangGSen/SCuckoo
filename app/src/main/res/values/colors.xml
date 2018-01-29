@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FF397FE5</color>
+    <color name="colorPrimaryDark">#FF397FE5</color>
+    <color name="colorAccent">#FF397FE5</color>
+    <!--主题设色的80%透明度-->
+    <color name="main_theme_80">#CC397FE5</color>
+    <color name="text_gray">#9b9b9b</color>
+    <color name="bg_gray">#f0f0f0</color>
+    <color name="tab_bgcolor">#FFFFFF</color>
+    <color name="whiles">#FFFFFF</color>
+    <color name="not_white_v1">#FFF7F7F7</color>
+    <color name="not_white_v2">#FFF9F9F9</color>
+
+    <color name="half_transparent">#00FFFFFF</color>
+    <color name="colorWhite">#FFFFFF</color>
+</resources>

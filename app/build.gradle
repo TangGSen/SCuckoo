@@ -1,0 +1,47 @@
+apply plugin: 'com.android.application'
+//SMSSDK 添加插件
+apply plugin: "com.mob.sdk"
+android {
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
+    defaultConfig {
+        applicationId "com.ourcompany"
+        minSdkVersion 16
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+// 在MobSDK的扩展中注册SMSSDK的相关信息
+MobSDK {
+    appKey "23f04acf8a9c4"
+    appSecret "b9997fb5f7bf7dbab1bf75af2157a2c2"
+    SMSSDK {
+        gui false
+    }
+    UMSSDK {}
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    compile "cn.bmob.android:http-legacy:$rootProject.ext.bmobHttpLegacyVersion"
+    compile "cn.bmob.android:bmob-sdk:$rootProject.ext.bmobSdkVersion"
+    compile "com.jakewharton:butterknife:$rootProject.ext.butterknifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterknifeVersion"
+    compile "de.hdodenhof:circleimageview:$rootProject.ext.circleViewVersion"
+    implementation project(':commons')
+    compile "com.github.bumptech.glide:glide:$rootProject.ext.glideVersion"
+}
