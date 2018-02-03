@@ -29,6 +29,7 @@ MobSDK {
         gui false
     }
     UMSSDK {}
+    MobIM {}
 }
 
 dependencies {

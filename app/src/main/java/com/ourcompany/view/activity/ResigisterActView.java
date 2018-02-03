@@ -46,10 +46,18 @@ public interface ResigisterActView extends MvpView {
     /**
      * 验证失败
      */
-    void verifyFail();
+    void verifyFail(String msg);
 
     /**
      * 验证成功
      */
     void verifySuccess();
+
+    void hasNotNet();
+
+    void logining();
+
+    void loginFail(String userInfos);
+
+    void loginSuccess();
 }

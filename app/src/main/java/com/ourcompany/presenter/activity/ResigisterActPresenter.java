@@ -11,6 +11,7 @@ import com.mob.ums.UMSSDK;
 import com.mob.ums.User;
 import com.ourcompany.R;
 import com.ourcompany.app.MApplication;
+import com.ourcompany.manager.MServiceManager;
 import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.LogUtils;
 import com.ourcompany.utils.NetWorkUtils;
@@ -29,11 +30,14 @@ import company.com.commons.framework.presenter.MvpBasePresenter;
 
 public class ResigisterActPresenter extends MvpBasePresenter<ResigisterActView> {
     //开始倒数
-    public static final int MSG_COUNTING_TIME = 0;
-    public static final int MSG_ERROR_GET_CODE = 1;
+    private static final int MSG_COUNTING_TIME = 0;
+    private static final int MSG_ERROR_GET_CODE = 1;
     //验证成功
-    public static final int MSG_RESIGISTER_SUCCESS = 2;
-    public static final int MSG_RESIGISTER_FAIL = 3;
+    private static final int MSG_RESIGISTER_SUCCESS = 2;
+    private static final int MSG_RESIGISTER_FAIL = 3;
+    private static final int MSG_LOGIN_SUCCESS = 4;
+    private static final int MSG_LOGIN_FAIL = 5;
+    private static String currentPhone = "";
     public int currentTime = 0;
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -60,13 +64,22 @@ public class ResigisterActPresenter extends MvpBasePresenter<ResigisterActView> 
                     break;
                 case MSG_RESIGISTER_FAIL:
                     //失败和成功都得注销
-                    getView().verifyFail();
+                    String mes = (String) msg.obj;
+
+                    getView().verifyFail(mes);
 
                     break;
                 case MSG_RESIGISTER_SUCCESS:
-
-                    getView().showToastMsg(ResourceUtils.getString(R.string.verify_success));
+                    getView().showToastMsg(ResourceUtils.getString(R.string.resigister_success));
                     getView().verifySuccess();
+                    getView().logining();
+                    break;
+
+                case MSG_LOGIN_SUCCESS:
+                    getView().loginSuccess();
+                    break;
+                case MSG_LOGIN_FAIL:
+                    getView().loginFail(currentPhone);
                     break;
 
             }
@@ -100,16 +113,18 @@ public class ResigisterActPresenter extends MvpBasePresenter<ResigisterActView> 
 
     // 请求验证码，其中country表示国家代码，如“86”；phone表示手机号码，如“13800138000”
     public void requestCode(String country, String phone) {
+
+
 //        // 触发操作
 //        SMSSDK.getVerificationCode(country, phone);
         UMSSDK.sendVerifyCode(country, phone, new OperationCallback<Boolean>() {
             @Override
             public void onFailed(Throwable throwable) {
                 super.onFailed(throwable);
-                LogUtils.e("sen",throwable.getMessage());
                 Message message = mHandler.obtainMessage();
                 message.what = MSG_ERROR_GET_CODE;
                 message.sendToTarget();
+                getView().showToastMsg(throwable.getMessage()+"\n***"+throwable.getLocalizedMessage());
 
             }
 
@@ -151,7 +166,7 @@ public class ResigisterActPresenter extends MvpBasePresenter<ResigisterActView> 
     }
 
     // 提交验证码，其中的code表示验证码，如“1357”
-    public void submitCode(String country, String phone, String code, String password) {
+    public void submitCode(String country, final String phone, String code, final String password) {
         // 注册一个事件回调，用于处理提交验证码操作的结果
 //        // 触发操作
 //        SMSSDK.submitVerificationCode(country, phone, code);
@@ -160,19 +175,51 @@ public class ResigisterActPresenter extends MvpBasePresenter<ResigisterActView> 
             @Override
             public void onSuccess(User user) {
                 super.onSuccess(user);
+                LogUtils.e("sen", " UMSSDK.registerWithPhoneNumber ThreadName:" + Thread.currentThread().getName());
                 Message message = mHandler.obtainMessage();
                 // 处理验证成功的结果
                 message.what = MSG_RESIGISTER_SUCCESS;
                 message.sendToTarget();
+                // 然后登陆
+                loginUser(phone, password);
 
             }
 
             @Override
             public void onFailed(Throwable throwable) {
                 super.onFailed(throwable);
+                LogUtils.e("sen", "onFailed ThreadName:" + Thread.currentThread().getName());
                 //  处理错误的结果
                 Message message = mHandler.obtainMessage();
                 message.what = MSG_RESIGISTER_FAIL;
+                message.obj = ResourceUtils.getString(R.string.submit_info_error);
+                message.sendToTarget();
+            }
+        });
+    }
+
+    /**
+     *  登陆,这里是自动登陆，如果失败后，就返回上一个登陆页面让用户手动登陆
+     */
+
+    private void loginUser(String phone, String password) {
+        currentPhone = phone;
+        UMSSDK.loginWithPhoneNumber(Constant.COUNTRY_CODE, phone, password, new OperationCallback<User>() {
+            @Override
+            public void onSuccess(User user) {
+                super.onSuccess(user);
+                Constant.CURRENT_USER = user;
+                MServiceManager.getInstance().login(user.id.get(), user.nickname.get(), "");
+                Message message = mHandler.obtainMessage();
+                message.what = MSG_LOGIN_SUCCESS;
+                message.sendToTarget();
+            }
+
+            @Override
+            public void onFailed(Throwable throwable) {
+                super.onFailed(throwable);
+                Message message = mHandler.obtainMessage();
+                message.what = MSG_LOGIN_FAIL;
                 message.sendToTarget();
             }
         });
@@ -181,4 +228,10 @@ public class ResigisterActPresenter extends MvpBasePresenter<ResigisterActView> 
     public void onDestroy() {
         mHandler.removeCallbacksAndMessages(null);
     }
+
+
+    public void resigisterIMAccount(String userName, String password) {
+
+    }
+
 }

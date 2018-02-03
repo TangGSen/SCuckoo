@@ -1,1 +1,1 @@
-include ':app', ':commons', ':liuboss'
+include ':app', ':commons', ':liuboss', ':timsdk', ':imlibrary', ':appIM'

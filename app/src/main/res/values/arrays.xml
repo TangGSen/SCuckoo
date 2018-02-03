@@ -6,9 +6,8 @@
         <item>消息</item>
         <item>我的</item>
     </string-array>
-    <string-array name="taHomeItemName">
-        <item>流行新果</item>
-        <item>人气热销</item>
-        <item>为你推荐</item>
+    <string-array name="tabMessageItems">
+        <item>会话</item>
+        <item>联系人</item>
     </string-array>
 </resources>

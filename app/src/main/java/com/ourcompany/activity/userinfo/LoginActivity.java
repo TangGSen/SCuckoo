@@ -1,6 +1,7 @@
-package com.ourcompany.activity.login;
+package com.ourcompany.activity.userinfo;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import com.ourcompany.R;
 import com.ourcompany.activity.HomeActivity;
 import com.ourcompany.presenter.activity.LoginActPresenter;
+import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.PhoneTextWatcher;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.ToastUtils;
@@ -23,6 +25,7 @@ import butterknife.OnClick;
 import company.com.commons.framework.view.impl.MvpActivity;
 
 public class LoginActivity extends MvpActivity<LoginActvityView, LoginActPresenter> implements LoginActvityView {
+
 
     @BindView(R.id.common_toolbar)
     Toolbar commonToolbar;
@@ -79,7 +82,7 @@ public class LoginActivity extends MvpActivity<LoginActvityView, LoginActPresent
             }
         };
         etPassword.addTextChangedListener(textWatcher);
-        etUserName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
+        etUserName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
         etUserName.addTextChangedListener(new PhoneTextWatcher(etUserName));
         etUserName.addTextChangedListener(textWatcher);
     }
@@ -115,8 +118,26 @@ public class LoginActivity extends MvpActivity<LoginActvityView, LoginActPresent
                 String phones = etUserName.getText().toString().trim();
                 String password = etPassword.getText().toString();
                 getPresenter().login( phones, password);
+
                 break;
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.getStringExtra(Constant.ACT_FROM).equals(Constant.ACT_FROM_RESIGISTER)) {
+            Bundle bundle = intent.getBundleExtra(Constant.ACT_LOGIN_BUNDLE);
+            if (bundle != null) {
+                String phone = bundle.getString(Constant.ACT_LOGIN_PHONE);
+                if (!TextUtils.isEmpty(phone)) {
+                    etUserName.setText(phone);
+                    //将光标移动到后面
+                    etUserName.setSelection(etUserName.getText().toString().length());
+                }
+            }
+        }
+
     }
 
     @Override
@@ -132,6 +153,7 @@ public class LoginActivity extends MvpActivity<LoginActvityView, LoginActPresent
     @Override
     public void loginSucess() {
         Intent intent = new Intent(this, HomeActivity.class);
+        intent.putExtra(Constant.ACT_FROM,Constant.ACT_FROM_LOGIN_SUCCESS);
         startActivity(intent);
         overridePendingTransition(0,0);
         finish();

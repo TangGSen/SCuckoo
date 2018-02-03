@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import company.com.commons.app.BaseFragment;
 import company.com.commons.framework.presenter.MvpPresenter;
 import company.com.commons.framework.view.MvpView;
@@ -20,7 +21,7 @@ import company.com.commons.framework.view.MvpView;
 public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter<V>> extends AppCompatActivity {
     private V view;
     private P presenter;
-
+    protected Unbinder mUnbinder;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +80,7 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter<V>> 
      * 初始化控件
      */
     protected void initView(){
-        ButterKnife.bind(this);
+        mUnbinder = ButterKnife.bind(this);
     }
 
     /**
@@ -143,6 +144,10 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter<V>> 
         if (presenter != null) {
             presenter.dettachView();
             presenter =null;
+        }
+
+        if(mUnbinder!=null){
+            mUnbinder.unbind();
         }
     }
 }

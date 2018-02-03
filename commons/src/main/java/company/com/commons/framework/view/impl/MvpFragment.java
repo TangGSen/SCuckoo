@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import company.com.commons.framework.presenter.MvpPresenter;
 import company.com.commons.framework.view.MvpView;
 
@@ -19,11 +20,13 @@ import company.com.commons.framework.view.MvpView;
  */
 
 public abstract class MvpFragment<V extends MvpView, P extends MvpPresenter<V>> extends Fragment {
+
     private V view;
     private P presenter;
 
     protected View mRootView;
     protected Activity mActivity;
+    protected Unbinder mUnbinder;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -54,7 +57,7 @@ public abstract class MvpFragment<V extends MvpView, P extends MvpPresenter<V>> 
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initData();
+
     }
 
     /**
@@ -82,7 +85,7 @@ public abstract class MvpFragment<V extends MvpView, P extends MvpPresenter<V>> 
      * 初始化控件
      */
     protected void initView(View view){
-        ButterKnife.bind(this,view);
+        mUnbinder = ButterKnife.bind(this,view);
     }
 
     /**
@@ -117,6 +120,8 @@ public abstract class MvpFragment<V extends MvpView, P extends MvpPresenter<V>> 
         if (presenter != null && view != null) {
             presenter.attachView(view);
         }
+
+        initData();
     }
 
 
@@ -137,6 +142,10 @@ public abstract class MvpFragment<V extends MvpView, P extends MvpPresenter<V>> 
         if (presenter != null) {
             presenter.dettachView();
             presenter =null;
+        }
+
+        if(mUnbinder!=null){
+            mUnbinder.unbind();
         }
     }
 }

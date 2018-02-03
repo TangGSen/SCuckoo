@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,12 +18,12 @@ import com.ourcompany.fragment.HomeFragment;
 import com.ourcompany.fragment.MessageFragment;
 import com.ourcompany.fragment.MineFragment;
 import com.ourcompany.presenter.activity.HomeActPresenter;
+import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.ToastUtils;
 import com.ourcompany.view.activity.HomeAcitityView;
 
 import butterknife.BindView;
-import cn.bmob.v3.Bmob;
 import company.com.commons.framework.view.impl.MvpActivity;
 
 public class HomeActivity extends MvpActivity<HomeAcitityView,HomeActPresenter> implements HomeAcitityView{
@@ -60,7 +61,7 @@ public class HomeActivity extends MvpActivity<HomeAcitityView,HomeActPresenter> 
     @Override
     protected void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
-        Bmob.initialize(this,"2db1fc7ea509d3ea6639495a3a24066d");
+       // Bmob.initialize(this,"2db1fc7ea509d3ea6639495a3a24066d");
         tabTiles = ResourceUtils.getStringArray( R.array.tabButtonItemName);
         tabItemDrawableNormal = new int[]{R.drawable.ic_main_normal, R.drawable.ic_classify_normal, R.drawable.ic_message_normal, R.drawable.ic_mine_normal};
         tabItemDrawableSelected = new int[]{R.drawable.ic_main_selected, R.drawable.ic_classify_selected, R.drawable.ic_message_selected, R.drawable.ic_mine_seleted};
@@ -241,7 +242,12 @@ public class HomeActivity extends MvpActivity<HomeAcitityView,HomeActPresenter> 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-       showToastMsg("onNewIntent");
+        String from = intent.getStringExtra(Constant.ACT_FROM);
+        //如果是登陆成功的话，那么刷新当前页面
+        if(!TextUtils.isEmpty(from)&&from.equals(Constant.ACT_FROM_LOGIN_SUCCESS)){
+            if(mPersonalCenterFragment!=null)
+                mPersonalCenterFragment.reflesh();
+        }
     }
 
     @Override

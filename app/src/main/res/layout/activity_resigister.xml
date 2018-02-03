@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/whiles"
     android:orientation="vertical"
-    tools:context="com.ourcompany.activity.login.LoginActivity">
+    tools:context="com.ourcompany.activity.userinfo.LoginActivity">
     <include layout="@layout/include_layout_tablayout" />
 
 

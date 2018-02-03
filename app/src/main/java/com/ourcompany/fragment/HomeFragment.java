@@ -110,4 +110,8 @@ public class HomeFragment extends MvpFragment<LoginFragmentView, LoginFragPresen
     public void showToastMsg(String string) {
 
     }
+
+    public void reflesh() {
+
+    }
 }

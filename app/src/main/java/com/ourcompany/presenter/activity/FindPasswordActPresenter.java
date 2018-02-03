@@ -59,12 +59,13 @@ public class FindPasswordActPresenter extends MvpBasePresenter<ResigisterActView
                     break;
                 case MSG_RESIGISTER_FAIL:
                     //失败和成功都得注销
-                    getView().verifyFail();
+                    String mes = (String) msg.obj;
+                    getView().verifyFail(mes);
 
                     break;
                 case MSG_RESIGISTER_SUCCESS:
 
-                    getView().showToastMsg(ResourceUtils.getString(R.string.verify_success));
+                    getView().showToastMsg(ResourceUtils.getString(R.string.resigister_success));
                     getView().verifySuccess();
                     break;
 
@@ -171,6 +172,7 @@ public class FindPasswordActPresenter extends MvpBasePresenter<ResigisterActView
                         //  处理错误的结果
                         Message message = mHandler.obtainMessage();
                         message.what = MSG_RESIGISTER_FAIL;
+                        message.obj = throwable.getMessage();
                         message.sendToTarget();
                     }
                 });

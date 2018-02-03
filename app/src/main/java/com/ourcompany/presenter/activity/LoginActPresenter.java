@@ -6,11 +6,13 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 
+import com.mob.MobSDK;
 import com.mob.ums.OperationCallback;
 import com.mob.ums.UMSSDK;
 import com.mob.ums.User;
 import com.ourcompany.R;
 import com.ourcompany.app.MApplication;
+import com.ourcompany.manager.MServiceManager;
 import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.NetWorkUtils;
 import com.ourcompany.utils.ResourceUtils;
@@ -86,14 +88,26 @@ public class LoginActPresenter extends MvpBasePresenter<LoginActvityView> {
             @Override
             public void onSuccess(User user) {
                 super.onSuccess(user);
+                Constant.CURRENT_USER = user;
                 Message message = mHandler.obtainMessage();
                 // 处理验证成功的结果
                 message.what = MSG_LOGIN_SUCCESS;
                 message.sendToTarget();
+                //同时也将登陆的信息保存一下
+                //登陆IM
+                MServiceManager.getInstance().login(user.id.get(),user.nickname.get(),"");
             }
         });
 
+
+
     }
+
+
+    public void loginIMAccount(String userName, String password) {
+        MobSDK.setUser("用户ID", "用户昵称","用户头像地址", null);
+    }
+
 
 
 }

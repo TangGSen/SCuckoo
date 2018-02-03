@@ -4,8 +4,11 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/OurCompany.iml" filepath="$PROJECT_DIR$/OurCompany.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/appIM/appIM.iml" filepath="$PROJECT_DIR$/appIM/appIM.iml" />
       <module fileurl="file://$PROJECT_DIR$/commons/commons.iml" filepath="$PROJECT_DIR$/commons/commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/imlibrary/imlibrary.iml" filepath="$PROJECT_DIR$/imlibrary/imlibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/liuboss/liuboss.iml" filepath="$PROJECT_DIR$/liuboss/liuboss.iml" />
+      <module fileurl="file://$PROJECT_DIR$/timsdk/timsdk.iml" filepath="$PROJECT_DIR$/timsdk/timsdk.iml" />
     </modules>
   </component>
 </project>

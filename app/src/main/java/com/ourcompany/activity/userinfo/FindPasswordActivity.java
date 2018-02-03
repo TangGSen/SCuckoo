@@ -1,4 +1,4 @@
-package com.ourcompany.activity.login;
+package com.ourcompany.activity.userinfo;
 
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.ourcompany.R;
-import com.ourcompany.presenter.activity.ResigisterActPresenter;
+import com.ourcompany.presenter.activity.FindPasswordActPresenter;
 import com.ourcompany.utils.PhoneTextWatcher;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.ToastUtils;
@@ -22,7 +22,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import company.com.commons.framework.view.impl.MvpActivity;
 
-public class ResigisterActivity extends MvpActivity<ResigisterActView, ResigisterActPresenter> implements ResigisterActView {
+public class FindPasswordActivity extends MvpActivity<ResigisterActView, FindPasswordActPresenter> implements ResigisterActView {
 
     @BindView(R.id.common_toolbar)
     Toolbar commonToolbar;
@@ -48,6 +48,8 @@ public class ResigisterActivity extends MvpActivity<ResigisterActView, Resigiste
         super.initView();
         setSupportActionBar(commonToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        commonToolbar.setTitle(ResourceUtils.getString(R.string.reset_passwrod));
+        btResigister.setText(ResourceUtils.getString(R.string.btn_ok));
         commonToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,8 +72,8 @@ public class ResigisterActivity extends MvpActivity<ResigisterActView, Resigiste
     }
 
     @Override
-    protected ResigisterActPresenter bindPresenter() {
-        return new ResigisterActPresenter(this);
+    protected FindPasswordActPresenter bindPresenter() {
+        return new FindPasswordActPresenter(this);
     }
 
 
@@ -174,15 +176,34 @@ public class ResigisterActivity extends MvpActivity<ResigisterActView, Resigiste
     }
 
     @Override
-    public void verifyFail() {
-        showToastMsg(ResourceUtils.getString(R.string.verify_fail));
+    public void verifyFail(String msg) {
+        showToastMsg(msg);
         resetAllViewStatus(true);
     }
 
     @Override
     public void verifySuccess() {
-        showToastMsg("ok");
         finish();
+    }
+
+    @Override
+    public void hasNotNet() {
+
+    }
+
+    @Override
+    public void logining() {
+
+    }
+
+    @Override
+    public void loginFail(String userInfos) {
+
+    }
+
+    @Override
+    public void loginSuccess() {
+
     }
 
     @Override

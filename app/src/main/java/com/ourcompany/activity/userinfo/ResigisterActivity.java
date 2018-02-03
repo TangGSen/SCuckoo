@@ -1,5 +1,7 @@
-package com.ourcompany.activity.login;
+package com.ourcompany.activity.userinfo;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -12,7 +14,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.ourcompany.R;
-import com.ourcompany.presenter.activity.FindPasswordActPresenter;
+import com.ourcompany.activity.HomeActivity;
+import com.ourcompany.presenter.activity.ResigisterActPresenter;
+import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.PhoneTextWatcher;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.ToastUtils;
@@ -22,7 +26,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import company.com.commons.framework.view.impl.MvpActivity;
 
-public class FindPasswordActivity extends MvpActivity<ResigisterActView, FindPasswordActPresenter> implements ResigisterActView {
+public class ResigisterActivity extends MvpActivity<ResigisterActView, ResigisterActPresenter> implements ResigisterActView {
 
     @BindView(R.id.common_toolbar)
     Toolbar commonToolbar;
@@ -48,8 +52,6 @@ public class FindPasswordActivity extends MvpActivity<ResigisterActView, FindPas
         super.initView();
         setSupportActionBar(commonToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        commonToolbar.setTitle(ResourceUtils.getString(R.string.reset_passwrod));
-        btResigister.setText(ResourceUtils.getString(R.string.btn_ok));
         commonToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,8 +74,8 @@ public class FindPasswordActivity extends MvpActivity<ResigisterActView, FindPas
     }
 
     @Override
-    protected FindPasswordActPresenter bindPresenter() {
-        return new FindPasswordActPresenter(this);
+    protected ResigisterActPresenter bindPresenter() {
+        return new ResigisterActPresenter(this);
     }
 
 
@@ -123,7 +125,7 @@ public class FindPasswordActivity extends MvpActivity<ResigisterActView, FindPas
             }
         };
         etPassword.addTextChangedListener(textWatcher);
-        etUserName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
+        etUserName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
         etUserName.addTextChangedListener(new PhoneTextWatcher(etUserName));
         etUserName.addTextChangedListener(textWatcher);
         etVerifyCode.addTextChangedListener(textWatcher);
@@ -176,13 +178,46 @@ public class FindPasswordActivity extends MvpActivity<ResigisterActView, FindPas
     }
 
     @Override
-    public void verifyFail() {
-        showToastMsg(ResourceUtils.getString(R.string.verify_fail));
+    public void verifyFail(String msg) {
+        showToastMsg(msg);
         resetAllViewStatus(true);
     }
 
     @Override
     public void verifySuccess() {
+        showToastMsg("ok");
+        finish();
+    }
+
+    @Override
+    public void hasNotNet() {
+
+    }
+
+    @Override
+    public void logining() {
+        showToastMsg(ResourceUtils.getString(R.string.logining));
+    }
+
+    @Override
+    public void loginFail(String userInfos) {
+        //自定动登陆失败，那就让用户，手动登陆，不过得将用户的手机号码回传，体验比较好
+        Intent intent = new Intent(ResigisterActivity.this,LoginActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(Constant.ACT_LOGIN_PHONE,userInfos);
+        intent.putExtra(Constant.ACT_LOGIN_BUNDLE,bundle);
+        intent.putExtra(Constant.ACT_FROM,Constant.ACT_FROM_RESIGISTER);
+        startActivity(intent);
+        finish();
+        overridePendingTransition(0,0);
+    }
+
+    @Override
+    public void loginSuccess() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.putExtra(Constant.ACT_FROM,Constant.ACT_FROM_LOGIN_SUCCESS);
+        startActivity(intent);
+        overridePendingTransition(0,0);
         finish();
     }
 

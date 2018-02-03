@@ -3,7 +3,7 @@ package com.ourcompany.app;
 import android.app.Application;
 import android.content.Context;
 
-import com.mob.MobSDK;
+import com.ourcompany.manager.MServiceManager;
 
 /**
  * Author : 唐家森
@@ -19,6 +19,6 @@ public class MApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = this;
-        MobSDK.init(this);
+        MServiceManager.getInstance().init(this);
     }
 }

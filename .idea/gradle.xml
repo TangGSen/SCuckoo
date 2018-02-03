@@ -10,8 +10,11 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/appIM" />
             <option value="$PROJECT_DIR$/commons" />
+            <option value="$PROJECT_DIR$/imlibrary" />
             <option value="$PROJECT_DIR$/liuboss" />
+            <option value="$PROJECT_DIR$/timsdk" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

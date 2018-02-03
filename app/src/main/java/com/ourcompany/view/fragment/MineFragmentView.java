@@ -11,4 +11,8 @@ import company.com.commons.framework.view.MvpView;
 
 public interface MineFragmentView extends MvpView {
 
+    void showUserInfo();
+
+    void changeUserLoginState(boolean isLogin);
+
 }
