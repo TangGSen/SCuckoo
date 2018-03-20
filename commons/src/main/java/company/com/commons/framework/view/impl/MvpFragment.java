@@ -27,6 +27,7 @@ public abstract class MvpFragment<V extends MvpView, P extends MvpPresenter<V>> 
     protected View mRootView;
     protected Activity mActivity;
     protected Unbinder mUnbinder;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -37,16 +38,16 @@ public abstract class MvpFragment<V extends MvpView, P extends MvpPresenter<V>> 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if(mRootView==null){
+        if (mRootView == null) {
             //mRootView 为空时，添加到container
             int layoutId = getLayoutId();
-            View root = inflater.inflate(layoutId,container,false);
+            View root = inflater.inflate(layoutId, container, false);
             initView(root);
             mRootView = root;
-        }else{
+        } else {
             //mRootView 不为空时，先从父->移除
-            if(mRootView.getParent()!=null){
-                ((ViewGroup)mRootView.getParent()).removeView(mRootView);
+            if (mRootView.getParent() != null) {
+                ((ViewGroup) mRootView.getParent()).removeView(mRootView);
             }
         }
 
@@ -62,46 +63,51 @@ public abstract class MvpFragment<V extends MvpView, P extends MvpPresenter<V>> 
 
     /**
      * 获取布局的id
+     *
      * @return
      */
-    protected abstract int getLayoutId() ;
+    protected abstract int getLayoutId();
 
     /**
      * 窗口的设置
      */
-    protected void windowsSetting(){
+    protected void windowsSetting() {
 
     }
 
     /**
      * 初始化界面的相关参数
+     *
      * @param bundle
      * @return
      */
-    protected void initArgs(Bundle bundle){
+    protected void initArgs(Bundle bundle) {
     }
 
     /**
      * 初始化控件
      */
-    protected void initView(View view){
-        mUnbinder = ButterKnife.bind(this,view);
+    protected void initView(View view) {
+        mUnbinder = ButterKnife.bind(this, view);
+        initStateLayout();
     }
 
+    protected void initStateLayout(){
+
+    }
     /**
      * 初始化数据
      */
-    protected void initData(){
+    protected void initData() {
 
     }
-
 
 
     /**
      * 如果fragment 处理了，并返回true ,activity 不需要finish
      * false activity 走自己的逻辑
      */
-    public boolean onBackEnvent(){
+    public boolean onBackEnvent() {
         return false;
     }
 
@@ -125,6 +131,7 @@ public abstract class MvpFragment<V extends MvpView, P extends MvpPresenter<V>> 
     }
 
 
+
     protected abstract V bindView();
 
     //绑定Presenter
@@ -135,17 +142,22 @@ public abstract class MvpFragment<V extends MvpView, P extends MvpPresenter<V>> 
     }
 
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+    }
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         if (presenter != null) {
             presenter.dettachView();
-            presenter =null;
+            presenter = null;
         }
-
-        if(mUnbinder!=null){
+        //这个目前有个bug ,待处理
+        /*if(mUnbinder!=null){
             mUnbinder.unbind();
-        }
+        }*/
+        super.onDestroy();
     }
 }

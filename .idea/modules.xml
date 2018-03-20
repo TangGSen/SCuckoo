@@ -2,13 +2,16 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/KeyBoard/KeyBoard.iml" filepath="$PROJECT_DIR$/KeyBoard/KeyBoard.iml" />
       <module fileurl="file://$PROJECT_DIR$/OurCompany.iml" filepath="$PROJECT_DIR$/OurCompany.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RelationDemo/RelationDemo.iml" filepath="$PROJECT_DIR$/RelationDemo/RelationDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RxJavaDemo/RxJavaDemo.iml" filepath="$PROJECT_DIR$/RxJavaDemo/RxJavaDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/appIM/appIM.iml" filepath="$PROJECT_DIR$/appIM/appIM.iml" />
+      <module fileurl="file://$PROJECT_DIR$/appV1/appV1.iml" filepath="$PROJECT_DIR$/appV1/appV1.iml" />
       <module fileurl="file://$PROJECT_DIR$/commons/commons.iml" filepath="$PROJECT_DIR$/commons/commons.iml" />
-      <module fileurl="file://$PROJECT_DIR$/imlibrary/imlibrary.iml" filepath="$PROJECT_DIR$/imlibrary/imlibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/imagepicker/imagepicker.iml" filepath="$PROJECT_DIR$/imagepicker/imagepicker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libemoji/libemoji.iml" filepath="$PROJECT_DIR$/libemoji/libemoji.iml" />
       <module fileurl="file://$PROJECT_DIR$/liuboss/liuboss.iml" filepath="$PROJECT_DIR$/liuboss/liuboss.iml" />
-      <module fileurl="file://$PROJECT_DIR$/timsdk/timsdk.iml" filepath="$PROJECT_DIR$/timsdk/timsdk.iml" />
     </modules>
   </component>
 </project>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="StateFrameLayout">
+        <attr name="loadingLayoutResId" format="reference" />
+        <attr name="emptyLayoutResId" format="reference" />
+        <attr name="netErrorLayoutResId" format="reference" />
+        <attr name="enableContentAnim" format="boolean" />
+    </declare-styleable>
+
+    <!--自定义特殊线条的分割线-->
+    <declare-styleable name="Division">
+        <attr name="lineColor" format="color" />
+        <attr name="shapeStart" format="dimension" />
+        <attr name="paintStrokeWidth" format="dimension" />
+    </declare-styleable>
+
+</resources>

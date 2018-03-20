@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="tabButtonItemName">
+        <item>首页</item>
+        <item>发现</item>
+        <item></item>
+        <item>消息</item>
+        <item>我的</item>
+    </string-array>
+    <string-array name="tabMessageItems">
+        <item>会话</item>
+        <item>好友</item>
+        <item>测试</item>
+    </string-array>
+
+    <string-array name="tabFoundItems">
+        <item>最新</item>
+        <item>关注</item>
+        <item>热门</item>
+        <item>分类</item>
+    </string-array>
+
+    <declare-styleable name="PieView">
+        <attr name="percentage" format="float" />
+        <attr name="percentage_size" format="integer" />
+        <attr name="inner_pie_padding" format="integer" />
+        <attr name="inner_text_visibility" format="boolean" />
+        <attr name="inner_text" format="string" />
+    </declare-styleable>
+</resources>

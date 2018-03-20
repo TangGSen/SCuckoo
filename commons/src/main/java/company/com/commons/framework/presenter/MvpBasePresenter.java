@@ -1,11 +1,15 @@
 package company.com.commons.framework.presenter;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import company.com.commons.framework.view.MvpView;
 
@@ -17,7 +21,8 @@ import company.com.commons.framework.view.MvpView;
 
 public class MvpBasePresenter<V extends MvpView> implements MvpPresenter<V> {
 
-
+    public static final Executor EXECUTOR = Executors.newCachedThreadPool();
+    public Handler mHandler = new Handler(Looper.getMainLooper());
     private WeakReference<Context> weakRefContext;
     private WeakReference<V> weakRefView;
     private V mvpViewProxy;
@@ -53,8 +58,7 @@ public class MvpBasePresenter<V extends MvpView> implements MvpPresenter<V> {
         weakRefView = new WeakReference<V>(view);
         //这里使用动态代理，这样就不用每次在Presenter 调用方法时都要判断空
         MvpViewInvocationHandler handler = new MvpViewInvocationHandler(view);
-        mvpViewProxy = (V) Proxy.newProxyInstance(view.getClass().getClassLoader(),
-                view.getClass().getInterfaces(),handler);
+        mvpViewProxy = (V) Proxy.newProxyInstance(view.getClass().getClassLoader(),view.getClass().getInterfaces(),handler);
     }
 
     @Override

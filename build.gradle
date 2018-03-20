@@ -43,9 +43,11 @@ ext{
     supportVersion ='26.1.0'
     butterknifeVersion = '8.8.1'
     bmobHttpLegacyVersion = '1.0'
-    bmobSdkVersion = '3.5.5'
+    bmobSdkVersion = '3.5.9'
     circleViewVersion = '2.2.0'
     loggerVersion = '1.15'
-    glideVersion = '4.0.0'
+    glideVersion = '3.7.0'
+    rxJavaVersion ='2.0.1'
+    rxAndroidVersion ='2.0.1'
 
 }

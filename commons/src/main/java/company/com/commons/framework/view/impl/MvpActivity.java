@@ -1,6 +1,8 @@
 package company.com.commons.framework.view.impl;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +24,7 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter<V>> 
     private V view;
     private P presenter;
     protected Unbinder mUnbinder;
+    protected Handler mHandler = new Handler(Looper.getMainLooper());
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,8 +34,9 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter<V>> 
             //初始化相关参数正确才能进入界面
             setContentView(getLayoutId());
             initView();
+            initStateLayout();
             initLinstener();
-            initData(savedInstanceState);
+
         }else{
             finish();
             return;
@@ -48,9 +52,17 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter<V>> 
         if (presenter != null && view != null) {
             presenter.attachView(view);
         }
+
+        initData(savedInstanceState);
     }
 
     public void initLinstener() {
+
+    }
+
+
+
+    protected void initStateLayout(){
 
     }
 
@@ -140,14 +152,15 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter<V>> 
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if (presenter != null) {
             presenter.dettachView();
             presenter =null;
         }
 
-        if(mUnbinder!=null){
+      /*  if(mUnbinder!=null){
             mUnbinder.unbind();
-        }
+        }*/
+        super.onDestroy();
+
     }
 }

@@ -1,1 +1,1 @@
-include ':app', ':commons', ':liuboss', ':timsdk', ':imlibrary', ':appIM'
+include ':appV1', ':commons', ':liuboss', ':RxJavaDemo', ':appIM', ':libemoji', ':KeyBoard', ':RelationDemo', ':imagepicker'
