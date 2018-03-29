@@ -96,9 +96,13 @@
 
         <activity
             android:name=".activity.PostDetailActivity"
-            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ImagesPreViewActvitity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
 
 
         <activity
@@ -117,11 +121,7 @@
             android:configChanges="orientation|screenSize"
             android:exported="false"
             android:theme="@style/ImagePickerThemeFullScreen" />
-        <activity
-            android:name="imagepicker.ui.LessonImgPreviewActivity"
-            android:configChanges="orientation|screenSize"
-            android:exported="false"
-            android:theme="@style/ImagePickerThemeFullScreen" />
+
         <activity
             android:name="imagepicker.ui.ImagePreviewDelActivity"
             android:configChanges="orientation|screenSize"

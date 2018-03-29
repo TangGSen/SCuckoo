@@ -14,7 +14,6 @@ import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.view.activity.PostDeailActView;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -35,62 +34,12 @@ import company.com.commons.framework.presenter.MvpBasePresenter;
  */
 
 public class PostDeailActPresenter extends MvpBasePresenter<PostDeailActView> {
+    private BmobDate bmobDate;
+
     public PostDeailActPresenter(Context context) {
         super(context);
     }
 
-    /**
-     * 加载评论，首先加载最新的
-     */
-    public void loadComments(final int start, String objectId) {
-        BmobQuery<Comment> query = new BmobQuery<Comment>();
-        query.include(Constant.BMOB_POST_USER);
-        query.order(Constant.BMOB_ORDER_DESCENDING + Constant.BMOB_CREATE);
-        //查询playerName叫“比目”的数据
-        query.addWhereLessThanOrEqualTo(Constant.BMOB_CREATE, new BmobDate(new Date(System.currentTimeMillis())));
-        query.addWhereEqualTo(Constant.BMOB_POST, objectId);
-        //返回50条数据，如果不加上这条语句，默认返回10条数据
-        query.setLimit(Constant.IM_PAGESIZE);
-        //执行查询方法
-        query.findObjects(new FindListener<Comment>() {
-            @Override
-            public void done(final List<Comment> list, BmobException e) {
-                if (e == null) {
-                    if (start == 0 && list.size() <= 0) {
-                        showEmptyView();
-                    } else {
-                        mHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                getView().showContentView(list);
-                            }
-                        });
-                    }
-                } else {
-                    getView().showErrorView();
-                }
-            }
-        });
-    }
-
-
-    private void showEmptyView() {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                getView().showEmptyView();
-            }
-        });
-    }
-
-    private void showErrorView() {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                getView().showErrorView();
-            }
-        });
-    }
 
     /**
      * 提交评论
@@ -103,7 +52,7 @@ public class PostDeailActPresenter extends MvpBasePresenter<PostDeailActView> {
             return;
         }
 
-        Comment comment = new Comment();
+        final Comment comment = new Comment();
         comment.setContent(conent);
          final Post post = new Post();
         post.setObjectId(postId);
@@ -115,7 +64,7 @@ public class PostDeailActPresenter extends MvpBasePresenter<PostDeailActView> {
             @Override
             public void done(String s, BmobException e) {
                 if (e == null) {
-                    getView().submitOk();
+                    getView().submitOk(comment);
                    LogUtils.e("sen","comment is ok time is:"+System.currentTimeMillis());
                 } else {
                     getView().submitError();
@@ -236,5 +185,6 @@ public class PostDeailActPresenter extends MvpBasePresenter<PostDeailActView> {
             }
         });
     }
+
 }
 

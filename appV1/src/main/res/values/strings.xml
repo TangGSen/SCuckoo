@@ -154,7 +154,12 @@
     <string name="hint_write_comment">我也来说一句...</string>
     <string name="str_love">喜欢</string>
     <string name="input_not_null">请输入内容</string>
-    <string name="submit_success">发表成功ok</string>
+    <string name="submit_success">发表成功</string>
     <string name="submit_fail">发表失败,请重试</string>
     <string name="str_a_t">@</string>
+    <string name="str_reflesh_error">刷新失败,请重试</string>
+    <string name="str_onload_error">加载更多失败</string>
+    <string name="str_reflsh_no_new_data">没有最新的数据了</string>
+    <string name="refresh_footer_nothing">-- 没有更多数据了 --</string>
+    <string name="str_user_info_get_error">获取用户失败</string>
 </resources>

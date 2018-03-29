@@ -89,10 +89,10 @@ public abstract class MvpFragment<V extends MvpView, P extends MvpPresenter<V>> 
      */
     protected void initView(View view) {
         mUnbinder = ButterKnife.bind(this, view);
-        initStateLayout();
+        initStateLayout(view);
     }
 
-    protected void initStateLayout(){
+    protected void initStateLayout(View view){
 
     }
     /**

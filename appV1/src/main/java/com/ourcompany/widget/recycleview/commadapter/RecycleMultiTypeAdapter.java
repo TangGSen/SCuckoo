@@ -63,10 +63,26 @@ public abstract class RecycleMultiTypeAdapter<D> extends RecyclerView.Adapter<SV
         }
     }
 
+    public void addData(D data,int position){
+        mData.add(position,data);
+        notifyItemChanged(position);
+    }
+
+    public void addDatasInLast(List<D> data){
+        int size = mData.size();
+        mData.addAll(size,data);
+        notifyItemRangeInserted(size,data.size());
+    }
+
     public abstract void bindItemData(SViewHolder holder, D itemData, int position) ;
 
     @Override
     public int getItemCount() {
         return mData.size();
+    }
+
+    public void addDatasInFirst(int start, List<D> data) {
+        mData.addAll(start,data);
+        notifyItemRangeInserted(start,data.size());
     }
 }

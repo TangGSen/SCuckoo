@@ -1,6 +1,7 @@
 package com.ourcompany.utils;
 
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 
 import com.ourcompany.app.MApplication;
 
@@ -17,7 +18,7 @@ public class ResourceUtils {
     }
 
     public static Drawable getDrawable(int id) {
-        return MApplication.mContext.getResources().getDrawable(id);
+        return ContextCompat.getDrawable(MApplication.mContext,id);
     }
 
 

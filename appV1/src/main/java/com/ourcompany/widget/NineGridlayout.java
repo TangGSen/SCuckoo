@@ -3,16 +3,20 @@ package com.ourcompany.widget;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.ourcompany.R;
+import com.ourcompany.utils.LogUtils;
 import com.ourcompany.utils.ScreenTools;
 
 import java.util.List;
 
 /**
  * creator  Lukey on 2016/6/14
+ * 修改在Recycleview 中使用，点击对应的position 的错乱的bug by 唐家森
  */
 public class NineGridlayout extends ViewGroup {
 
@@ -95,7 +99,7 @@ public class NineGridlayout extends ViewGroup {
     }
 
 
-    public void setImagesData(List<String> lists) {
+    public void setImagesData(List<String> lists, int position) {
         if (lists == null || lists.isEmpty()) {
             return;
         }
@@ -105,7 +109,7 @@ public class NineGridlayout extends ViewGroup {
         if (listData == null) {
             int i = 0;
             while (i < lists.size()) {
-                CustomImageView iv = generateImageView();
+                CustomImageView iv = generateImageView(i);
                 addView(iv, generateDefaultLayoutParams());
                 i++;
             }
@@ -113,10 +117,21 @@ public class NineGridlayout extends ViewGroup {
             int oldViewCount = listData.size();
             int newViewCount = lists.size();
             if (oldViewCount > newViewCount) {
-                removeViews(newViewCount - 1, oldViewCount - newViewCount);
+                // removeViews(newViewCount - 1, oldViewCount - newViewCount);
+                //解决bug
+
+                try {
+                    removeViews(newViewCount, oldViewCount - 1);
+                }catch (Exception e){
+                    LogUtils.e("sen",e.getMessage()+"**"+e.getLocalizedMessage());
+                }
+
             } else if (oldViewCount < newViewCount) {
                 for (int i = 0; i < newViewCount - oldViewCount; i++) {
-                    CustomImageView iv = generateImageView();
+                    //解决Recycleview中的 position 的bug
+                    //  CustomImageView iv = generateImageView(i);
+                    //这是增加的view
+                    CustomImageView iv = generateImageView(i + oldViewCount);
                     addView(iv, generateDefaultLayoutParams());
                 }
             }
@@ -158,18 +173,34 @@ public class NineGridlayout extends ViewGroup {
         }
     }
 
-    private CustomImageView generateImageView() {
-        CustomImageView iv = new CustomImageView(getContext());
-        iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        iv.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+    private OnClickListener onClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (clickListener != null) {
+                clickListener.onItemClick((int) v.getTag(R.id.nine_layout_of_index));
             }
-        });
+        }
+    };
+
+
+
+    private CustomImageView generateImageView(int position) {
+        CustomImageView iv = new CustomImageView(getContext());
+        iv.setTag(R.id.nine_layout_of_index,position);
+        iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        iv.setOnClickListener(onClickListener);
         iv.setBackgroundColor(Color.parseColor("#f5f5f5"));
         return iv;
     }
 
+    private OnItemClickListener clickListener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.clickListener = listener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
 
 }

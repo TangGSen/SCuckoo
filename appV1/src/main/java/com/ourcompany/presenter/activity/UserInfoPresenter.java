@@ -15,6 +15,7 @@ import com.ourcompany.utils.NetWorkUtils;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.view.activity.UserInfoActvityView;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import company.com.commons.framework.presenter.MvpBasePresenter;
@@ -131,5 +132,39 @@ public class UserInfoPresenter extends MvpBasePresenter<UserInfoActvityView> {
         });
 
 
+    }
+
+    public void getCurrentUserInfo(String mCurrentUserId) {
+        if(TextUtils.isEmpty(mCurrentUserId)){
+            getView().getUserInfoFailed();
+            return;
+        }
+        MServiceManager.getInstance().getUserInfoByUserId(mCurrentUserId, new OperationCallback<ArrayList<User>>() {
+            @Override
+            public void onSuccess(final ArrayList<User> users) {
+                super.onSuccess(users);
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (users != null && users.size() > 0 && users.get(0) != null) {
+                            getView().getUserInfoSuccess( users.get(0));
+                        } else {
+                            getView().getUserInfoFailed();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onFailed(Throwable throwable) {
+                super.onFailed(throwable);
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        getView().getUserInfoFailed();
+                    }
+                });
+            }
+        });
     }
 }

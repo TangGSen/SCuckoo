@@ -54,6 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivNineLayout"
         android:layout_marginTop="@dimen/common_8dp"
+        android:layout_marginRight="8dp"
         android:layout_toRightOf="@+id/imgUser"
         android:orientation="horizontal">
 
@@ -84,6 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/common_8dp"
+            android:layout_marginRight="@dimen/common_8dp"
             android:drawableLeft="@drawable/ic_comments"
             android:drawablePadding="4dp"
             android:gravity="center_vertical"

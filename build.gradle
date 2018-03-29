@@ -49,5 +49,7 @@ ext{
     glideVersion = '3.7.0'
     rxJavaVersion ='2.0.1'
     rxAndroidVersion ='2.0.1'
+    smartRefreshLayout ='1.1.0-alpha-1'
+    statusBarUtilVersion='1.5.0'
 
 }

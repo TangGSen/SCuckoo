@@ -19,4 +19,37 @@ public interface FoundNewsFragmentView extends MvpView {
     void showLoadView();
 
     void showErrorView();
+
+    /**
+     * 刷新有数据
+     *
+     * @param list
+     */
+    void showOnReflsh(List<Post> list);
+
+    /**
+     * 刷新时没有最新的数据了
+     */
+    void showOnReflshNoNewsData();
+
+    /**
+     * 刷新失败
+     */
+    void showOnReflshError();
+
+    /**
+     * 加载更多失败
+     */
+
+    void showOnLoadError();
+
+    /**
+     * 加载更多完成
+     */
+    void showOnLoadFinish();
+
+    /**
+     * 加载更多时没有数据了
+     */
+    void showOnloadMoreNoData();
 }

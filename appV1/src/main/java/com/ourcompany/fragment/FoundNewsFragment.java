@@ -2,7 +2,7 @@ package com.ourcompany.fragment;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -10,10 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ourcompany.R;
+import com.ourcompany.activity.ImagesPreViewActvitity;
 import com.ourcompany.activity.PostDetailActivity;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.bean.bmob.Post;
 import com.ourcompany.presenter.fragment.FoundNewsFragPresenter;
+import com.ourcompany.utils.LogUtils;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.TimeFormatUtil;
 import com.ourcompany.utils.ToastUtils;
@@ -21,9 +23,15 @@ import com.ourcompany.view.fragment.FoundNewsFragmentView;
 import com.ourcompany.widget.NineGridlayout;
 import com.ourcompany.widget.StateFrameLayout;
 import com.ourcompany.widget.recycleview.commadapter.OnItemOnclickLinstener;
-import com.ourcompany.widget.recycleview.commadapter.RecycleCommonAdapter;
+import com.ourcompany.widget.recycleview.commadapter.RecycleMultiTypeAdapter;
 import com.ourcompany.widget.recycleview.commadapter.SViewHolder;
 import com.ourcompany.widget.recycleview.commadapter.SimpleDecoration;
+import com.ourcompany.widget.recycleview.headfooter.MFooter;
+import com.ourcompany.widget.recycleview.headfooter.MHeader;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
+import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,15 +48,20 @@ import company.com.commons.framework.view.impl.MvpFragment;
  */
 
 public class FoundNewsFragment extends MvpFragment<FoundNewsFragmentView, FoundNewsFragPresenter> implements FoundNewsFragmentView {
+    private static int NINELAYOUTTYPE_TEXT = 0;
+    private static int NINELAYOUTTYPE_IMAGES = 1;
+
 
     @BindView(R.id.recycleview)
     RecyclerView recycleview;
-    @BindView(R.id.refreshLayout)
-    SwipeRefreshLayout mRefreshLayout;
+
     @BindView(R.id.layoutState)
     StateFrameLayout layoutState;
     Unbinder unbinder1;
-    private RecycleCommonAdapter recycleCommonAdapter;
+    @BindView(R.id.refreshLayout)
+    SmartRefreshLayout refreshLayout;
+    Unbinder unbinder;
+    private RecycleMultiTypeAdapter recycleCommonAdapter;
     private List<Post> mPostList = new ArrayList<>();
     private int currentIndex;
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -69,18 +82,47 @@ public class FoundNewsFragment extends MvpFragment<FoundNewsFragmentView, FoundN
         recycleview.setLayoutManager(linearLayoutManager);
         recycleview.setHasFixedSize(true);
         recycleview.addItemDecoration(new SimpleDecoration(MApplication.mContext, R.drawable.recycle_line_divider_padding, 2));
-        recycleCommonAdapter = new RecycleCommonAdapter<Post>(
-                MApplication.mContext, mPostList, R.layout.layout_item_post) {
+        recycleCommonAdapter = new RecycleMultiTypeAdapter<Post>(
+                MApplication.mContext, mPostList) {
             @Override
-            public void bindItemData(SViewHolder holder, Post itemData, int position) {
+            protected int setViewType(int position) {
+                if (mPostList.get(position).getImageUrls() == null || mPostList.get(position).getImageUrls().size() <= 0) {
+                    return NINELAYOUTTYPE_TEXT;
+                } else {
+                    return NINELAYOUTTYPE_IMAGES;
+                }
+            }
+
+            @Override
+            protected int getLayoutId(int viewType) {
+                if (viewType == NINELAYOUTTYPE_TEXT) {
+                    return R.layout.layout_item_post_text;
+                } else if (viewType == NINELAYOUTTYPE_IMAGES) {
+                    return R.layout.layout_item_post_images;
+                }
+                return R.layout.layout_item_post_images;
+            }
+
+            @Override
+            public void bindItemData(SViewHolder holder, final Post itemData, final int position) {
 
                 holder.setText(R.id.tvUserName, itemData.getUser() == null ? ResourceUtils.getString(R.string.defualt_userName) : TextUtils.isEmpty(itemData.getUser().getUserName()) ? ResourceUtils.getString(R.string.defualt_userName) : itemData.getUser().getUserName());
                 holder.setText(R.id.tvContent, itemData.getContent());
                 holder.setText(R.id.tvTime, TimeFormatUtil.getIntervalFormString(itemData.getCreatedAt()));
                 holder.setImage(R.id.imgUser, itemData.getUser() == null ? "" : itemData.getUser().getImageUrl());
-                ((NineGridlayout) holder.getView(R.id.ivNineLayout)).setImagesData(itemData.getImageUrls());
                 holder.setText(R.id.likes, itemData.getLikeCount() != null ? itemData.getLikeCount() + "" : "0");
+
                 holder.setText(R.id.comments, itemData.getCommentCount() != null ? itemData.getCommentCount() + "" : "0");
+                if (getItemViewType(position) == NINELAYOUTTYPE_IMAGES) {
+                    ((NineGridlayout) holder.getView(R.id.ivNineLayout)).setImagesData(itemData.getImageUrls(), position);
+                    ((NineGridlayout) holder.getView(R.id.ivNineLayout)).setOnItemClickListener(new NineGridlayout.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(int index) {
+                            ImagesPreViewActvitity.gotoThis(mActivity, (ArrayList<String>) itemData.getImageUrls(), index);
+                        }
+                    });
+                }
+
             }
 
 
@@ -93,25 +135,41 @@ public class FoundNewsFragment extends MvpFragment<FoundNewsFragmentView, FoundN
                 PostDetailActivity.gotoThis(mActivity, mPostList.get(position));
             }
         });
-        mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
-        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            public void onRefresh() {
-                currentIndex = 0;
-                getPresenter().getData(currentIndex);
+        refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
+
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                //按照时间来加载，刷新是加载比第一个更晚的时间，
+                if (mPostList != null && mPostList.size() > 0) {
+                    getPresenter().getDataOnReFresh(mPostList.get(0).getCreatedAt(),mPostList.get(0).getObjectId());
+                } else {
+                    //传空默认传当前时间
+                    getPresenter().getDataOnReFresh("","");
+                }
 
             }
+
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                ++currentIndex;
+                getPresenter().getDataOnLoadMore(currentIndex);
+            }
         });
+        refreshLayout.setEnableFooterFollowWhenLoadFinished(true);
+        refreshLayout.setRefreshHeader(new MHeader(mActivity).setEnableLastTime(false).setTextSizeTitle(14).setAccentColor(ResourceUtils.getResColor(R.color.text_gray)));
+        refreshLayout.setRefreshFooter(new MFooter(mActivity).setTextSizeTitle(14).setSpinnerStyle(SpinnerStyle.Scale).setAccentColor(ResourceUtils.getResColor(R.color.text_gray)));
     }
 
     @Override
     protected void initData() {
         super.initData();
-        getPresenter().getData(currentIndex);
+        //开始时以当前的时间来加载最新的
+        getPresenter().getData(currentIndex, false);
     }
 
     @Override
-    protected void initStateLayout() {
-        super.initStateLayout();
+    protected void initStateLayout(View view) {
+        super.initStateLayout(view);
         //初始化状态的布局
         View emptyView = getLayoutInflater().inflate(R.layout.layout_state_empty, (ViewGroup) mActivity.findViewById(android.R.id.content), false);
         layoutState.setEmptyView(emptyView);
@@ -143,25 +201,23 @@ public class FoundNewsFragment extends MvpFragment<FoundNewsFragmentView, FoundN
 
     @Override
     public void showContentView(List<Post> list) {
+        LogUtils.e("sen", "新增数据" + list.size());
         int start = mPostList.size();
-        mPostList.addAll(list);
-        int end = mPostList.size();
-        recycleCommonAdapter.notifyItemRangeChanged(start, end);
+        recycleCommonAdapter.addDatasInLast(list);
         layoutState.changeState(StateFrameLayout.SUCCESS);
-        closeReflshView();
     }
 
     private void closeReflshView() {
-        mRefreshLayout.setEnabled(true);
-        if (mRefreshLayout.isRefreshing()) {
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mRefreshLayout.setRefreshing(false);
-                }
-            }, 1000);
-
-        }
+//        mRefreshLayout.setEnabled(true);
+//        if (mRefreshLayout.isRefreshing()) {
+//            mHandler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mRefreshLayout.setRefreshing(false);
+//                }
+//            }, 1000);
+//
+//        }
     }
 
     @Override
@@ -175,4 +231,46 @@ public class FoundNewsFragment extends MvpFragment<FoundNewsFragmentView, FoundN
         closeReflshView();
         showToastMsg(ResourceUtils.getString(R.string.load_data_fail));
     }
+
+    @Override
+    public void showOnReflsh(List<Post> list) {
+        refreshLayout.finishRefresh(50, true);
+        recycleCommonAdapter.addDatasInFirst(0, list);
+        recycleview.scrollToPosition(0);
+
+    }
+
+    @Override
+    public void showOnReflshNoNewsData() {
+        LogUtils.e("sen","showOnReflshNoNewsData");
+        showToastMsg(ResourceUtils.getString(R.string.str_reflsh_no_new_data));
+        refreshLayout.finishRefresh(50, true);
+    }
+
+    @Override
+    public void showOnReflshError() {
+        showToastMsg(ResourceUtils.getString(R.string.str_reflesh_error));
+        refreshLayout.finishRefresh(50, false);
+
+    }
+
+    @Override
+    public void showOnLoadError() {
+        refreshLayout.finishLoadMore(50, false, false);
+        showToastMsg(ResourceUtils.getString(R.string.str_onload_error));
+
+    }
+
+    @Override
+    public void showOnLoadFinish() {
+        //如果是没有更新的数据时需要停止刷新半分钟，防止频繁的刷新
+        refreshLayout.finishLoadMore(50, true, false);
+    }
+
+    @Override
+    public void showOnloadMoreNoData() {
+        refreshLayout.finishLoadMore(50, true, true);
+    }
+
+
 }

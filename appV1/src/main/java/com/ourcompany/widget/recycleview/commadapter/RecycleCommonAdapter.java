@@ -53,6 +53,16 @@ public abstract class RecycleCommonAdapter<D> extends RecyclerView.Adapter<SView
         }
     }
 
+    public void addData(D data,int position){
+        mData.add(position,data);
+        notifyItemChanged(position);
+    }
+
+    public void addDatasInLast(List<D> data){
+        int size = mData.size();
+        mData.addAll(size,data);
+        notifyItemRangeInserted(size,data.size());
+    }
 
     public abstract void bindItemData(SViewHolder holder, D itemData, int position) ;
 

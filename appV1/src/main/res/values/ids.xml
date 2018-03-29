@@ -5,4 +5,5 @@
     <!--NetError触发重试监听的id-->
     <item name="id_sfl_net_error_retry" type="id"/>
     <item name="loading_image_url" type="id"/>
+    <item name="nine_layout_of_index" type="id"/>
 </resources>

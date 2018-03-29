@@ -1,6 +1,6 @@
 package com.ourcompany.view.activity;
 
-import com.mob.imsdk.model.IMUser;
+import com.mob.ums.User;
 
 import company.com.commons.framework.view.MvpView;
 
@@ -25,4 +25,7 @@ public interface UserInfoActvityView extends MvpView {
     void onErrortToToast(String string);
     void showSuccess(String string);
 
+    void getUserInfoSuccess(User user);
+
+    void getUserInfoFailed();
 }

@@ -1,6 +1,5 @@
 package com.ourcompany.activity.imui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -110,13 +109,8 @@ public class SearchActivity extends MvpActivity<SearchActvityView, SearchActPres
             @Override
             public void itemOnclickLinstener(int position) {
                 if (mUsers != null && mUsers.size() >= position) {
-                    Intent intent = new Intent(SearchActivity.this, UserInfoActivity.class);
-//                    Bundle bundle = new Bundle();
-//                    bundle.putParcelable(Constant.KEY_ITEM_USER, (Parcelable) mUsers.get(position));
-//                    intent.putExtra(Constant.ACT_SEARCH_BUNDLE, bundle);
-                    //上面不可行，因为UMsdk user 这个类并不是可以序列化的，所以放弃
                     Constant.CURRENT_ITEM_USER =  mUsers.get(position);
-                    startActivity(intent);
+                    UserInfoActivity.gotoThis(SearchActivity.this,true,Constant.CURRENT_ITEM_USER.id.get());
                 }
             }
         });

@@ -2,8 +2,6 @@ package com.ourcompany.view.activity;
 
 import com.ourcompany.bean.bmob.Comment;
 
-import java.util.List;
-
 import company.com.commons.framework.view.MvpView;
 
 /**
@@ -14,15 +12,13 @@ import company.com.commons.framework.view.MvpView;
  */
 
 public interface PostDeailActView extends MvpView {
-    void showEmptyView();
-    void showContentView(List<Comment> list);
     void showLoadView();
 
-    void showErrorView();
 
     void submitError();
 
-    void submitOk();
+    void submitOk(Comment comment);
 
     void userIsLikeThis(boolean isLike);
+
 }

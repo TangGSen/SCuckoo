@@ -8,6 +8,7 @@ import android.view.View;
 import com.ourcompany.R;
 import com.ourcompany.adapter.ViewPagerAdapter;
 import com.ourcompany.app.MApplication;
+import com.ourcompany.interfaces.MOnTabSelectedListener;
 import com.ourcompany.presenter.fragment.FoundFragPresenter;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.TabLayoutIndicatorWith;
@@ -52,7 +53,7 @@ public class FoundFragment extends MvpFragment<FoundFragmentView, FoundFragPrese
         //tablayout 和viewpager 联动
         mViewPager.setAdapter(viewPagerAdapter);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTablayout));
-        mTablayout.addOnTabSelectedListener(new MOnTabSelectedListener());
+        mTablayout.addOnTabSelectedListener(new MOnTabSelectedListener(mViewPager));
         mViewPager.setCurrentItem(0);
     }
 
@@ -78,21 +79,5 @@ public class FoundFragment extends MvpFragment<FoundFragmentView, FoundFragPrese
     }
 
 
-    class MOnTabSelectedListener implements TabLayout.OnTabSelectedListener {
-        @Override
-        public void onTabSelected(TabLayout.Tab tab) {
-            int position = tab.getPosition();
-            mViewPager.setCurrentItem(position);
-        }
 
-        @Override
-        public void onTabUnselected(TabLayout.Tab tab) {
-
-        }
-
-        @Override
-        public void onTabReselected(TabLayout.Tab tab) {
-
-        }
-    }
 }

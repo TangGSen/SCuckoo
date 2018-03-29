@@ -1,10 +1,15 @@
 package com.ourcompany.activity;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -18,26 +23,28 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ourcompany.R;
+import com.ourcompany.activity.imui.UserInfoActivity;
+import com.ourcompany.adapter.ViewPagerAdapter;
 import com.ourcompany.app.MApplication;
+import com.ourcompany.beahovr.CollapsingToolbarLayoutState;
 import com.ourcompany.bean.bmob.Comment;
 import com.ourcompany.bean.bmob.Post;
+import com.ourcompany.fragment.CommentFragment;
+import com.ourcompany.fragment.message.TestMobFragment;
+import com.ourcompany.interfaces.MOnTabSelectedListener;
 import com.ourcompany.presenter.activity.PostDeailActPresenter;
+import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.InputMethodUtils;
 import com.ourcompany.utils.LogUtils;
 import com.ourcompany.utils.ResourceUtils;
+import com.ourcompany.utils.TabLayoutIndicatorWith;
 import com.ourcompany.utils.TimeFormatUtil;
 import com.ourcompany.utils.ToastUtils;
 import com.ourcompany.view.activity.PostDeailActView;
 import com.ourcompany.widget.NineGridlayout;
-import com.ourcompany.widget.StateFrameLayout;
 import com.ourcompany.widget.recycleview.commadapter.ImageLoader;
-import com.ourcompany.widget.recycleview.commadapter.OnItemOnclickLinstener;
-import com.ourcompany.widget.recycleview.commadapter.RecycleCommonAdapter;
-import com.ourcompany.widget.recycleview.commadapter.SViewHolder;
-import com.ourcompany.widget.recycleview.commadapter.SimpleDecoration;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,8 +62,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailActPresenter> implements PostDeailActView, InputMethodUtils.OnKeyboardEventListener {
     private static final String KEY_INTENT = "key_intent";
     private static final String KEY_BUNDLE = "key_bundle";
-    @BindView(R.id.common_toolbar)
-    Toolbar commonToolbar;
     @BindView(R.id.imgUser)
     CircleImageView imgUser;
     @BindView(R.id.tvUserName)
@@ -71,36 +76,46 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
     TextView likes;
     @BindView(R.id.comments)
     TextView comments;
-    @BindView(R.id.recycleview)
-    RecyclerView recycleview;
-    @BindView(R.id.layoutBottom)
-    LinearLayout layoutBottom;
-    @BindView(R.id.imgLove)
-    ImageView imgLove;
-    @BindView(R.id.layoutState)
-    StateFrameLayout layoutState;
+    @BindView(R.id.imgUserTop)
+    CircleImageView imgUserTop;
+    @BindView(R.id.common_toolbar)
+    Toolbar commonToolbar;
+    @BindView(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout collapsingToolbar;
+    @BindView(R.id.appBarLayout)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.viewPager)
+    ViewPager mViewPager;
     @BindView(R.id.etInputFor)
     TextView etInputFor;
+    @BindView(R.id.imgLove)
+    ImageView imgLove;
+    @BindView(R.id.layoutBottom)
+    LinearLayout layoutBottom;
+    @BindView(R.id.inputOutSildeView)
+    View inputOutSildeView;
     @BindView(R.id.etInput)
     EditText etInput;
     @BindView(R.id.btn_a_t)
     TextView btnAT;
-    @BindView(R.id.btnSend)
-    TextView btnSend;
-    @BindView(R.id.layoutInpts)
-    LinearLayout layoutInpts;
-
     @BindView(R.id.imageKeyBorad)
     ImageView imageKeyBorad;
+    @BindView(R.id.btnSend)
+    TextView btnSend;
     @BindView(R.id.v_panel)
     View vPanel;
-    @BindView(R.id.inputOutSildeView)
-    View inputOutSildeView;
+    @BindView(R.id.layoutInpts)
+    LinearLayout layoutInpts;
+    @BindView(R.id.tabLayout)
+    TabLayout mTablayout;
+
 
     private Post mPost;
-    private List<Comment> mCommentList = new ArrayList<>();
-    private RecycleCommonAdapter recycleCommonAdapter;
-    private int currentIndex;
+    private ArrayList<Fragment> fragments = new ArrayList<>();
+    private CollapsingToolbarLayoutState collapsingToolbarLayoutState;
+    private ValueAnimator animViewShow;
+    private ValueAnimator animViewGone;
+    private String[] mTiltes;
 
     public static void gotoThis(Context context, Post post) {
         if (post == null) {
@@ -150,30 +165,6 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
             }
         });
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MApplication.mContext);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recycleview.setLayoutManager(linearLayoutManager);
-        recycleview.setHasFixedSize(true);
-        recycleview.addItemDecoration(new SimpleDecoration(MApplication.mContext, R.drawable.recycle_line_divider_padding, 2));
-        recycleCommonAdapter = new RecycleCommonAdapter<Comment>(
-                MApplication.mContext, mCommentList, R.layout.layout_item_comment) {
-            @Override
-            public void bindItemData(SViewHolder holder, Comment itemData, int position) {
-                holder.setText(R.id.tvUserName, itemData.getUser() == null ? ResourceUtils.getString(R.string.defualt_userName) : TextUtils.isEmpty(itemData.getUser().getUserName()) ? ResourceUtils.getString(R.string.defualt_userName) : itemData.getUser().getUserName());
-                holder.setText(R.id.tvContent, itemData.getContent());
-                holder.setText(R.id.tvTime, TimeFormatUtil.getIntervalFormString(itemData.getCreatedAt()));
-                holder.setImage(R.id.imgUser, itemData.getUser() == null ? "" : itemData.getUser().getImageUrl());
-            }
-
-
-        };
-        recycleview.setItemAnimator(null);
-        recycleview.setAdapter(recycleCommonAdapter);
-        recycleCommonAdapter.setOnItemClickLinstener(new OnItemOnclickLinstener() {
-            @Override
-            public void itemOnclickLinstener(int position) {
-            }
-        });
 
         etInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -184,6 +175,132 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
             }
         });
         InputMethodUtils.detectKeyboard(this, this);
+
+        imgUserTop.setVisibility(View.GONE);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (verticalOffset == 0) {
+                    if (collapsingToolbarLayoutState != CollapsingToolbarLayoutState.EXPANDED) {
+                        collapsingToolbarLayoutState = CollapsingToolbarLayoutState.EXPANDED;//修改状态标记为展开
+                        startAninatorViewGone();
+                    }
+                } else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) {
+                    if (collapsingToolbarLayoutState != CollapsingToolbarLayoutState.COLLAPSED) {
+                        startAninatorViewShow();
+                        collapsingToolbarLayoutState = CollapsingToolbarLayoutState.COLLAPSED;//修改状态标记为折叠
+                    }
+                } else {
+                    if (collapsingToolbarLayoutState != CollapsingToolbarLayoutState.INTERNEDIATE) {
+                        if (collapsingToolbarLayoutState == CollapsingToolbarLayoutState.COLLAPSED) {
+                            startAninatorViewGone();
+                        }
+                        collapsingToolbarLayoutState = CollapsingToolbarLayoutState.INTERNEDIATE;//修改状态标记为中间
+                    }
+                }
+            }
+        });
+
+
+    }
+
+    public void startAninatorViewShow() {
+        if (animViewGone != null && animViewGone.isRunning()) {
+            animViewGone.cancel();
+        }
+        if (animViewShow != null) {
+            animViewShow.start();
+            return;
+        }
+        imgUserTop.setTag(R.id.loading_image_url, mPost.getUser() == null ? "" : mPost.getUser().getImageUrl());
+        ImageLoader.getImageLoader().loadImage(imgUserTop, "");
+        animViewShow = ValueAnimator.ofFloat(0.3f, 1.0f);
+        animViewShow.setDuration(500);
+        animViewShow.setRepeatCount(0);
+        animViewShow.setRepeatMode(ValueAnimator.RESTART);
+        animViewShow.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+                float currentValue = (float) animation.getAnimatedValue();
+                imgUserTop.setAlpha(currentValue);
+            }
+
+        });
+        animViewShow.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+                imgUserTop.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                imgUserTop.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+                imgUserTop.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+
+        animViewShow.start();
+
+
+    }
+
+    public void startAninatorViewGone() {
+        if (animViewShow != null && animViewShow.isRunning()) {
+            animViewShow.cancel();
+            return;
+        }
+        if (animViewGone != null) {
+            animViewGone.start();
+            return;
+        }
+        animViewGone = ValueAnimator.ofFloat(1.0f, 0.3f);
+        animViewGone.setDuration(500);
+        animViewGone.setRepeatCount(0);
+        animViewGone.setRepeatMode(ValueAnimator.RESTART);
+        animViewGone.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+                float currentValue = (float) animation.getAnimatedValue();
+                imgUserTop.setAlpha(currentValue);
+            }
+
+        });
+        animViewGone.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                imgUserTop.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+                //一般被取消都是
+                imgUserTop.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+
+        animViewGone.start();
+
 
     }
 
@@ -236,16 +353,6 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
         getPresenter().submitComment(etInput.getText().toString(), mPost.getObjectId());
     }
 
-    @Override
-    protected void initStateLayout() {
-        super.initStateLayout();
-        //初始化状态的布局
-        View emptyView = getLayoutInflater().inflate(R.layout.layout_state_empty, (ViewGroup) findViewById(android.R.id.content), false);
-        layoutState.setEmptyView(emptyView);
-        layoutState.changeState(StateFrameLayout.LOADING);
-
-    }
-
 
     @Override
     protected void initData(Bundle savedInstanceState) {
@@ -256,7 +363,16 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
             tvTime.setText(TimeFormatUtil.getIntervalFormString(mPost.getCreatedAt()));
             imgUser.setTag(R.id.loading_image_url, mPost.getUser() == null ? "" : mPost.getUser().getImageUrl());
             ImageLoader.getImageLoader().loadImage(imgUser, "");
-            ivNineLayout.setImagesData(mPost.getImageUrls());
+
+            ivNineLayout.setImagesData(mPost.getImageUrls(), 0);
+            ivNineLayout.setOnItemClickListener(new NineGridlayout.OnItemClickListener() {
+                @Override
+                public void onItemClick(int index) {
+                    ImagesPreViewActvitity.gotoThis(PostDetailActivity.this, (ArrayList<String>) mPost.getImageUrls(), index);
+
+                }
+            });
+
             if (mPost.getLikeCount() == null) {
                 mPost.setLikeCount(0);
             }
@@ -265,11 +381,30 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
             }
             likes.setText(mPost.getLikeCount() + "");
             comments.setText(mPost.getCommentCount() + "");
+
+            //查看用户是否喜欢这个帖子
+            TabLayoutIndicatorWith.resetWith(mTablayout);
+            getPresenter().loadIsUserLike(mPost.getObjectId());
+            CommentFragment commentFragment = new CommentFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(Constant.KEY_POST_ID, mPost.getObjectId());
+            commentFragment.setArguments(bundle);
+            TestMobFragment testMobFragment1 = new TestMobFragment();
+            fragments.add(commentFragment);
+            fragments.add(testMobFragment1);
+
+            mTiltes = ResourceUtils.getStringArray(R.array.tabPostDealtItems);
+            for (int i = 0; i < mTiltes.length; i++) {
+                mTablayout.addTab(mTablayout.newTab().setText(mTiltes[i]));
+            }
+            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), mTiltes, fragments);
+            //tablayout 和viewpager 联动
+            mViewPager.setAdapter(viewPagerAdapter);
+            mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTablayout));
+            mTablayout.addOnTabSelectedListener(new MOnTabSelectedListener(mViewPager));
+            mViewPager.setCurrentItem(0);
         }
-        //加载评论
-        getPresenter().loadComments(currentIndex, mPost.getObjectId());
-        //查看用户是否喜欢这个帖子
-        getPresenter().loadIsUserLike(mPost.getObjectId());
+
     }
 
     @Override
@@ -279,45 +414,9 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
 
 
     @Override
-    public void showEmptyView() {
-        layoutState.changeState(StateFrameLayout.EMPTY);
-        closeReflshView();
-    }
-
-    @Override
-    public void showContentView(List<Comment> list) {
-        int start = mCommentList.size();
-        mCommentList.addAll(list);
-        int end = mCommentList.size();
-        recycleCommonAdapter.notifyItemRangeChanged(start, end);
-        layoutState.changeState(StateFrameLayout.SUCCESS);
-        closeReflshView();
-    }
-
-    private void closeReflshView() {
-//        mRefreshLayout.setEnabled(true);
-//        if (mRefreshLayout.isRefreshing()) {
-//            mHandler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    mRefreshLayout.setRefreshing(false);
-//                }
-//            }, 1000);
-//
-//        }
-    }
-
-    @Override
     public void showLoadView() {
-        layoutState.changeState(StateFrameLayout.LOADING);
-        closeReflshView();
     }
 
-    @Override
-    public void showErrorView() {
-        closeReflshView();
-        showToastMsg(ResourceUtils.getString(R.string.load_data_fail));
-    }
 
     @Override
     public void submitError() {
@@ -326,14 +425,19 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
     }
 
     @Override
-    public void submitOk() {
-        //  LogUtils.e("sen", "submitOk");
-        // etInput.setText("");
+    public void submitOk(Comment comment) {
         getView().showToastMsg(ResourceUtils.getString(R.string.submit_success));
         etInput.setText("");
         int count = mPost.getCommentCount() + 1;
         comments.setText(count + "");
+        mPost.setCommentCount(count);
         showLayoutButtomView();
+        //刷新Fragment
+
+//        mCommentList.add(0, comment);
+//        layoutState.changeState(StateFrameLayout.SUCCESS);
+//        recycleCommonAdapter.notifyItemInserted(0);
+//
     }
 
     @Override
@@ -351,7 +455,10 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
         likes.setText(count + "");
     }
 
-    @OnClick({R.id.imgLove, R.id.etInputFor, R.id.btnSend, R.id.imageKeyBorad, R.id.inputOutSildeView})
+
+    @OnClick({R.id.imgUser, R.id.imgLove, R.id.etInputFor, R.id.btnSend,
+            R.id.imageKeyBorad, R.id.inputOutSildeView,
+            R.id.imgUserTop})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.imgLove:
@@ -382,6 +489,17 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
                 break;
             case R.id.inputOutSildeView:
                 showLayoutButtomView();
+                break;
+
+            case R.id.imgUserTop:
+            case R.id.imgUser:
+                String userId;
+                if (mPost.getUser() != null && !TextUtils.isEmpty(mPost.getUser().getUserId())) {
+                    userId = mPost.getUser().getUserId();
+                } else {
+                    userId = mPost.getUserId();
+                }
+                UserInfoActivity.gotoThis(PostDetailActivity.this, false, userId);
                 break;
 
 
@@ -421,6 +539,7 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
             return super.onKeyDown(keyCode, event);
         }
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

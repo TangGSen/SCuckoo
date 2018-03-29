@@ -11,6 +11,7 @@ import com.ourcompany.app.MApplication;
 import com.ourcompany.fragment.message.ChatFragment;
 import com.ourcompany.fragment.message.MessageContactsFragment;
 import com.ourcompany.fragment.message.TestMobFragment;
+import com.ourcompany.interfaces.MOnTabSelectedListener;
 import com.ourcompany.presenter.fragment.LoginFragPresenter;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.TabLayoutIndicatorWith;
@@ -60,7 +61,7 @@ public class MessageFragment extends MvpFragment<LoginFragmentView, LoginFragPre
         //tablayout 和viewpager 联动
         mViewPager.setAdapter(viewPagerAdapter);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTablayout));
-        mTablayout.addOnTabSelectedListener(new MOnTabSelectedListener());
+        mTablayout.addOnTabSelectedListener(new MOnTabSelectedListener(mViewPager));
         mViewPager.setCurrentItem(0);
 
 
@@ -91,21 +92,5 @@ public class MessageFragment extends MvpFragment<LoginFragmentView, LoginFragPre
 
 
 
-    class MOnTabSelectedListener implements TabLayout.OnTabSelectedListener {
-        @Override
-        public void onTabSelected(TabLayout.Tab tab) {
-            int position = tab.getPosition();
-            mViewPager.setCurrentItem(position);
-        }
 
-        @Override
-        public void onTabUnselected(TabLayout.Tab tab) {
-
-        }
-
-        @Override
-        public void onTabReselected(TabLayout.Tab tab) {
-
-        }
-    }
 }

@@ -192,6 +192,24 @@ public class MServiceManager {
         });
     }
 
+    public void getUserInfoByUserId(final String mCurrentUserId, final OperationCallback<ArrayList<User>> callback) {
+        final String[] ids = new String[]{mCurrentUserId};
+        EXECUTOR.execute(new Runnable() {
+            @Override
+            public void run() {
+                UMSSDK.getUserListByIDs(ids,callback);
+            }
+        });
+    }
+
+    /**
+     * 获取当前登陆的用户的userId
+     * @return
+     */
+    public String getCurrentLoginUserId() {
+        return UMSSDK.getLoginUserId();
+    }
+
     /**
      * 修改用户的数据比如后台增加了第三方id 放在UMSDK中
      */
@@ -313,5 +331,7 @@ public class MServiceManager {
 
         });
     }
+
+
 
 }
