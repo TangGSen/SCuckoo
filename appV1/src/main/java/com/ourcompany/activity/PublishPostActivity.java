@@ -24,6 +24,7 @@ import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.ToastUtils;
 import com.ourcompany.view.activity.PublishPostActView;
+import com.ourcompany.widget.LoadingViewAOV;
 import com.ourcompany.widget.recycleview.commadapter.GridItemDecoration;
 
 import java.util.ArrayList;
@@ -247,8 +248,9 @@ public class PublishPostActivity extends MvpActivity<PublishPostActView, Publish
         switch (view.getId()) {
             case R.id.btPublish:
                 //检查所有的工作流程，包括压缩图片，文字检查，图片检查，完毕后批量上传
+                LoadingViewAOV.getInstance().with(PublishPostActivity.this,btPublish,R.color.colorPrimary);
                 String text = etContent.getText().toString();
-                 getPresenter().checkAllWorkflow(text);
+                getPresenter().checkAllWorkflow(text);
 
                 break;
         }
@@ -282,6 +284,7 @@ public class PublishPostActivity extends MvpActivity<PublishPostActView, Publish
 
     @Override
     public void uploadSuccess() {
+        LoadingViewAOV.getInstance().close(PublishPostActivity.this,btPublish);
         if (dialogProgress != null && dialogProgress.isShowing()) {
             dialogProgress.dismiss();
         }
@@ -321,6 +324,11 @@ public class PublishPostActivity extends MvpActivity<PublishPostActView, Publish
     }
 
     @Override
+    public void verifySubmitError() {
+        LoadingViewAOV.getInstance().close(PublishPostActivity.this,btPublish);
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             if(ImagePicker.getInstance().getSelectImageCount()>0 || !TextUtils.isEmpty(etContent.getText().toString())){
@@ -334,5 +342,6 @@ public class PublishPostActivity extends MvpActivity<PublishPostActView, Publish
             return super.onKeyDown(keyCode, event);
         }
     }
+
 
 }

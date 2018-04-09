@@ -18,15 +18,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.mob.ums.UMSSDK;
 import com.mob.ums.User;
 import com.ourcompany.R;
-import com.ourcompany.adapter.ViewPagerAdapter;
+import com.ourcompany.adapter.TabLayoutViewPagerAdapter;
 import com.ourcompany.app.MApplication;
+import com.ourcompany.fragment.TestMobFragment;
 import com.ourcompany.fragment.UserDynamicFragment;
-import com.ourcompany.fragment.message.TestMobFragment;
 import com.ourcompany.im.ui.ChatActivity;
 import com.ourcompany.interfaces.MOnTabSelectedListener;
-import com.ourcompany.manager.MServiceManager;
 import com.ourcompany.presenter.activity.UserInfoPresenter;
 import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.ResourceUtils;
@@ -141,7 +141,7 @@ public class UserInfoActivity extends MvpActivity<UserInfoActvityView, UserInfoP
             for (int i = 0; i < mTiltes.length; i++) {
                 mTablayout.addTab(mTablayout.newTab().setText(mTiltes[i]));
             }
-            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), mTiltes, fragments);
+            TabLayoutViewPagerAdapter viewPagerAdapter = new TabLayoutViewPagerAdapter(getSupportFragmentManager(), mTiltes, fragments);
             //tablayout 和viewpager 联动
             mViewPager.setAdapter(viewPagerAdapter);
             mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTablayout));
@@ -185,7 +185,8 @@ public class UserInfoActivity extends MvpActivity<UserInfoActvityView, UserInfoP
             return;
         }
         //相等
-        if (mUser.id.get().equals(MServiceManager.getInstance().getCurrentLoginUserId())) {
+
+        if (UMSSDK.isMe(mUser)) {
             btnAddFriend.setVisibility(View.GONE);
             btnChat.setVisibility(View.GONE);
             tvNickName.setText("[我]" + mUser.nickname.get());

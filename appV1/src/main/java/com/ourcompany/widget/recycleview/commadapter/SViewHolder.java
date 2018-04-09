@@ -1,6 +1,7 @@
 package com.ourcompany.widget.recycleview.commadapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.ImageView;
@@ -42,7 +43,12 @@ public class SViewHolder extends RecyclerView.ViewHolder {
      */
     public SViewHolder setText(int viewId, CharSequence text) {
         TextView textView = getView(viewId);
-        textView.setText(text);
+        if (!TextUtils.isEmpty(text)) {
+            textView.setText(text);
+        } else {
+            textView.setText("");
+        }
+
         return this;
     }
 
@@ -65,6 +71,14 @@ public class SViewHolder extends RecyclerView.ViewHolder {
         view.setEnabled(able);
         return this;
     }
+
+    public SViewHolder setImageResId(final int viewId, int resId) {
+        ImageView imageView = getView(viewId);
+        imageView.setTag(R.id.loading_image_url, resId);
+        ImageLoader.getImageLoader().loadImageRes(imageView, resId);
+
+        return this;
+    }
     //加载图片，定制流程，但是使用图片框架，看使用人
 
     public abstract static class HolderImageLoader{
@@ -79,6 +93,8 @@ public class SViewHolder extends RecyclerView.ViewHolder {
         public String getPath() {
             return mPath;
         }
+
+        public abstract void loadImageRes(ImageView imageView, int resId);
     }
 
 

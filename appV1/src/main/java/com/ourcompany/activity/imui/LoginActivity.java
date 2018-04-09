@@ -1,7 +1,6 @@
 package com.ourcompany.activity.imui;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -12,13 +11,18 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.ourcompany.R;
-import com.ourcompany.activity.HomeActivity;
+import com.ourcompany.bean.UserAccoutLoginRes;
 import com.ourcompany.presenter.activity.LoginActPresenter;
 import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.PhoneTextWatcher;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.ToastUtils;
 import com.ourcompany.view.activity.LoginActvityView;
+import com.ourcompany.widget.LoadingViewAOV;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -43,9 +47,9 @@ public class LoginActivity extends MvpActivity<LoginActvityView, LoginActPresent
     @Override
     protected void initView() {
         super.initView();
-        etUserName.setText("15510474794");
-        etPassword.setText("12345678sen");
-        btLogin.setEnabled(true);
+//        etUserName.setText("15510474794");
+//        etPassword.setText("12345678sen");
+//        btLogin.setEnabled(true);
         setSupportActionBar(commonToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         commonToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -55,6 +59,7 @@ public class LoginActivity extends MvpActivity<LoginActvityView, LoginActPresent
                 overridePendingTransition(0, 0);
             }
         });
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -114,12 +119,11 @@ public class LoginActivity extends MvpActivity<LoginActvityView, LoginActPresent
                 startActivity(fintent);
                 break;
             case R.id.singUp:
-                Intent intent = new Intent(LoginActivity.this, ResigisterActivity.class);
+                Intent intent = new Intent(LoginActivity.this, ResigisterAccountActivity.class);
                 startActivity(intent);
                 break;
             case R.id.bt_login:
-
-
+                LoadingViewAOV.getInstance().with(LoginActivity.this,btLogin);
                 String phones = etUserName.getText().toString().trim();
                 String password = etPassword.getText().toString();
                 getPresenter().login( phones, password);
@@ -128,22 +132,6 @@ public class LoginActivity extends MvpActivity<LoginActvityView, LoginActPresent
         }
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        if (intent.getStringExtra(Constant.ACT_FROM).equals(Constant.ACT_FROM_RESIGISTER)) {
-            Bundle bundle = intent.getBundleExtra(Constant.ACT_LOGIN_BUNDLE);
-            if (bundle != null) {
-                String phone = bundle.getString(Constant.ACT_LOGIN_PHONE);
-                if (!TextUtils.isEmpty(phone)) {
-                    etUserName.setText(phone);
-                    //将光标移动到后面
-                    etUserName.setSelection(etUserName.getText().toString().length());
-                }
-            }
-        }
-
-    }
 
     @Override
     public void loading() {
@@ -157,20 +145,49 @@ public class LoginActivity extends MvpActivity<LoginActvityView, LoginActPresent
 
     @Override
     public void loginSucess() {
-        Intent intent = new Intent(this, HomeActivity.class);
-        intent.putExtra(Constant.ACT_FROM,Constant.ACT_FROM_LOGIN_SUCCESS);
-        startActivity(intent);
+        LoadingViewAOV.getInstance().close(LoginActivity.this,btLogin);
+        EventBus.getDefault().post(new UserAccoutLoginRes().setLoginSuccess(true));
         overridePendingTransition(0,0);
         finish();
+    }
+
+    /**
+     * 登陆成功
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventResigister(UserAccoutLoginRes res) {
+        if (res.isLoginSuccess()) {
+            overridePendingTransition(0, 0);
+            finish();
+        } else {
+            String phone = res.getPhone();
+            if (!TextUtils.isEmpty(phone)) {
+                etUserName.setText(phone);
+                //将光标移动到后面
+                etUserName.setSelection(etUserName.getText().toString().length());
+            }
+        }
     }
 
     @Override
     public void loginFial() {
         showToastMsg(ResourceUtils.getString(R.string.login_fail));
+        LoadingViewAOV.getInstance().close(LoginActivity.this,btLogin);
+    }
+
+    @Override
+    public void verifyError() {
+        LoadingViewAOV.getInstance().close(LoginActivity.this,btLogin);
     }
 
     @Override
     public void showToastMsg(String string) {
         ToastUtils.showSimpleToast(string);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

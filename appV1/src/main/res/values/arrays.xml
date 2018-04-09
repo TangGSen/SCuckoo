@@ -4,7 +4,7 @@
         <item>首页</item>
         <item>发现</item>
         <item></item>
-        <item>消息</item>
+        <item>材料城</item>
         <item>我的</item>
     </string-array>
     <string-array name="tabMessageItems">
@@ -29,6 +29,15 @@
         <item>评论</item>
         <item>投票</item>
     </string-array>
+
+    <string-array name="MainChooseItems">
+        <item>设计</item>
+        <item>施工</item>
+        <item>监理</item>
+        <item>维修</item>
+    </string-array>
+
+
 
     <declare-styleable name="PieView">
         <attr name="percentage" format="float" />

@@ -24,13 +24,13 @@ import android.widget.TextView;
 
 import com.ourcompany.R;
 import com.ourcompany.activity.imui.UserInfoActivity;
-import com.ourcompany.adapter.ViewPagerAdapter;
+import com.ourcompany.adapter.TabLayoutViewPagerAdapter;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.beahovr.CollapsingToolbarLayoutState;
 import com.ourcompany.bean.bmob.Comment;
 import com.ourcompany.bean.bmob.Post;
 import com.ourcompany.fragment.CommentFragment;
-import com.ourcompany.fragment.message.TestMobFragment;
+import com.ourcompany.fragment.VoteFragment;
 import com.ourcompany.interfaces.MOnTabSelectedListener;
 import com.ourcompany.presenter.activity.PostDeailActPresenter;
 import com.ourcompany.utils.Constant;
@@ -43,6 +43,8 @@ import com.ourcompany.utils.ToastUtils;
 import com.ourcompany.view.activity.PostDeailActView;
 import com.ourcompany.widget.NineGridlayout;
 import com.ourcompany.widget.recycleview.commadapter.ImageLoader;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -108,6 +110,8 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
     LinearLayout layoutInpts;
     @BindView(R.id.tabLayout)
     TabLayout mTablayout;
+    @BindView(R.id.btVote)
+    TextView btVote;
 
 
     private Post mPost;
@@ -382,6 +386,11 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
             likes.setText(mPost.getLikeCount() + "");
             comments.setText(mPost.getCommentCount() + "");
 
+            if (mPost.getNeedVote() != null && mPost.getNeedVote() && mPost.getmPostVoteDeadline() != null && !mPost.getmPostVoteDeadline()) {
+                btVote.setVisibility(View.VISIBLE);
+            } else {
+                btVote.setVisibility(View.GONE);
+            }
             //查看用户是否喜欢这个帖子
             TabLayoutIndicatorWith.resetWith(mTablayout);
             getPresenter().loadIsUserLike(mPost.getObjectId());
@@ -389,15 +398,23 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
             Bundle bundle = new Bundle();
             bundle.putString(Constant.KEY_POST_ID, mPost.getObjectId());
             commentFragment.setArguments(bundle);
-            TestMobFragment testMobFragment1 = new TestMobFragment();
             fragments.add(commentFragment);
-            fragments.add(testMobFragment1);
 
             mTiltes = ResourceUtils.getStringArray(R.array.tabPostDealtItems);
-            for (int i = 0; i < mTiltes.length; i++) {
+
+            int tabLength = 0;
+            if (mPost.getNeedVote() != null && mPost.getNeedVote()) {
+                tabLength = mTiltes.length;
+                VoteFragment voteFragment = new VoteFragment();
+                voteFragment.setArguments(bundle);
+                fragments.add(voteFragment);
+            } else {
+                tabLength = mTiltes.length - 1;
+            }
+            for (int i = 0; i < tabLength; i++) {
                 mTablayout.addTab(mTablayout.newTab().setText(mTiltes[i]));
             }
-            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), mTiltes, fragments);
+            TabLayoutViewPagerAdapter viewPagerAdapter = new TabLayoutViewPagerAdapter(getSupportFragmentManager(), mTiltes, fragments);
             //tablayout 和viewpager 联动
             mViewPager.setAdapter(viewPagerAdapter);
             mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTablayout));
@@ -433,11 +450,7 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
         mPost.setCommentCount(count);
         showLayoutButtomView();
         //刷新Fragment
-
-//        mCommentList.add(0, comment);
-//        layoutState.changeState(StateFrameLayout.SUCCESS);
-//        recycleCommonAdapter.notifyItemInserted(0);
-//
+        EventBus.getDefault().post(comment);
     }
 
     @Override

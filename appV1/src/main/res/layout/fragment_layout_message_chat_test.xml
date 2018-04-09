@@ -54,6 +54,51 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/ic_testemoji"/>
+
+        <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/btTestOpen"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/common_16dp"
+
+            android:layout_marginRight="@dimen/common_16dp"
+            android:layout_height="@dimen/frgment_login_edtx_h40dp"
+            android:layout_below="@+id/layout_ets"
+            android:layout_marginTop="@dimen/frgment_login_24dp"
+            android:background="@drawable/etbg_login_register"
+            android:text="测试开启"
+            android:textColor="@drawable/selector_text_style_v2"
+            android:textSize="16sp"/>
+
+        <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/btTestClose"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/frgment_login_edtx_h40dp"
+            android:layout_below="@+id/layout_ets"
+            android:layout_marginTop="@dimen/frgment_login_24dp"
+            android:background="@drawable/etbg_login_register"
+            android:layout_marginLeft="@dimen/common_16dp"
+            android:layout_marginRight="@dimen/common_16dp"
+            android:text="测试关闭"
+            android:textColor="@drawable/selector_text_style_v2"
+            android:textSize="16sp"/>
+
+        <Button
+            android:id="@+id/btnShowRes"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/frgment_login_edtx_h40dp"
+            android:layout_below="@+id/layout_ets"
+            android:layout_marginLeft="@dimen/common_16dp"
+            android:layout_marginRight="@dimen/common_16dp"
+            android:layout_marginTop="@dimen/frgment_login_24dp"
+            android:background="@drawable/etbg_login_register"
+            android:text="测试关闭"
+            android:textColor="@drawable/selector_text_style_v2"
+            android:textSize="16sp" />
+
+
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

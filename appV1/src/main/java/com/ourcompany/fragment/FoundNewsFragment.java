@@ -81,7 +81,7 @@ public class FoundNewsFragment extends MvpFragment<FoundNewsFragmentView, FoundN
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recycleview.setLayoutManager(linearLayoutManager);
         recycleview.setHasFixedSize(true);
-        recycleview.addItemDecoration(new SimpleDecoration(MApplication.mContext, R.drawable.recycle_line_divider_padding, 2));
+        recycleview.addItemDecoration(new SimpleDecoration(MApplication.mContext, R.drawable.recycle_line_divider_padding, 1));
         recycleCommonAdapter = new RecycleMultiTypeAdapter<Post>(
                 MApplication.mContext, mPostList) {
             @Override

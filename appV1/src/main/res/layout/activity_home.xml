@@ -20,5 +20,6 @@
         android:id="@+id/tabLayout"
         style="@style/TabLayoutStyle"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize" />
+        android:layout_height="48dp"
+        app:tabBackground="@android:color/transparent"/>
 </LinearLayout>

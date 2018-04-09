@@ -28,4 +28,6 @@ public interface PublishPostActView extends MvpView {
      */
 
     void dealImageError(String errormsg);
+
+    void verifySubmitError();
 }

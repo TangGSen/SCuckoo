@@ -6,7 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.ourcompany.R;
-import com.ourcompany.adapter.ViewPagerAdapter;
+import com.ourcompany.adapter.TabLayoutViewPagerAdapter;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.interfaces.MOnTabSelectedListener;
 import com.ourcompany.presenter.fragment.FoundFragPresenter;
@@ -49,7 +49,7 @@ public class FoundFragment extends MvpFragment<FoundFragmentView, FoundFragPrese
             FoundNewsFragment testMobFragment = new FoundNewsFragment();
             fragments.add(testMobFragment);
         }
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), mTiltes, fragments);
+        TabLayoutViewPagerAdapter viewPagerAdapter = new TabLayoutViewPagerAdapter(getChildFragmentManager(), mTiltes, fragments);
         //tablayout 和viewpager 联动
         mViewPager.setAdapter(viewPagerAdapter);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTablayout));

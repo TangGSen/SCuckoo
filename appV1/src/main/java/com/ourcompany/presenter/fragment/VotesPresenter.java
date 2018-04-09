@@ -1,16 +1,17 @@
-package com.ourcompany.presenter.activity;
+package com.ourcompany.presenter.fragment;
 
 import android.content.Context;
 import android.support.v7.util.DiffUtil;
 import android.text.TextUtils;
 
 import com.ourcompany.bean.bmob.Comment;
+import com.ourcompany.bean.bmob.Vote;
 import com.ourcompany.manager.MServiceManager;
 import com.ourcompany.utils.BombUtils;
 import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.LogUtils;
 import com.ourcompany.utils.MDiffCallback;
-import com.ourcompany.view.fragment.CommentFragView;
+import com.ourcompany.view.fragment.VoteFragView;
 
 import java.util.Date;
 import java.util.List;
@@ -29,23 +30,23 @@ import company.com.commons.framework.presenter.MvpPresenter;
  * Des    :
  */
 
-public class CommentsPresenter extends MvpBasePresenter<CommentFragView> implements MvpPresenter<CommentFragView> {
+public class VotesPresenter extends MvpBasePresenter<VoteFragView> implements MvpPresenter<VoteFragView> {
     private BmobDate bmobDate;
 
-    public CommentsPresenter(Context context) {
+    public VotesPresenter(Context context) {
         super(context);
     }
 
     /**
      * 加载评论，首先加载最新的
      */
-    public void loadComments(final int start, String objectId,final boolean isLoadMore) {
+    public void loadData(final int start, String objectId,final boolean isLoadMore) {
         //除了第一页
         if(TextUtils.isEmpty(objectId) && start==0){
             getView().showEmptyView();
             return;
         }
-        BmobQuery<Comment> query = new BmobQuery<Comment>();
+        BmobQuery<Vote> query = new BmobQuery<Vote>();
         query.include(Constant.BMOB_POST_USER);
         query.order(Constant.BMOB_ORDER_DESCENDING + Constant.BMOB_CREATE);
         if (bmobDate == null) {
@@ -59,12 +60,9 @@ public class CommentsPresenter extends MvpBasePresenter<CommentFragView> impleme
         query.setLimit(Constant.IM_PAGESIZE);
         query.setSkip(start * Constant.IM_PAGESIZE);
         //执行查询方法
-        query.findObjects(new FindListener<Comment>() {
+        query.findObjects(new FindListener<Vote>() {
             @Override
-            public void done(final List<Comment> list, BmobException e) {
-                for(Comment comment :list){
-                    LogUtils.e("sen","****"+comment.getContent()+"**"+comment.getObjectId());
-                }
+            public void done(final List<Vote> list, BmobException e) {
 
                 if (e == null) {
                     mHandler.post(new Runnable() {
@@ -111,7 +109,7 @@ public class CommentsPresenter extends MvpBasePresenter<CommentFragView> impleme
      * @param postId
      */
     public void getDataOnReFresh(String createdAt, String postId) {
-        BmobQuery<Comment> query = new BmobQuery<Comment>();
+        BmobQuery<Vote> query = new BmobQuery<Vote>();
         query.include(Constant.BMOB_POST_USER);
         query.order(Constant.BMOB_ORDER_DESCENDING + Constant.BMOB_CREATE);
         //查询playerName叫“比目”的数据
@@ -121,9 +119,9 @@ public class CommentsPresenter extends MvpBasePresenter<CommentFragView> impleme
         //返回50条数据，如果不加上这条语句，默认返回10条数据
         query.setLimit(Constant.IM_PAGESIZE);
         //执行查询方法
-        query.findObjects(new FindListener<Comment>() {
+        query.findObjects(new FindListener<Vote>() {
             @Override
-            public void done(final List<Comment> list, BmobException e) {
+            public void done(final List<Vote> list, BmobException e) {
 
                 if (e == null) {
                     mHandler.post(new Runnable() {
@@ -150,7 +148,7 @@ public class CommentsPresenter extends MvpBasePresenter<CommentFragView> impleme
      * @param currentIndex
      */
     public void getDataOnLoadMore(int currentIndex,String objectId) {
-        loadComments(currentIndex,objectId, true);
+        loadData(currentIndex,objectId, true);
     }
 
     public void diffAdapter(final List<Comment> oldList, final List<Comment> newDatas) {
@@ -167,5 +165,7 @@ public class CommentsPresenter extends MvpBasePresenter<CommentFragView> impleme
             }
         });
     }
+
+
 }
 

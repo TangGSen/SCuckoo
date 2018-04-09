@@ -6,11 +6,10 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.ourcompany.R;
-import com.ourcompany.adapter.ViewPagerAdapter;
+import com.ourcompany.adapter.TabLayoutViewPagerAdapter;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.fragment.message.ChatFragment;
 import com.ourcompany.fragment.message.MessageContactsFragment;
-import com.ourcompany.fragment.message.TestMobFragment;
 import com.ourcompany.interfaces.MOnTabSelectedListener;
 import com.ourcompany.presenter.fragment.LoginFragPresenter;
 import com.ourcompany.utils.ResourceUtils;
@@ -57,7 +56,7 @@ public class MessageFragment extends MvpFragment<LoginFragmentView, LoginFragPre
         for (int i = 0;i<mTiltes.length;i++){
             mTablayout.addTab(mTablayout.newTab().setText(mTiltes[i]));
         }
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), mTiltes, fragments);
+        TabLayoutViewPagerAdapter viewPagerAdapter = new TabLayoutViewPagerAdapter(getChildFragmentManager(), mTiltes, fragments);
         //tablayout 和viewpager 联动
         mViewPager.setAdapter(viewPagerAdapter);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTablayout));

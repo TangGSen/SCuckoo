@@ -44,4 +44,12 @@ public class ImageLoader extends SViewHolder.HolderImageLoader {
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(imageView);
         }
+
+    @Override
+    public void loadImageRes(ImageView imageView, int resId) {
+        Glide.with(imageView.getContext()).load(imageView.getTag(R.id.loading_image_url)).error(R.mipmap.photo)           //设置错误图片
+                .placeholder(R.mipmap.photo)     //设置占位图片
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imageView);
+    }
 }

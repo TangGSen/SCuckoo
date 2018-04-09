@@ -77,15 +77,16 @@
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:layout_gravity="left"
+            android:paddingLeft="@dimen/common_16dp"
             android:background="@color/whiles"
-            android:paddingBottom="@dimen/common_8dp"
-            android:paddingTop="@dimen/common_8dp"
             app:layout_collapseMode="pin"
             app:tabGravity="center"
             app:tabIndicatorHeight="1dp"
-            app:tabMode="fixed"
+            app:tabBackground="@android:color/transparent"
             app:tabSelectedTextColor="@color/colorPrimary"
-            app:tabTextColor="@color/text_gray" />
+            app:tabMode="scrollable"
+            app:tabTextColor="@color/colorFrist" />
+
 
     </android.support.design.widget.AppBarLayout>
 
@@ -136,6 +137,22 @@
             android:textColor="@color/colorFrist"
             android:textSize="@dimen/font_14sp" />
 
+        <TextView
+            android:id="@+id/btVote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/common_8dp"
+            android:background="@drawable/bg_style_theme_stroke"
+            android:gravity="center"
+            android:paddingLeft="@dimen/common_8dp"
+            android:paddingRight="@dimen/common_8dp"
+            android:paddingTop="@dimen/common_4dp"
+            android:paddingBottom="@dimen/common_4dp"
+            android:text="@string/str_vote"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/font_12sp"
+            android:visibility="gone" />
+
 
         <ImageView
             android:id="@+id/imgLove"
@@ -145,6 +162,15 @@
             android:gravity="center"
             android:padding="4dp"
             android:src="@drawable/selector_ic_love" />
+
+        <ImageView
+            android:id="@+id/imgCollection"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginLeft="@dimen/common_8dp"
+            android:gravity="center"
+            android:padding="8dp"
+            android:src="@drawable/selector_ic_collection" />
 
     </LinearLayout>
 

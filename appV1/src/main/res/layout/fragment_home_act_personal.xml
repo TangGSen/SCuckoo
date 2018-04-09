@@ -75,12 +75,13 @@
                         android:textSize="@dimen/fragment_font_14sp" />
 
                     <TextView
+                        android:id="@+id/btnMessage"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:drawableTop="@drawable/ic_unknows_state"
+                        android:drawableTop="@drawable/ic_message_normal"
                         android:gravity="center_horizontal"
-                        android:text="待定"
+                        android:text="@string/tab_message"
                         android:textColor="@color/tab_bgcolor"
                         android:textSize="@dimen/fragment_font_14sp" />
 

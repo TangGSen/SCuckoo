@@ -51,5 +51,6 @@ ext{
     rxAndroidVersion ='2.0.1'
     smartRefreshLayout ='1.1.0-alpha-1'
     statusBarUtilVersion='1.5.0'
+    eventBusVersion='3.0.0'
 
 }

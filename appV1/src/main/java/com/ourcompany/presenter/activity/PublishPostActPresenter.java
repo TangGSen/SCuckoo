@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.ourcompany.R;
 import com.ourcompany.bean.CompressImage;
+import com.ourcompany.bean.UserTypeLocal;
 import com.ourcompany.bean.bmob.Post;
 import com.ourcompany.bean.bmob.SUser;
 import com.ourcompany.bean.bmob.UploadType;
@@ -60,11 +61,13 @@ public class PublishPostActPresenter extends MvpBasePresenter<PublishPostActView
         //1.先检查用户有没登录
         if (Constant.CURRENT_USER == null || TextUtils.isEmpty(Constant.CURRENT_USER.id.get())) {
             getView().showToastMsg(ResourceUtils.getString(R.string.str_user_not_login));
+            getView().verifySubmitError();
             return;
         }
         //2.检查有没合法的填入信息
         if (TextUtils.isEmpty(text) && ImagePicker.getInstance().getSelectImageCount() <= 0) {
             getView().showToastMsg(ResourceUtils.getString(R.string.str_text_image_null));
+            getView().verifySubmitError();
             return;
         }
         //3.上传的类型
@@ -74,6 +77,7 @@ public class PublishPostActPresenter extends MvpBasePresenter<PublishPostActView
         this.inputText = text;
         if (ImagePicker.getInstance().getSelectImageCount() <= 0 && !TextUtils.isEmpty(text)) {
             uploadPost(null, UploadType.Text);
+            getView().verifySubmitError();
             return;
         }
         //（2.有图片的，先处理图片
@@ -256,6 +260,11 @@ public class PublishPostActPresenter extends MvpBasePresenter<PublishPostActView
                     return;
                 }
                 Post newPost = new Post();
+                //设置Post 是否需要投票
+                if (getIsPostNeedVote()) {
+                    newPost.setNeedVote(Boolean.TRUE);
+                    newPost.setmPostVoteDeadline(Boolean.FALSE);
+                }
                 newPost.setUserId(Constant.CURRENT_USER.id.get());
                 SUser user = new SUser();
                 user.setObjectId(MServiceManager.getInstance().getLocalThirdPartyId());
@@ -296,5 +305,17 @@ public class PublishPostActPresenter extends MvpBasePresenter<PublishPostActView
                 });
             }
         });
+    }
+
+    /**
+     * 判断是否需要投票，目前就是只有业主的身份需要投票
+     *
+     * @return
+     */
+    private boolean getIsPostNeedVote() {
+       if( MServiceManager.getInstance().getLoginUserType()== UserTypeLocal.Owner.getValue()){
+           return true;
+       }
+        return false;
     }
 }

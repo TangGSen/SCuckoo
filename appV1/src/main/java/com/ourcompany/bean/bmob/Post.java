@@ -26,6 +26,49 @@ public class Post extends BmobObject {
     private Integer likeCount;
     //评论的总数
     private Integer commentCount;
+    //投票总数
+    private Integer voteCount;
+    //该帖子的胜利者或者是中标者
+    private SUser mWinningBidder;
+    //是否允许投票
+    private Boolean mPostVoteDeadline;
+    //是否需要投票，只有是业主发表的的需求才为ture
+    private Boolean isNeedVote;
+
+    public Boolean getmPostVoteDeadline() {
+        return mPostVoteDeadline;
+    }
+
+    public void setmPostVoteDeadline(Boolean mPostVoteDeadline) {
+        this.mPostVoteDeadline = mPostVoteDeadline;
+    }
+
+
+    public Boolean getNeedVote() {
+        return isNeedVote;
+    }
+
+    public void setNeedVote(Boolean needVote) {
+        isNeedVote = needVote;
+    }
+
+
+    public Integer getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(Integer voteCount) {
+        this.voteCount = voteCount;
+    }
+
+    public SUser getmWinningBidder() {
+        return mWinningBidder;
+    }
+
+    public void setmWinningBidder(SUser mWinningBidder) {
+        this.mWinningBidder = mWinningBidder;
+    }
+
 
 
     public Integer getLikeCount() {

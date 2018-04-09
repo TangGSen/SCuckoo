@@ -57,9 +57,11 @@ public abstract class MvpFragment<V extends MvpView, P extends MvpPresenter<V>> 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        initLinstener();
 
     }
+
+    protected  void initLinstener(){}
 
     /**
      * 获取布局的id

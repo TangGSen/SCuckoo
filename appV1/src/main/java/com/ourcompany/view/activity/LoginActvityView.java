@@ -16,4 +16,5 @@ public interface LoginActvityView extends MvpView {
     void loginFial();
 
 
+    void verifyError();
 }

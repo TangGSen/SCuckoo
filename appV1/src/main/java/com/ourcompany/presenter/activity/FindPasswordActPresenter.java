@@ -8,13 +8,14 @@ import android.text.TextUtils;
 
 import com.mob.ums.OperationCallback;
 import com.mob.ums.UMSSDK;
+import com.mob.ums.User;
 import com.ourcompany.R;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.LogUtils;
 import com.ourcompany.utils.NetWorkUtils;
 import com.ourcompany.utils.ResourceUtils;
-import com.ourcompany.view.activity.ResigisterActView;
+import com.ourcompany.view.activity.FindAccoutPswActView;
 
 import company.com.commons.framework.presenter.MvpBasePresenter;
 
@@ -26,7 +27,7 @@ import company.com.commons.framework.presenter.MvpBasePresenter;
  * Des    :
  */
 
-public class FindPasswordActPresenter extends MvpBasePresenter<ResigisterActView> {
+public class FindPasswordActPresenter extends MvpBasePresenter<FindAccoutPswActView> {
     //开始倒数
     public static final int MSG_COUNTING_TIME = 0;
     public static final int MSG_ERROR_GET_CODE = 1;
@@ -65,7 +66,7 @@ public class FindPasswordActPresenter extends MvpBasePresenter<ResigisterActView
                     break;
                 case MSG_RESIGISTER_SUCCESS:
 
-                    getView().showToastMsg(ResourceUtils.getString(R.string.resigister_success));
+
                     getView().verifySuccess();
                     break;
 
@@ -128,20 +129,24 @@ public class FindPasswordActPresenter extends MvpBasePresenter<ResigisterActView
     public void sendSafetyCode(String phone, String code, String password) {
         if (TextUtils.isEmpty(phone)) {
             getView().showToastMsg(ResourceUtils.getString(R.string.frag_login_username_hint));
+            getView().verifyTextError();
             return;
         }
 
         if (TextUtils.isEmpty(code)) {
             getView().showToastMsg(ResourceUtils.getString(R.string.frag_login_safety_hint));
+            getView().verifyTextError();
             return;
         }
         if (TextUtils.isEmpty(password)) {
             getView().showToastMsg(ResourceUtils.getString(R.string.frag_login_password_hint));
+            getView().verifyTextError();
             return;
         }
         //再检查网络
         if (!NetWorkUtils.isConnected(MApplication.mContext)) {
             getView().showToastMsg(ResourceUtils.getString(R.string.net_unlink));
+            getView().verifyTextError();
             return;
         }
         //开始验证
@@ -155,6 +160,7 @@ public class FindPasswordActPresenter extends MvpBasePresenter<ResigisterActView
         // 注册一个事件回调，用于处理提交验证码操作的结果
 //        // 触发操作
 //        SMSSDK.submitVerificationCode(country, phone, code);
+        LogUtils.e("sen","修改密码"+phone+"pw:"+password);
         UMSSDK.resetPasswordWithPhoneNumber(country, phone, code, password,
                 new OperationCallback<Void>(){
                     @Override
@@ -181,5 +187,20 @@ public class FindPasswordActPresenter extends MvpBasePresenter<ResigisterActView
 
     public void onDestroy() {
         mHandler.removeCallbacksAndMessages(null);
+    }
+
+    /**
+     * 获取当前的登陆的User 去修改密码
+     */
+    public void getCurrentLoginUser() {
+        UMSSDK.getLoginUser(new OperationCallback<User>() {
+            @Override
+            public void onSuccess(User user) {
+                super.onSuccess(user);
+                if (user != null && !TextUtils.isEmpty(user.phone.get())) {
+                    getView().setCurrentUserName(user.phone.get());
+                }
+            }
+        });
     }
 }

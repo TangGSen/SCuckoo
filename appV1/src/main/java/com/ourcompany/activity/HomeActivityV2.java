@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.ourcompany.R;
 import com.ourcompany.fragment.FoundFragment;
 import com.ourcompany.fragment.HomeFragment;
-import com.ourcompany.fragment.MessageFragment;
+import com.ourcompany.fragment.MallFragment;
 import com.ourcompany.fragment.MineFragment;
 import com.ourcompany.presenter.activity.HomeActPresenter;
 import com.ourcompany.utils.Constant;
@@ -46,7 +46,7 @@ public class HomeActivityV2 extends MvpActivity<HomeAcitityView, HomeActPresente
 
     private HomeFragment mHomeFragment;
     private FoundFragment mFoundFragment;
-    private MessageFragment mMessageFragment;
+    private MallFragment mMallFragment;
     private MineFragment mPersonalCenterFragment;
 
     private int currentFragPosition = -1;
@@ -71,8 +71,8 @@ public class HomeActivityV2 extends MvpActivity<HomeAcitityView, HomeActPresente
     protected void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
         tabTiles = ResourceUtils.getStringArray(R.array.tabButtonItemName);
-        tabItemDrawableNormal = new int[]{R.drawable.ic_main_normal, R.drawable.ic_classify_normal, R.drawable.ic_add_event, R.drawable.ic_message_normal, R.drawable.ic_mine_normal};
-        tabItemDrawableSelected = new int[]{R.drawable.ic_main_selected, R.drawable.ic_classify_selected, R.drawable.ic_add_event, R.drawable.ic_message_selected, R.drawable.ic_mine_seleted};
+        tabItemDrawableNormal = new int[]{R.drawable.ic_main_normal, R.drawable.ic_classify_normal, R.drawable.ic_add_event, R.drawable.ic_mall_normal, R.drawable.ic_mine_normal};
+        tabItemDrawableSelected = new int[]{R.drawable.ic_main_selected, R.drawable.ic_classify_selected, R.drawable.ic_add_event, R.drawable.ic_mall_selected, R.drawable.ic_mine_seleted};
         initTabView();
         mFragmentManager = getSupportFragmentManager();
         if (savedInstanceState != null) {
@@ -82,12 +82,10 @@ public class HomeActivityV2 extends MvpActivity<HomeAcitityView, HomeActPresente
             Log.e("sen", "恢复的状态" + currentFragPosition);
             mHomeFragment = (HomeFragment) mFragmentManager.findFragmentByTag(tabTiles[0]);
             mFoundFragment = (FoundFragment) mFragmentManager.findFragmentByTag(tabTiles[1]);
-            mMessageFragment = (MessageFragment) mFragmentManager.findFragmentByTag(tabTiles[3]);
+            mMallFragment = (MallFragment) mFragmentManager.findFragmentByTag(tabTiles[3]);
             mPersonalCenterFragment = (MineFragment) mFragmentManager.findFragmentByTag(tabTiles[4]);
 
             tabLayout.getTabAt(currentFragPosition).select();
-
-
         }
 
         if (currentFragPosition == -1) {
@@ -95,20 +93,19 @@ public class HomeActivityV2 extends MvpActivity<HomeAcitityView, HomeActPresente
         } else {
             setSelectedFragment(currentFragPosition);
         }
-
-
     }
 
     private void setSelectedFragment(int position) {
         if (currentFragPosition == position) {
             return;
         }
-        FragmentTransaction transaction = mFragmentManager.beginTransaction().setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+        //.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         hideAllFragments(transaction);
         switch (position) {
             case 0:
                 if (mHomeFragment == null) {
-                    // 如果MessageFragment为空，则创建一个并添加到界面上
+                    // 如果MallFragment为空，则创建一个并添加到界面上
                     mHomeFragment = new HomeFragment();
                     transaction.add(R.id.home_layout_content, mHomeFragment, tabTiles[position]);
                 } else {
@@ -125,11 +122,11 @@ public class HomeActivityV2 extends MvpActivity<HomeAcitityView, HomeActPresente
                 }
                 break;
             case 3:
-                if (mMessageFragment == null) {
-                    mMessageFragment = new MessageFragment();
-                    transaction.add(R.id.home_layout_content, mMessageFragment, tabTiles[position]);
+                if (mMallFragment == null) {
+                    mMallFragment = new MallFragment();
+                    transaction.add(R.id.home_layout_content, mMallFragment, tabTiles[position]);
                 } else {
-                    transaction.show(mMessageFragment);
+                    transaction.show(mMallFragment);
                 }
                 break;
             case 4:
@@ -152,8 +149,8 @@ public class HomeActivityV2 extends MvpActivity<HomeAcitityView, HomeActPresente
         if (mFoundFragment != null) {
             transaction.hide(mFoundFragment);
         }
-        if (mMessageFragment != null) {
-            transaction.hide(mMessageFragment);
+        if (mMallFragment != null) {
+            transaction.hide(mMallFragment);
         }
         if (mPersonalCenterFragment != null) {
             transaction.hide(mPersonalCenterFragment);
@@ -276,16 +273,16 @@ public class HomeActivityV2 extends MvpActivity<HomeAcitityView, HomeActPresente
     }
 
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        String from = intent.getStringExtra(Constant.ACT_FROM);
-        //如果是登陆成功的话，那么刷新当前页面
-        if (!TextUtils.isEmpty(from) && from.equals(Constant.ACT_FROM_LOGIN_SUCCESS)) {
-            if (mPersonalCenterFragment != null)
-                mPersonalCenterFragment.reflesh();
-        }
-    }
+//    @Override
+//    protected void onNewIntent(Intent intent) {
+//        super.onNewIntent(intent);
+//        String from = intent.getStringExtra(Constant.ACT_FROM);
+//        //如果是登陆成功的话，那么刷新当前页面
+//        if (!TextUtils.isEmpty(from) && from.equals(Constant.ACT_FROM_LOGIN_SUCCESS)) {
+//            if (mPersonalCenterFragment != null)
+//                mPersonalCenterFragment.reflesh();
+//        }
+//    }
 
     @Override
     public void showToastMsg(String string) {

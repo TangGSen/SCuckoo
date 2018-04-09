@@ -15,12 +15,10 @@ import java.util.List;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
-    private String[] titleList;
     private List<Fragment> fragmentList;
 
-    public ViewPagerAdapter(FragmentManager fm, String[] titleList, List<Fragment> fragmentList) {
+    public ViewPagerAdapter(FragmentManager fm,  List<Fragment> fragmentList) {
         super(fm);
-        this.titleList = titleList;
         this.fragmentList = fragmentList;
     }
 
@@ -37,9 +35,6 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         return fragmentList.size();
     }
 
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return titleList[position];
-    }
+
 }
 

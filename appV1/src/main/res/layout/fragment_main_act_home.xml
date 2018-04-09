@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
+        android:background="@color/whiles"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -17,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:fitsSystemWindows="true"
+
             app:contentScrim="@color/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -36,25 +38,30 @@
                 app:layout_collapseMode="pin"
                 app:titleMarginTop="15dp" />
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/home_tablayout"
-                style="@style/TabLayout"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_gravity="bottom"
-                android:background="@color/tab_bgcolor"
-                />
-
 
         </android.support.design.widget.CollapsingToolbarLayout>
+        <!--   <android.support.v7.widget.RecyclerView
+               android:id="@+id/recycleview"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_horizontal"
+               android:background="@color/tab_bgcolor"
+               android:paddingLeft="@dimen/common_16dp"
+               android:paddingRight="@dimen/common_16dp" />-->
+
 
     </android.support.design.widget.AppBarLayout>
-    <android.support.v4.view.ViewPager
-        android:id="@+id/home_viewpager_shows"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimaryDark"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:background="@color/whiles"
+        app:tabGravity="center"
+        app:tabIndicatorHeight="0dp"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="@color/colorPrimary"
+        app:tabTextColor="@color/colorFrist" />
 
 </android.support.design.widget.CoordinatorLayout>

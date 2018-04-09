@@ -66,6 +66,8 @@ public class Constant {
 
     //自定义字段，是否存在第三id key
     public static final String UMSDK_COMSTOR_KEY_EXIST_ID = "isExistThirdId";
+    public static final String UMSDK_COMSTOR_KEY_USER_TYPE = "user_type_name";
+    public static final String UMSDK_COMSTOR_KEY_USER_TYPE_VALUE = "user_type_value";
     /**
      * bmob sdk 相关的
      */

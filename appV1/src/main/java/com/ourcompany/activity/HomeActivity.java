@@ -247,8 +247,8 @@ public class HomeActivity extends MvpActivity<HomeAcitityView,HomeActPresenter> 
         String from = intent.getStringExtra(Constant.ACT_FROM);
         //如果是登陆成功的话，那么刷新当前页面
         if(!TextUtils.isEmpty(from)&&from.equals(Constant.ACT_FROM_LOGIN_SUCCESS)){
-            if(mPersonalCenterFragment!=null)
-                mPersonalCenterFragment.reflesh();
+            if(mPersonalCenterFragment!=null){}
+              //  mPersonalCenterFragment.reflesh();
         }
     }
 

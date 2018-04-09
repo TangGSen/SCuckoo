@@ -115,15 +115,14 @@
             android:background="@color/whiles"
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            android:paddingBottom="@dimen/common_8dp"
-            android:paddingTop="@dimen/common_8dp"
+            android:layout_height="48dp"
+            android:paddingLeft="@dimen/common_8dp"
             android:layout_gravity="left"
             app:tabGravity="center"
             app:tabIndicatorHeight="1dp"
-            app:tabMode="fixed"
+            app:tabMode="scrollable"
             app:tabSelectedTextColor="@color/colorPrimary"
-            app:tabTextColor="@color/text_gray" />
+            app:tabTextColor="@color/colorFrist" />
     </android.support.design.widget.AppBarLayout>
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/userImage"

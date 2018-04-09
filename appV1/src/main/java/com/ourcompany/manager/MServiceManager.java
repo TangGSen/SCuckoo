@@ -27,7 +27,6 @@ import java.util.concurrent.Executors;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
-import cn.bmob.v3.listener.SaveListener;
 
 /**
  * Author : 唐家森
@@ -227,41 +226,7 @@ public class MServiceManager {
     /************************************
      * 以下是Bomb Sdk
      */
-    /**
-     * 将用户也绑定到bmob 数据库上
-     * 然后将bmob 的也绑定到mob 上
-     *
-     * @param user
-     */
-    public void saveUserToBmob(User user) {
-        LogUtils.e("sen", "saveUserToBmob");
-        SUser sUser = new SUser();
-        sUser.addUnique(Constant.BMOB_SUSER_ID, user.id.get());
-        sUser.setUserName(user.nickname.get());
-        sUser.setImageUrl(Constant.test_user_image);
-        sUser.save(new SaveListener<String>() {
-            @Override
-            public void done(final String s, final BmobException e) {
-                LogUtils.e("sen", "done1");
-                EXECUTOR.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        LogUtils.e("sen", "done2");
-                        if (e == null) {
-                            //直接存
-                            saveThirdPartyImp(s);
-                            LogUtils.e("sen", "直接存bmob user ok");
-                        } else {
-                            LogUtils.e("sen", "查出来在存bmob user error");
-                            //意思是重复保存了，那么就查出来，在存
-                            findObjectIdFromSUser(s);
-                        }
-                    }
-                });
 
-            }
-        });
-    }
 
     //设置本地第三方的id 绑定到user
     private void setLocalUserThridPartyId(String id) {
@@ -283,6 +248,12 @@ public class MServiceManager {
         }
     }
 
+    /**
+     * 获取第三方的id
+     *
+     * @return
+     */
+
     public String getLocalThirdPartyId() {
         try {
             DataType<String> idType = (DataType<String>) Constant.CURRENT_USER.getCustomField(Constant.UMSDK_COMSTOR_KEY_THRID_ID);
@@ -297,6 +268,41 @@ public class MServiceManager {
         return "";
 
     }
+
+    /**
+     * 更新用户
+     */
+    public void updateUser(HashMap<String, Object> objectMap , OperationCallback<Void> callback ){
+
+        UMSSDK.updateUserInfo(objectMap, callback);
+
+    }
+
+
+    /**
+     * 用户的类型
+     *
+     * @return
+     */
+    public int getLoginUserType() {
+        try {
+            DataType<String> idType = (DataType<String>) Constant.CURRENT_USER.getCustomField(Constant.UMSDK_COMSTOR_KEY_USER_TYPE_VALUE);
+            if (idType != null) {
+                String type = (String) idType.value();
+                return Integer.parseInt(type);
+            }
+        } catch (Exception e) {
+            LogUtils.e("sen", "getLocaTlhirdPartyId Exception: " + e.getMessage());
+        }
+
+        return 0;
+
+    }
+
+    /**
+     * 保存第三方的id
+     * @param id
+     */
 
     public void saveThirdPartyImp(final String id) {
         saveThridPartyId(id, new OperationCallback<Void>() {

@@ -1,5 +1,6 @@
 package com.ourcompany.activity.imui;
 
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -11,11 +12,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.ourcompany.R;
+import com.ourcompany.bean.AccoutRsigisterBean;
 import com.ourcompany.presenter.activity.FindPasswordActPresenter;
 import com.ourcompany.utils.PhoneTextWatcher;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.ToastUtils;
-import com.ourcompany.view.activity.ResigisterActView;
+import com.ourcompany.view.activity.FindAccoutPswActView;
+import com.ourcompany.widget.LoadingViewAOV;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -28,10 +31,9 @@ import company.com.commons.framework.view.impl.MvpActivity;
  * Des    :
  */
 
-public class FindPasswordActivity extends MvpActivity<ResigisterActView, FindPasswordActPresenter> implements ResigisterActView {
+public class FindPasswordActivity extends MvpActivity<FindAccoutPswActView, FindPasswordActPresenter> implements FindAccoutPswActView {
 
-    @BindView(R.id.common_toolbar)
-    Toolbar commonToolbar;
+
     @BindView(R.id.et_user_name)
     EditText etUserName;
     @BindView(R.id.et_verify_code)
@@ -46,6 +48,8 @@ public class FindPasswordActivity extends MvpActivity<ResigisterActView, FindPas
     LinearLayout layoutEts;
     @BindView(R.id.bt_resigister)
     Button btResigister;
+    @BindView(R.id.common_toolbar)
+    Toolbar commonToolbar;
 
     @Override
     protected void initView() {
@@ -67,11 +71,11 @@ public class FindPasswordActivity extends MvpActivity<ResigisterActView, FindPas
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_resigister;
+        return R.layout.activity_findpassword;
     }
 
     @Override
-    protected ResigisterActView bindView() {
+    protected FindAccoutPswActView bindView() {
         return this;
     }
 
@@ -80,6 +84,11 @@ public class FindPasswordActivity extends MvpActivity<ResigisterActView, FindPas
         return new FindPasswordActPresenter(this);
     }
 
+    @Override
+    protected void initData(Bundle savedInstanceState) {
+        super.initData(savedInstanceState);
+        getPresenter().getCurrentLoginUser();
+    }
 
     @OnClick({R.id.bt_safety_code, R.id.bt_resigister})
     public void onViewClicked(View view) {
@@ -91,10 +100,11 @@ public class FindPasswordActivity extends MvpActivity<ResigisterActView, FindPas
                 }
                 break;
             case R.id.bt_resigister:
+                LoadingViewAOV.getInstance().with(FindPasswordActivity.this, btResigister);
                 String phones = etUserName.getText().toString().trim();
                 String code = etVerifyCode.getText().toString().trim();
-                String password = etVerifyCode.getText().toString();
-                getPresenter().sendSafetyCode( phones, code,password);
+                String password = etPassword.getText().toString();
+                getPresenter().sendSafetyCode(phones, code, password);
                 break;
         }
     }
@@ -131,6 +141,7 @@ public class FindPasswordActivity extends MvpActivity<ResigisterActView, FindPas
         etUserName.addTextChangedListener(new PhoneTextWatcher(etUserName));
         etUserName.addTextChangedListener(textWatcher);
         etVerifyCode.addTextChangedListener(textWatcher);
+
     }
 
 
@@ -183,11 +194,20 @@ public class FindPasswordActivity extends MvpActivity<ResigisterActView, FindPas
     public void verifyFail(String msg) {
         showToastMsg(msg);
         resetAllViewStatus(true);
+        LoadingViewAOV.getInstance().close(FindPasswordActivity.this, btResigister);
     }
 
     @Override
     public void verifySuccess() {
-        finish();
+        getView().showToastMsg(ResourceUtils.getString(R.string.str_update_password_success));
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                LoadingViewAOV.getInstance().close(FindPasswordActivity.this, btResigister);
+                finish();
+            }
+        }, 1000);
+
     }
 
     @Override
@@ -196,24 +216,34 @@ public class FindPasswordActivity extends MvpActivity<ResigisterActView, FindPas
     }
 
     @Override
-    public void logining() {
+    public void logining(AccoutRsigisterBean accoutRsigisterBean) {
 
     }
 
     @Override
-    public void loginFail(String userInfos) {
-
+    public void verifyTextError() {
+        LoadingViewAOV.getInstance().close(FindPasswordActivity.this, btResigister);
     }
 
     @Override
-    public void loginSuccess() {
-
+    public void setCurrentUserName(String phone) {
+        if (!TextUtils.isEmpty(phone)) {
+            etUserName.setText(phone);
+            //将光标移动到后面
+            etUserName.setSelection(etUserName.getText().toString().length());
+            etUserName.setFocusable(false);
+            //   etUserName.setNextFocusUpId(etVerifyCode);
+        }
     }
+
 
     @Override
     protected void onDestroy() {
+        LoadingViewAOV.getInstance().close(FindPasswordActivity.this, btResigister);
         getPresenter().onDestroy();
         super.onDestroy();
 
     }
+
+
 }

@@ -13,7 +13,7 @@ import com.ourcompany.R;
 import com.ourcompany.activity.imui.UserInfoActivity;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.bean.bmob.Comment;
-import com.ourcompany.presenter.activity.CommentsPresenter;
+import com.ourcompany.presenter.fragment.CommentsPresenter;
 import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.LogUtils;
 import com.ourcompany.utils.ResourceUtils;
@@ -23,13 +23,16 @@ import com.ourcompany.widget.StateFrameLayout;
 import com.ourcompany.widget.recycleview.commadapter.OnItemOnclickLinstener;
 import com.ourcompany.widget.recycleview.commadapter.RecycleCommonAdapter;
 import com.ourcompany.widget.recycleview.commadapter.SViewHolder;
-import com.ourcompany.widget.recycleview.commadapter.SimpleDecoration;
 import com.ourcompany.widget.recycleview.headfooter.MFooter;
 import com.ourcompany.widget.recycleview.headfooter.MHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +85,7 @@ public class CommentFragment extends MvpFragment<CommentFragView, CommentsPresen
     @Override
     protected void initView(View view) {
         super.initView(view);
+        EventBus.getDefault().register(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MApplication.mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         //解决嵌套在NestedScrollView 的滑动不顺的问题1
@@ -91,7 +95,7 @@ public class CommentFragment extends MvpFragment<CommentFragView, CommentsPresen
         //解决嵌套在NestedScrollView 的滑动不顺的问题2
         recycleview.setNestedScrollingEnabled(true);
         refreshLayout.setEnableRefresh(false);
-        recycleview.addItemDecoration(new SimpleDecoration(MApplication.mContext, R.drawable.recycle_line_divider_padding, 2));
+      //  recycleview.addItemDecoration(new SimpleDecoration(MApplication.mContext, R.drawable.recycle_line_divider_padding, 2));
         recycleCommonAdapter = new RecycleCommonAdapter<Comment>(
                 MApplication.mContext, mCommentList, R.layout.layout_item_comment) {
             @Override
@@ -159,6 +163,7 @@ public class CommentFragment extends MvpFragment<CommentFragView, CommentsPresen
         return this;
     }
 
+
     @Override
     protected CommentsPresenter bindPresenter() {
         return new CommentsPresenter(MApplication.mContext);
@@ -170,6 +175,12 @@ public class CommentFragment extends MvpFragment<CommentFragView, CommentsPresen
         layoutState.changeState(StateFrameLayout.EMPTY);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCommeSubmit(Comment comment) {
+        mCommentList.add(0, comment);
+        layoutState.changeState(StateFrameLayout.SUCCESS);
+        recycleCommonAdapter.notifyItemInserted(0);
+    }
     @Override
     public void showContentView(List<Comment> list) {
         LogUtils.e("sen", "新增：" + list.size());
@@ -242,8 +253,10 @@ public class CommentFragment extends MvpFragment<CommentFragView, CommentsPresen
         refreshLayout.finishLoadMore(50, true, true);
     }
 
-   
-   
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

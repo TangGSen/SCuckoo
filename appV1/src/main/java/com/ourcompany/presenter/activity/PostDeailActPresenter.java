@@ -152,6 +152,9 @@ public class PostDeailActPresenter extends MvpBasePresenter<PostDeailActView> {
         });
     }
 
+
+
+
     /**
      * 用户更新喜欢操作
      *

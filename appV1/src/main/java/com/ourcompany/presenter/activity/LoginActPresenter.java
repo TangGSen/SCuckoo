@@ -63,17 +63,18 @@ public class LoginActPresenter extends MvpBasePresenter<LoginActvityView> {
         password = password.replaceAll(" ","");
         if (TextUtils.isEmpty(phones)) {
             getView().showToastMsg(ResourceUtils.getString(R.string.frag_login_username_hint));
+            getView().verifyError();
             return;
         }
-
-
         if (TextUtils.isEmpty(password)) {
             getView().showToastMsg(ResourceUtils.getString(R.string.frag_login_password_hint));
+            getView().verifyError();
             return;
         }
         //再检查网络
         if (!NetWorkUtils.isConnected(MApplication.mContext)) {
             getView().showToastMsg(ResourceUtils.getString(R.string.net_unlink));
+            getView().verifyError();
             return;
         }
         UMSSDK.loginWithPhoneNumber(Constant.COUNTRY_CODE,phones,password,new OperationCallback<User>(){
@@ -103,7 +104,7 @@ public class LoginActPresenter extends MvpBasePresenter<LoginActvityView> {
                         MServiceManager.getInstance().saveImUserInfos(user.id.get());
                         //如果登陆成功，发现注册那边，并没有写入第三方的id，就重新写入
                         if (TextUtils.isEmpty(MServiceManager.getInstance().getLocalThirdPartyId())) {
-                            MServiceManager.getInstance().saveUserToBmob(user);
+                           // MServiceManager.getInstance().saveUserToBmob(user);
                         }else{
                             LogUtils.e("sen","存在");
                         }
