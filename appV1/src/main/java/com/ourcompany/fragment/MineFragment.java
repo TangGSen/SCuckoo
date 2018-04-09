@@ -48,6 +48,8 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
     @BindView(R.id.btnMessage)
     TextView btnMessage;
     Unbinder unbinder;
+    @BindView(R.id.btCollection)
+    TextView btCollection;
 
 
     @Override
@@ -71,7 +73,7 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
         return new MineFragPresenter(MApplication.mContext);
     }
 
-    @OnClick({R.id.img_user, R.id.btnMessage})
+    @OnClick({R.id.img_user, R.id.btnMessage,R.id.btCollection})
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
@@ -81,6 +83,9 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
                 break;
             case R.id.btnMessage:
                 startActivity(new Intent(mActivity, MessageActivity.class));
+                break;
+            case R.id.btCollection:
+                getPresenter().gotoCollection(mActivity);
                 break;
         }
     }

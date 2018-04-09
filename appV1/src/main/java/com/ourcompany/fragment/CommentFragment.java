@@ -15,7 +15,6 @@ import com.ourcompany.app.MApplication;
 import com.ourcompany.bean.bmob.Comment;
 import com.ourcompany.presenter.fragment.CommentsPresenter;
 import com.ourcompany.utils.Constant;
-import com.ourcompany.utils.LogUtils;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.TimeFormatUtil;
 import com.ourcompany.view.fragment.CommentFragView;
@@ -183,13 +182,7 @@ public class CommentFragment extends MvpFragment<CommentFragView, CommentsPresen
     }
     @Override
     public void showContentView(List<Comment> list) {
-        LogUtils.e("sen", "新增：" + list.size());
-        int start = mCommentList.size();
-        // getPresenter().diffAdapter(mCommentList,list);
         recycleCommonAdapter.addDatasInLast(list);
-        //  recycleCommonAdapter.notifyItemRangeInserted(start, list.size());
-        //  recycleCommonAdapter.notifyItemRangeChanged(start, list.size());
-        // recycleCommonAdapter.notifyDataSetChanged();
         layoutState.changeState(StateFrameLayout.SUCCESS);
     }
 

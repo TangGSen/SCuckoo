@@ -47,9 +47,9 @@ public class LoginActivity extends MvpActivity<LoginActvityView, LoginActPresent
     @Override
     protected void initView() {
         super.initView();
-//        etUserName.setText("15510474794");
-//        etPassword.setText("12345678sen");
-//        btLogin.setEnabled(true);
+        etUserName.setText("15915311453");
+        etPassword.setText("12345678sen");
+        btLogin.setEnabled(true);
         setSupportActionBar(commonToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         commonToolbar.setNavigationOnClickListener(new View.OnClickListener() {

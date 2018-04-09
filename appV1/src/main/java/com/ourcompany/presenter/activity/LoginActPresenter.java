@@ -104,9 +104,10 @@ public class LoginActPresenter extends MvpBasePresenter<LoginActvityView> {
                         MServiceManager.getInstance().saveImUserInfos(user.id.get());
                         //如果登陆成功，发现注册那边，并没有写入第三方的id，就重新写入
                         if (TextUtils.isEmpty(MServiceManager.getInstance().getLocalThirdPartyId())) {
-                           // MServiceManager.getInstance().saveUserToBmob(user);
+//                            MServiceManager.getInstance().saveUserToBmob(user);
+                            LogUtils.e("sen","***getLocalThirdPartyId 不存在");
                         }else{
-                            LogUtils.e("sen","存在");
+                            LogUtils.e("sen","***getLocalThirdPartyId 存在"+MServiceManager.getInstance().getLocalThirdPartyId());
                         }
                     }
                 });

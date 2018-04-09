@@ -48,6 +48,7 @@ public class Constant {
     public static final java.lang.String BMOB_APPKEY = "2db1fc7ea509d3ea6639495a3a24066d";
 
 
+
     //保存当前的user
     public static User CURRENT_USER = null;
     //由于Activity 传递User ，但User 并不可以序列化
@@ -81,6 +82,9 @@ public class Constant {
     public static final String BMOB_SUSER_ID = "userId";
     public static final String BMOB_POST = "post";
     public static final String BMOB_COMMENT = "post";
+
+    //表名
+    public static final String BMOB_TABLE_SUSER = "SUser";
     //评论喜欢的字段
     public static final String BMOB_LIKES = "likes";
     //post 喜欢的总数
@@ -96,4 +100,5 @@ public class Constant {
     //Bundle UserInfo
     public static final String KEY_USER_ID = "user_id";
     public static final java.lang.String KEY_POST_ID = "post_id";
+    public static final java.lang.String KEY_USEROBJECT_ID = "user_object_id";
 }

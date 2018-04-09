@@ -160,7 +160,7 @@
     <string name="str_reflesh_error">刷新失败,请重试</string>
     <string name="str_onload_error">加载更多失败</string>
     <string name="str_reflsh_no_new_data">没有最新的数据了</string>
-    <string name="refresh_footer_nothing">-- 没有更多数据了 --</string>
+    <string name="refresh_footer_nothing">没有更多数据了</string>
     <string name="str_user_info_get_error">获取用户失败</string>
     <string name="str_vote">投票</string>
     <string name="str_chose_user_type">欢迎,请选择您的身份</string>
@@ -173,4 +173,6 @@
     <string name="str_phone_exist">该账号已被注册，是否去登陆?</string>
     <string name="str_try_other_phone">请换其他账号注册</string>
     <string name="str_collection">收藏</string>
+    <string name="str_my_collection">我的收藏</string>
+    <string name="str_other_collection">Ta的收藏</string>
 </resources>

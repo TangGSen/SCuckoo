@@ -8,7 +8,6 @@ import com.ourcompany.bean.bmob.Comment;
 import com.ourcompany.manager.MServiceManager;
 import com.ourcompany.utils.BombUtils;
 import com.ourcompany.utils.Constant;
-import com.ourcompany.utils.LogUtils;
 import com.ourcompany.utils.MDiffCallback;
 import com.ourcompany.view.fragment.CommentFragView;
 
@@ -50,8 +49,6 @@ public class CommentsPresenter extends MvpBasePresenter<CommentFragView> impleme
         query.order(Constant.BMOB_ORDER_DESCENDING + Constant.BMOB_CREATE);
         if (bmobDate == null) {
             bmobDate = new BmobDate(new Date(System.currentTimeMillis()));
-        } else {
-            LogUtils.e("sen", "bmobDate 不为null");
         }
         query.addWhereLessThanOrEqualTo(Constant.BMOB_CREATE, bmobDate);
         query.addWhereEqualTo(Constant.BMOB_POST, objectId);
@@ -62,9 +59,7 @@ public class CommentsPresenter extends MvpBasePresenter<CommentFragView> impleme
         query.findObjects(new FindListener<Comment>() {
             @Override
             public void done(final List<Comment> list, BmobException e) {
-                for(Comment comment :list){
-                    LogUtils.e("sen","****"+comment.getContent()+"**"+comment.getObjectId());
-                }
+
 
                 if (e == null) {
                     mHandler.post(new Runnable() {

@@ -165,7 +165,7 @@ public class MFooter extends InternalClassics<MFooter> implements RefreshFooter 
     @Override
     public int onFinish(@NonNull RefreshLayout layout, boolean success) {
         if (!mNoMoreData) {
-            mTitleText.setText(success ? REFRESH_FOOTER_FINISH : REFRESH_FOOTER_FAILED);
+            mTitleText.setVisibility(View.GONE);
             return super.onFinish(layout, success);
         }
         return 0;

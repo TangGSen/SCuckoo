@@ -10,8 +10,12 @@ import android.os.Message;
 import com.mob.ums.OperationCallback;
 import com.mob.ums.UMSSDK;
 import com.mob.ums.User;
+import com.ourcompany.R;
+import com.ourcompany.activity.CollectionActivity;
 import com.ourcompany.activity.imui.LoginActivity;
+import com.ourcompany.manager.MServiceManager;
 import com.ourcompany.utils.Constant;
+import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.ToastUtils;
 import com.ourcompany.view.fragment.MineFragmentView;
 
@@ -64,6 +68,22 @@ public class MineFragPresenter extends MvpBasePresenter<MineFragmentView> {
             //去登陆
             Intent intent = new Intent(activity, LoginActivity.class);
             mineFragment.startActivity(intent);
+        }
+
+    }
+
+    public void gotoCollection(Activity activity){
+        if(activity==null){
+            return;
+        }
+
+        if( Constant.CURRENT_USER!=null){
+            //去修改资料
+            CollectionActivity.gotoThis(activity, MServiceManager.getInstance().getLocalThirdPartyId(), ResourceUtils.getString(R.string.str_my_collection));
+        }else{
+            //去登陆
+            Intent intent = new Intent(activity, LoginActivity.class);
+            activity.startActivity(intent);
         }
 
     }
