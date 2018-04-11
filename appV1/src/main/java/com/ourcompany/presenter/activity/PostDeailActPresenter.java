@@ -7,6 +7,7 @@ import com.ourcompany.R;
 import com.ourcompany.bean.bmob.Comment;
 import com.ourcompany.bean.bmob.Post;
 import com.ourcompany.bean.bmob.SUser;
+import com.ourcompany.bean.bmob.Vote;
 import com.ourcompany.manager.MServiceManager;
 import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.LogUtils;
@@ -58,6 +59,7 @@ public class PostDeailActPresenter extends MvpBasePresenter<PostDeailActView> {
         post.setObjectId(postId);
         comment.setPost(post);
         SUser user = new SUser();
+        user.setUserName(Constant.CURRENT_USER.nickname.get());
         user.setObjectId(MServiceManager.getInstance().getLocalThirdPartyId());
         comment.setUser(user);
         comment.save(new SaveListener<String>() {
@@ -180,7 +182,7 @@ public class PostDeailActPresenter extends MvpBasePresenter<PostDeailActView> {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    getView().userIsLikeThis(!selected);
+                    getView().userChangeLikeThis(!selected);
                     LogUtils.e("sen","用户喜欢操作成功");
                 } else {
                    // LogUtils.e("sen", "unLikeThis 用户喜欢操作失败"+e.getErrorCode());
@@ -189,5 +191,101 @@ public class PostDeailActPresenter extends MvpBasePresenter<PostDeailActView> {
         });
     }
 
+
+    public void deleteUserVote( Vote mVote) {
+        if (mVote == null) {
+            LogUtils.e("sen","vote is null");
+            return;
+        }
+        mVote.delete(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    LogUtils.e("sen","deleteUserVoteSuccess");
+                    getView().deleteUserVoteSuccess();
+                } else {
+                    LogUtils.e("sen","optionUserVoteFail");
+                    getView().optionUserVoteFail();
+                }
+            }
+        });
+    }
+
+    /**
+     * 增加用户投票
+     *
+     * @param postId
+     */
+    public void addUserVote(String postId) {
+        final Vote vote = new Vote();
+        Post post = new Post();
+        post.setObjectId(postId);
+        vote.setPost(post);
+        SUser user = new SUser();
+        user.setObjectId(MServiceManager.getInstance().getLocalThirdPartyId());
+        vote.setUser(user);
+        vote.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                if (e == null) {
+                    getView().addUserVoteSuccess(vote);
+                } else {
+                    getView().optionUserVoteFail();
+                }
+            }
+        });
+    }
+
+    /**
+     * 获取自己又没投票
+     */
+
+    public void loadIsUserVote(String postId) {
+        // 查询喜欢这个帖子的所有用户，因此查询的是用户表
+        if (TextUtils.isEmpty(MServiceManager.getInstance().getLocalThirdPartyId())) {
+            return;
+        }
+        BmobQuery<Vote> query = new BmobQuery<Vote>();
+        query.order(Constant.BMOB_ORDER_DESCENDING + Constant.BMOB_CREATE);
+        //查询playerName叫“比目”的数据
+        query.addWhereEqualTo(Constant.BMOB_POST, postId);
+        BmobQuery<SUser> innerQuery = new BmobQuery<>();
+        innerQuery.addWhereEqualTo(Constant.BMOB_OBJECT_ID, MServiceManager.getInstance().getLocalThirdPartyId());
+        // 注意第二个参数表名不要写错 是系统表
+        query.addWhereMatchesQuery(Constant.BMOB_POST_USER, Constant.BMOB_TABLE_SUSER, innerQuery);
+        query.include(Constant.BMOB_POST_USER);
+        query.setLimit(1);
+        //执行查询方法
+        query.findObjects(new FindListener<Vote>() {
+            @Override
+            public void done(final List<Vote> list, BmobException e) {
+                LogUtils.e("sen", "UUUUU**********");
+                if (e == null) {
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (list.size() > 0) {
+                                LogUtils.e("sen", "U**********");
+                                getView().showIsUserVote(true, list.get(0));
+                            } else {
+                                LogUtils.e("sen", "UU**********");
+                                getView().showIsUserVote(false, null);
+                            }
+
+                        }
+                    });
+                } else {
+                    LogUtils.e("sen", "出错了**********");
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            getView().showIsUserVote(false, null);
+
+                        }
+                    });
+                }
+            }
+        });
+    }
 }
 

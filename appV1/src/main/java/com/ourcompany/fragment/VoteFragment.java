@@ -12,10 +12,10 @@ import android.view.ViewGroup;
 import com.ourcompany.R;
 import com.ourcompany.activity.imui.UserInfoActivity;
 import com.ourcompany.app.MApplication;
+import com.ourcompany.bean.VoteChage;
 import com.ourcompany.bean.bmob.Vote;
 import com.ourcompany.presenter.fragment.VotesPresenter;
 import com.ourcompany.utils.Constant;
-import com.ourcompany.utils.LogUtils;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.TimeFormatUtil;
 import com.ourcompany.utils.ToastUtils;
@@ -71,7 +71,7 @@ public class VoteFragment extends MvpFragment<VoteFragView, VotesPresenter> impl
     protected void initStateLayout(View view) {
         super.initStateLayout(view);
         //初始化状态的布局
-        View emptyView = getLayoutInflater().inflate(R.layout.layout_state_empty, (ViewGroup)view.findViewById(android.R.id.content), false);
+        View emptyView = getLayoutInflater().inflate(R.layout.layout_state_empty_with_retry, (ViewGroup)view.findViewById(android.R.id.content), false);
         layoutState.setEmptyView(emptyView);
         layoutState.changeState(StateFrameLayout.LOADING);
 
@@ -177,10 +177,20 @@ public class VoteFragment extends MvpFragment<VoteFragView, VotesPresenter> impl
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onVoteSubmit(Vote Vote) {
-        mVoteList.add(0, Vote);
-        layoutState.changeState(StateFrameLayout.SUCCESS);
-        recycleCommonAdapter.notifyItemInserted(0);
+    public void onVoteSubmit(VoteChage voteChage) {
+        if(voteChage!=null && voteChage.getmVote()!=null){
+            if(voteChage.isAdd()){
+                layoutState.changeState(StateFrameLayout.SUCCESS);
+                recycleCommonAdapter.addData(voteChage.getmVote(),0);
+            }else{
+                if(recycleCommonAdapter.getItemCount()==1){
+                    layoutState.changeState(StateFrameLayout.EMPTY);
+                }
+                recycleCommonAdapter.removeItemData(voteChage.getmVote());
+
+            }
+        }
+
     }
     @Override
     public void showContentView(List<Vote> list) {

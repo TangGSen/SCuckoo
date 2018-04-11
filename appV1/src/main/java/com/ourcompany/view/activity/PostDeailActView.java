@@ -1,6 +1,7 @@
 package com.ourcompany.view.activity;
 
 import com.ourcompany.bean.bmob.Comment;
+import com.ourcompany.bean.bmob.Vote;
 
 import company.com.commons.framework.view.MvpView;
 
@@ -20,5 +21,25 @@ public interface PostDeailActView extends MvpView {
     void submitOk(Comment comment);
 
     void userIsLikeThis(boolean isLike);
+    void userChangeLikeThis(boolean isLike);
 
+    /**
+     * 用户是否投票了
+     * @param isVote
+     * @param vote
+     */
+    void showIsUserVote(boolean isVote, Vote vote);
+
+    /**
+     * 投票成功
+     * @param vote
+     */
+    void addUserVoteSuccess(Vote vote);
+
+    /**
+     * 投票失败，请重试
+     */
+    void optionUserVoteFail();
+
+    void deleteUserVoteSuccess();
 }

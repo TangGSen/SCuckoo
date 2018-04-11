@@ -49,14 +49,15 @@ public abstract class RecycleMultiTypeAdapter<D> extends RecyclerView.Adapter<SV
 
 
     @Override
-    public void onBindViewHolder(SViewHolder holder, final int position) {
+    public void onBindViewHolder( SViewHolder holder,  int position) {
         bindItemData(holder,mData.get(position),position);
+        holder.itemView.setTag(position);
         if (linstener !=null){
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (linstener!=null){
-                        linstener.itemOnclickLinstener(position);
+                        linstener.itemOnclickLinstener((Integer) v.getTag());
                     }
                 }
             });
@@ -84,5 +85,12 @@ public abstract class RecycleMultiTypeAdapter<D> extends RecyclerView.Adapter<SV
     public void addDatasInFirst(int start, List<D> data) {
         mData.addAll(start,data);
         notifyItemRangeInserted(start,data.size());
+    }
+
+    public void removeItem(int position) {
+        if(position>=0 &&mData!=null&& position<mData.size()){
+            notifyItemRemoved(position);
+            mData.remove(position);
+        }
     }
 }

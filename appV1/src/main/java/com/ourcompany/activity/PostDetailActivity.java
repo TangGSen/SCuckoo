@@ -1,8 +1,7 @@
 package com.ourcompany.activity;
 
-import android.animation.Animator;
-import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -10,6 +9,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -26,9 +26,11 @@ import com.ourcompany.R;
 import com.ourcompany.activity.imui.UserInfoActivity;
 import com.ourcompany.adapter.TabLayoutViewPagerAdapter;
 import com.ourcompany.app.MApplication;
-import com.ourcompany.beahovr.CollapsingToolbarLayoutState;
+import com.ourcompany.bean.PostPositionChange;
+import com.ourcompany.bean.VoteChage;
 import com.ourcompany.bean.bmob.Comment;
 import com.ourcompany.bean.bmob.Post;
+import com.ourcompany.bean.bmob.Vote;
 import com.ourcompany.fragment.CommentFragment;
 import com.ourcompany.fragment.VoteFragment;
 import com.ourcompany.interfaces.MOnTabSelectedListener;
@@ -49,7 +51,6 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import company.com.commons.framework.view.impl.MvpActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -64,6 +65,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailActPresenter> implements PostDeailActView, InputMethodUtils.OnKeyboardEventListener {
     private static final String KEY_INTENT = "key_intent";
     private static final String KEY_BUNDLE = "key_bundle";
+    private static final String KEY_BUNDLE_POSITION = "key_bundle_position";
     @BindView(R.id.imgUser)
     CircleImageView imgUser;
     @BindView(R.id.tvUserName)
@@ -115,19 +117,20 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
 
 
     private Post mPost;
+    private int mPostPosition;
     private ArrayList<Fragment> fragments = new ArrayList<>();
-    private CollapsingToolbarLayoutState collapsingToolbarLayoutState;
-    private ValueAnimator animViewShow;
-    private ValueAnimator animViewGone;
-    private String[] mTiltes;
 
-    public static void gotoThis(Context context, Post post) {
+    private String[] mTiltes;
+    private Vote mVote;
+
+    public static void gotoThis(Context context, Post post, int position) {
         if (post == null) {
             return;
         }
         Intent intent = new Intent(context, PostDetailActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(KEY_BUNDLE, post);
+        bundle.putInt(KEY_BUNDLE_POSITION, position);
         intent.putExtra(KEY_INTENT, bundle);
         context.startActivity(intent);
     }
@@ -152,6 +155,7 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
         Bundle bun = getIntent().getBundleExtra(KEY_INTENT);
         if (bun != null) {
             mPost = (Post) bun.getSerializable(KEY_BUNDLE);
+            mPostPosition = bun.getInt(KEY_BUNDLE_POSITION);
         }
         return super.initArgs(bundle);
 
@@ -179,131 +183,19 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
             }
         });
         InputMethodUtils.detectKeyboard(this, this);
-
-        imgUserTop.setVisibility(View.GONE);
+        imgUserTop.setAlpha(0.0f);
+        imgUserTop.setEnabled(false);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (verticalOffset == 0) {
-                    if (collapsingToolbarLayoutState != CollapsingToolbarLayoutState.EXPANDED) {
-                        collapsingToolbarLayoutState = CollapsingToolbarLayoutState.EXPANDED;//修改状态标记为展开
-                        startAninatorViewGone();
-                    }
-                } else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) {
-                    if (collapsingToolbarLayoutState != CollapsingToolbarLayoutState.COLLAPSED) {
-                        startAninatorViewShow();
-                        collapsingToolbarLayoutState = CollapsingToolbarLayoutState.COLLAPSED;//修改状态标记为折叠
-                    }
-                } else {
-                    if (collapsingToolbarLayoutState != CollapsingToolbarLayoutState.INTERNEDIATE) {
-                        if (collapsingToolbarLayoutState == CollapsingToolbarLayoutState.COLLAPSED) {
-                            startAninatorViewGone();
-                        }
-                        collapsingToolbarLayoutState = CollapsingToolbarLayoutState.INTERNEDIATE;//修改状态标记为中间
-                    }
+                imgUserTop.setAlpha(-verticalOffset * 1.0f / appBarLayout.getTotalScrollRange());
+                if (verticalOffset >= 0) {
+                    imgUserTop.setEnabled(false);
+                } else if (verticalOffset == -appBarLayout.getTotalScrollRange()) {
+                    imgUserTop.setEnabled(true);
                 }
             }
         });
-
-
-    }
-
-    public void startAninatorViewShow() {
-        if (animViewGone != null && animViewGone.isRunning()) {
-            animViewGone.cancel();
-        }
-        if (animViewShow != null) {
-            animViewShow.start();
-            return;
-        }
-        imgUserTop.setTag(R.id.loading_image_url, mPost.getUser() == null ? "" : mPost.getUser().getImageUrl());
-        ImageLoader.getImageLoader().loadImage(imgUserTop, "");
-        animViewShow = ValueAnimator.ofFloat(0.3f, 1.0f);
-        animViewShow.setDuration(500);
-        animViewShow.setRepeatCount(0);
-        animViewShow.setRepeatMode(ValueAnimator.RESTART);
-        animViewShow.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-
-                float currentValue = (float) animation.getAnimatedValue();
-                imgUserTop.setAlpha(currentValue);
-            }
-
-        });
-        animViewShow.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-                imgUserTop.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                imgUserTop.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-                imgUserTop.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
-            }
-        });
-
-        animViewShow.start();
-
-
-    }
-
-    public void startAninatorViewGone() {
-        if (animViewShow != null && animViewShow.isRunning()) {
-            animViewShow.cancel();
-            return;
-        }
-        if (animViewGone != null) {
-            animViewGone.start();
-            return;
-        }
-        animViewGone = ValueAnimator.ofFloat(1.0f, 0.3f);
-        animViewGone.setDuration(500);
-        animViewGone.setRepeatCount(0);
-        animViewGone.setRepeatMode(ValueAnimator.RESTART);
-        animViewGone.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-
-                float currentValue = (float) animation.getAnimatedValue();
-                imgUserTop.setAlpha(currentValue);
-            }
-
-        });
-        animViewGone.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                imgUserTop.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-                //一般被取消都是
-                imgUserTop.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
-            }
-        });
-
-        animViewGone.start();
 
 
     }
@@ -368,6 +260,8 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
             imgUser.setTag(R.id.loading_image_url, mPost.getUser() == null ? "" : mPost.getUser().getImageUrl());
             ImageLoader.getImageLoader().loadImage(imgUser, "");
 
+            imgUserTop.setTag(R.id.loading_image_url, mPost.getUser() == null ? "" : mPost.getUser().getImageUrl());
+            ImageLoader.getImageLoader().loadImage(imgUserTop, "");
             ivNineLayout.setImagesData(mPost.getImageUrls(), 0);
             ivNineLayout.setOnItemClickListener(new NineGridlayout.OnItemClickListener() {
                 @Override
@@ -387,7 +281,9 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
             comments.setText(mPost.getCommentCount() + "");
 
             if (mPost.getNeedVote() != null && mPost.getNeedVote() && mPost.getmPostVoteDeadline() != null && !mPost.getmPostVoteDeadline()) {
-                btVote.setVisibility(View.VISIBLE);
+                //btVote.setVisibility(View.VISIBLE);
+                //获取自己有没投票
+                getPresenter().loadIsUserVote(mPost.getObjectId());
             } else {
                 btVote.setVisibility(View.GONE);
             }
@@ -455,23 +351,60 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
 
     @Override
     public void userIsLikeThis(boolean isLike) {
-        if (isLike) {
-            LogUtils.e("sen", "userIsLikeThis is true");
-        } else {
-            LogUtils.e("sen", "userIsLikeThis is false");
-        }
+        imgLove.setSelected(isLike);
+    }
+
+    @Override
+    public void userChangeLikeThis(boolean isLike) {
         imgLove.setSelected(isLike);
         int count = mPost.getLikeCount();
         count = isLike ? ++count : --count;
         count = count < 0 ? 0 : count;
         mPost.setLikeCount(count);
         likes.setText(count + "");
+        EventBus.getDefault().post(new PostPositionChange().setPosition(mPostPosition).setCollection(isLike));
+    }
+
+    @Override
+    public void showIsUserVote(boolean isVote, Vote vote) {
+        this.mVote = vote;
+        changeBtnVote( isVote);
+    }
+
+    @Override
+    public void addUserVoteSuccess(Vote vote) {
+        changeBtnVote( true);
+        EventBus.getDefault().post(new VoteChage().setAdd(true).setmVote(vote));
+        this.mVote = vote;
+    }
+
+    @Override
+    public void optionUserVoteFail() {
+        showToastMsg(ResourceUtils.getString(R.string.net_exception));
+    }
+
+    @Override
+    public void deleteUserVoteSuccess() {
+        changeBtnVote(  false);
+        EventBus.getDefault().post(new VoteChage().setAdd(false).setmVote(mVote));
+    }
+
+    private void changeBtnVote( boolean isVote){
+        btVote.setSelected(isVote);
+        btVote.setVisibility(View.VISIBLE);
+        String tip ="";
+        if(isVote){
+            tip =  ResourceUtils.getString(R.string.str_vote_success);
+        }else{
+            tip = ResourceUtils.getString(R.string.str_vote_normal);
+        }
+        btVote.setText(tip);
     }
 
 
     @OnClick({R.id.imgUser, R.id.imgLove, R.id.etInputFor, R.id.btnSend,
             R.id.imageKeyBorad, R.id.inputOutSildeView,
-            R.id.imgUserTop})
+            R.id.imgUserTop, R.id.btVote})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.imgLove:
@@ -514,9 +447,33 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
                 }
                 UserInfoActivity.gotoThis(PostDetailActivity.this, false, userId);
                 break;
+            case R.id.btVote:
+                if (btVote.isSelected()) {
+                    showDialogVote();
+                } else {
+                    getPresenter().addUserVote(mPost.getObjectId());
+                }
+
+                break;
 
 
         }
+    }
+
+    private void showDialogVote() {
+        //弹出选框
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(ResourceUtils.getString(R.string.str_title_vote));
+        builder.setNegativeButton("取消", null);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                getPresenter().deleteUserVote(mVote);
+            }
+        });
+        builder.setCancelable(false);
+        builder.show();
     }
 
     /**
@@ -553,13 +510,13 @@ public class PostDetailActivity extends MvpActivity<PostDeailActView, PostDeailA
         }
     }
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
+    protected void onDestroy() {
+
+        super.onDestroy();
     }
+
+
 }
 
 

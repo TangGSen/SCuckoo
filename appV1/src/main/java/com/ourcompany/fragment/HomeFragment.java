@@ -2,13 +2,12 @@ package com.ourcompany.fragment;
 
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.TabLayout;
-import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ourcompany.R;
@@ -17,8 +16,10 @@ import com.ourcompany.bean.MainItemChooses;
 import com.ourcompany.presenter.fragment.LoginFragPresenter;
 import com.ourcompany.utils.DisplayUtils;
 import com.ourcompany.utils.ResourceUtils;
+import com.ourcompany.utils.ToastUtils;
 import com.ourcompany.view.fragment.LoginFragmentView;
 import com.ourcompany.widget.ImageCycleView;
+import com.ourcompany.widget.recycleview.commadapter.RecycleCommonAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,17 +40,23 @@ public class HomeFragment extends MvpFragment<LoginFragmentView, LoginFragPresen
 
     @BindView(R.id.head_ImageCycle)
     ImageCycleView headImageCycle;
-    @BindView(R.id.home_toolbar)
-    Toolbar homeToolbar;
     @BindView(R.id.collapsingToolbarLayout)
     CollapsingToolbarLayout collapsingToolbarLayout;
-
     Unbinder unbinder;
-    @BindView(R.id.tabLayout)
-    TabLayout mTablayout;
+    @BindView(R.id.layoutItemRoot)
+    LinearLayout layoutItemRoot;
     private ArrayList<String> urls = new ArrayList<>();
     private String[] mTiltes;
     private List<MainItemChooses> mMessages = new ArrayList<>();
+    private RecycleCommonAdapter<MainItemChooses> recycleCommonAdapter;
+    int resId[] = new int[]{R.drawable.ic_design, R.drawable.ic_working, R.drawable.ic_supervisor, R.drawable.ic_repair, R.drawable.ic_learning};
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+           ToastUtils.showSimpleToast(mTiltes[(Integer) view.getTag(R.id.nine_layout_of_index)]);
+
+        }
+    };
 
     @Override
     protected void initView(View view) {
@@ -66,24 +73,29 @@ public class HomeFragment extends MvpFragment<LoginFragmentView, LoginFragPresen
 
 
         mTiltes = ResourceUtils.getStringArray(R.array.MainChooseItems);
-        int resId[] = new int[]{R.drawable.ic_design, R.drawable.ic_working, R.drawable.ic_supervisor, R.drawable.ic_repair};
         int size = mTiltes.length;
 
         for (int i = 0; i < size; i++) {
-//            MainItemChooses itemChooses = new MainItemChooses();
-//            itemChooses.setItemName(mTiltes[i]);
-//            itemChooses.setItemResId(resId[i]);
-//            mMessages.add(itemChooses);
-            View viewChoose = View.inflate(mActivity, R.layout.layout_item_main_choose, null);
-            ImageView imageView = viewChoose.findViewById(R.id.image);
-            imageView.setBackground(ResourceUtils.getDrawable(R.drawable.bg_main_ic_repair));
-            imageView.setImageDrawable(ResourceUtils.getDrawable(resId[i]));
-            TextView tvItemName = viewChoose.findViewById(R.id.tvItemName);
-            tvItemName.setText(mTiltes[i]);
-            mTablayout.addTab(mTablayout.newTab().setCustomView(viewChoose));
+            layoutItemRoot.addView(generateItemView(i), i);
         }
 
+    }
 
+
+    private View generateItemView(int position) {
+        View iv = LayoutInflater.from(mActivity).inflate(R.layout.layout_item_main_choose, null);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        params.weight = 1.0f;
+        iv.setLayoutParams(params);
+        iv.setTag(R.id.nine_layout_of_index, position);
+        ImageView imageView = iv.findViewById(R.id.image);
+        imageView.setImageDrawable(ResourceUtils.getDrawable(resId[position]));
+        imageView.setBackground((ResourceUtils.getDrawable(R.drawable.bg_main_ic_repair)));
+        TextView textView = iv.findViewById(R.id.tvItemName);
+        textView.setText(mTiltes[position]);
+         iv.setOnClickListener(onClickListener);
+        return iv;
     }
 
     @Override

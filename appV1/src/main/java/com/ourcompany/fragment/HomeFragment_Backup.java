@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,8 +39,6 @@ public class HomeFragment_Backup extends MvpFragment<LoginFragmentView, LoginFra
 
     @BindView(R.id.head_ImageCycle)
     ImageCycleView headImageCycle;
-    @BindView(R.id.home_toolbar)
-    Toolbar homeToolbar;
     @BindView(R.id.collapsingToolbarLayout)
     CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.recycleview)

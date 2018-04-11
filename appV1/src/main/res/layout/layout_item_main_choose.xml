@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
+    android:gravity="center"
+    android:padding="@dimen/common_8dp"
     android:orientation="vertical">
 
     <ImageView
@@ -24,5 +25,4 @@
         android:text="time"
         android:textColor="@color/colorFrist"
         android:textSize="@dimen/font_12sp" />
-
 </LinearLayout>

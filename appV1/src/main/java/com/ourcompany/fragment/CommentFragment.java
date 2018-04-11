@@ -69,7 +69,7 @@ public class CommentFragment extends MvpFragment<CommentFragView, CommentsPresen
     protected void initStateLayout(View view) {
         super.initStateLayout(view);
         //初始化状态的布局
-        View emptyView = getLayoutInflater().inflate(R.layout.layout_state_empty, (ViewGroup)view.findViewById(android.R.id.content), false);
+        View emptyView = getLayoutInflater().inflate(R.layout.layout_state_empty_with_retry, (ViewGroup)view.findViewById(android.R.id.content), false);
         layoutState.setEmptyView(emptyView);
         layoutState.changeState(StateFrameLayout.LOADING);
 
@@ -126,8 +126,8 @@ public class CommentFragment extends MvpFragment<CommentFragView, CommentsPresen
         });
 
 
-        refreshLayout.setRefreshHeader(new MHeader(mActivity).setEnableLastTime(false).setTextSizeTitle(14).setAccentColor(ResourceUtils.getResColor(R.color.text_gray)));
-        refreshLayout.setRefreshFooter(new MFooter(mActivity).setTextSizeTitle(14).setSpinnerStyle(SpinnerStyle.Scale).setAccentColor(ResourceUtils.getResColor(R.color.text_gray)));
+        refreshLayout.setRefreshHeader(new MHeader(mActivity).setEnableLastTime(false).setTextSizeTitle(14).setAccentColor(ResourceUtils.getResColor(R.color.text_gray)).setFinishDuration(100));
+        refreshLayout.setRefreshFooter(new MFooter(mActivity).setTextSizeTitle(14).setSpinnerStyle(SpinnerStyle.Scale).setAccentColor(ResourceUtils.getResColor(R.color.text_gray)).setFinishDuration(100));
         refreshLayout.setEnableFooterFollowWhenLoadFinished(true);
         refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
@@ -176,9 +176,8 @@ public class CommentFragment extends MvpFragment<CommentFragView, CommentsPresen
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCommeSubmit(Comment comment) {
-        mCommentList.add(0, comment);
         layoutState.changeState(StateFrameLayout.SUCCESS);
-        recycleCommonAdapter.notifyItemInserted(0);
+        recycleCommonAdapter.addData(comment,0);
     }
     @Override
     public void showContentView(List<Comment> list) {
@@ -204,7 +203,7 @@ public class CommentFragment extends MvpFragment<CommentFragView, CommentsPresen
 
     @Override
     public void showOnReflsh(List<Comment> list) {
-        refreshLayout.finishRefresh(50, true);
+        refreshLayout.finishRefresh(0, true);
         mCommentList.addAll(0, list);
         recycleCommonAdapter.notifyItemRangeChanged(0, list.size());
 
@@ -212,20 +211,20 @@ public class CommentFragment extends MvpFragment<CommentFragView, CommentsPresen
 
     @Override
     public void showOnReflshNoNewsData() {
-        refreshLayout.finishRefresh(50, true);
+        refreshLayout.finishRefresh(0, true);
         showToastMsg(ResourceUtils.getString(R.string.str_reflsh_no_new_data));
 
     }
 
     @Override
     public void showOnReflshError() {
-        refreshLayout.finishRefresh(50, false);
+        refreshLayout.finishRefresh(0, false);
         showToastMsg(ResourceUtils.getString(R.string.str_reflesh_error));
     }
 
     @Override
     public void showOnLoadError() {
-        refreshLayout.finishLoadMore(50, false, false);
+        refreshLayout.finishLoadMore(0, false, false);
         showToastMsg(ResourceUtils.getString(R.string.str_onload_error));
 
     }
@@ -238,12 +237,12 @@ public class CommentFragment extends MvpFragment<CommentFragView, CommentsPresen
     @Override
     public void showOnLoadFinish() {
         //如果是没有更新的数据时需要停止刷新半分钟，防止频繁的刷新
-        refreshLayout.finishLoadMore(50, true, false);
+        refreshLayout.finishLoadMore(0, true, false);
     }
 
     @Override
     public void showOnloadMoreNoData() {
-        refreshLayout.finishLoadMore(50, true, true);
+        refreshLayout.finishLoadMore(0, true, true);
     }
 
 

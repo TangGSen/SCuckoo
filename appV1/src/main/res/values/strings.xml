@@ -175,4 +175,8 @@
     <string name="str_collection">收藏</string>
     <string name="str_my_collection">我的收藏</string>
     <string name="str_other_collection">Ta的收藏</string>
+    <string name="str_empty_collection">好像没有收藏数据哦</string>
+    <string name="str_title_vote">确定不投票了？</string>
+    <string name="str_vote_success">已投票</string>
+    <string name="str_vote_normal">投票</string>
 </resources>

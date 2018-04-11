@@ -133,7 +133,7 @@ public class UserDynamicFragment extends MvpFragment<FoundNewsFragmentView, User
         recycleCommonAdapter.setOnItemClickLinstener(new OnItemOnclickLinstener() {
             @Override
             public void itemOnclickLinstener(int position) {
-                PostDetailActivity.gotoThis(mActivity, mPostList.get(position));
+                PostDetailActivity.gotoThis(mActivity, mPostList.get(position),position);
             }
         });
         refreshLayout.setEnableRefresh(false);
@@ -168,14 +168,13 @@ public class UserDynamicFragment extends MvpFragment<FoundNewsFragmentView, User
         //开始时以当前的时间来加载最新的
 
         getPresenter().getData(currentIndex, false, mUserId);
-        LogUtils.e("sen","*****"+mUserId);
     }
 
     @Override
     protected void initStateLayout(View view) {
         super.initStateLayout(view);
         //初始化状态的布局
-        View emptyView = getLayoutInflater().inflate(R.layout.layout_state_empty, (ViewGroup) mActivity.findViewById(android.R.id.content), false);
+        View emptyView = getLayoutInflater().inflate(R.layout.layout_state_empty_with_retry, (ViewGroup) mActivity.findViewById(android.R.id.content), false);
         layoutState.setEmptyView(emptyView);
         layoutState.setLoadingViewLayoutId(R.layout.layout_loading_top);
         layoutState.changeState(StateFrameLayout.LOADING);

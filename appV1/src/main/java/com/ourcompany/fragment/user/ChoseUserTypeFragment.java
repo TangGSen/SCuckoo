@@ -78,7 +78,7 @@ public class ChoseUserTypeFragment extends MvpFragment<ChoseUserTypeView, ChoseU
     protected void initStateLayout(View view) {
         super.initStateLayout(view);
         //初始化状态的布局
-        View emptyView = getLayoutInflater().inflate(R.layout.layout_state_empty, (ViewGroup) mActivity.findViewById(android.R.id.content), false);
+        View emptyView = getLayoutInflater().inflate(R.layout.layout_state_empty_with_retry, (ViewGroup) mActivity.findViewById(android.R.id.content), false);
         layoutState.setEmptyView(emptyView);
         layoutState.changeState(StateFrameLayout.LOADING);
     }

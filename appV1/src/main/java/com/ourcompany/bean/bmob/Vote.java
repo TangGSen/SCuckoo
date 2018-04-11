@@ -31,4 +31,18 @@ public class Vote extends BmobObject {
     public void setPost(Post post) {
         this.post = post;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Vote) {
+            Vote other = (Vote) obj;
+            return (getObjectId().equals(other.getObjectId()));
+        }
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getObjectId().hashCode();
+    }
 }

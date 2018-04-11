@@ -10,12 +10,15 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ourcompany.R;
 import com.ourcompany.app.MApplication;
+import com.ourcompany.bean.PostPositionChange;
 import com.ourcompany.bean.bmob.Post;
 import com.ourcompany.presenter.activity.CollectionsPresenter;
 import com.ourcompany.utils.Constant;
+import com.ourcompany.utils.LogUtils;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.TimeFormatUtil;
 import com.ourcompany.view.activity.CollectionActView;
@@ -30,6 +33,10 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +71,7 @@ public class CollectionActivity extends MvpActivity<CollectionActView, Collectio
     private static int NINELAYOUTTYPE_TEXT = 0;
     private static int NINELAYOUTTYPE_IMAGES = 1;
     private String mToolbarName;
-
+    private PostPositionChange postChange;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_layout_collections;
@@ -74,11 +81,40 @@ public class CollectionActivity extends MvpActivity<CollectionActView, Collectio
     protected void initStateLayout() {
         super.initStateLayout();
         //初始化状态的布局
-        View emptyView = getLayoutInflater().inflate(R.layout.layout_state_empty, (ViewGroup) findViewById(android.R.id.content), false);
+        View emptyView = getLayoutInflater().inflate(R.layout.layout_state_empty_with_no_retry, (ViewGroup) findViewById(android.R.id.content), false);
+        TextView tvTip = emptyView.findViewById(R.id.tv_empty_tip);
+        tvTip.setText(ResourceUtils.getString(R.string.str_empty_collection));
         layoutState.setEmptyView(emptyView);
         layoutState.changeState(StateFrameLayout.LOADING);
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(postChange!=null && recycleCommonAdapter!=null && !postChange.isCollection()){
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        recycleCommonAdapter.removeItem(postChange.getPosition());
+                        postChange=null;
+                        if(recycleCommonAdapter.getItemCount()==0){
+                            layoutState.changeState(StateFrameLayout.EMPTY);
+                        }
+                    }
+                },1000);
+        }
+    }
+
+    /**
+     * 这个是在Pose详情页，用户在收藏功能变化时，接受的
+     * @param
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCollectionChange(PostPositionChange change) {
+        this.postChange = change;
+    }
+
 
     public static void gotoThis(Context context, String userObjId,String toolbarName) {
        if(context==null){
@@ -108,6 +144,7 @@ public class CollectionActivity extends MvpActivity<CollectionActView, Collectio
     @Override
     protected void initView() {
         super.initView();
+        EventBus.getDefault().register(this);
         commonToolbar.setTitle(TextUtils.isEmpty(mToolbarName)?"":mToolbarName);
         commonToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,7 +185,7 @@ public class CollectionActivity extends MvpActivity<CollectionActView, Collectio
 
                 holder.setText(R.id.tvUserName, itemData.getUser() == null ? ResourceUtils.getString(R.string.defualt_userName) : TextUtils.isEmpty(itemData.getUser().getUserName()) ? ResourceUtils.getString(R.string.defualt_userName) : itemData.getUser().getUserName());
                 holder.setText(R.id.tvContent, itemData.getContent());
-                holder.setText(R.id.tvTime, TimeFormatUtil.getIntervalFormString(itemData.getCreatedAt()));
+                holder.setText(R.id.tvTime, TimeFormatUtil.getIntervalFormString(itemData.getCreatedAt())+"*****"+position);
                 holder.setImage(R.id.imgUser, itemData.getUser() == null ? "" : itemData.getUser().getImageUrl());
                 holder.setText(R.id.likes, itemData.getLikeCount() != null ? itemData.getLikeCount() + "" : "0");
 
@@ -172,7 +209,8 @@ public class CollectionActivity extends MvpActivity<CollectionActView, Collectio
         recycleCommonAdapter.setOnItemClickLinstener(new OnItemOnclickLinstener() {
             @Override
             public void itemOnclickLinstener(int position) {
-                PostDetailActivity.gotoThis(CollectionActivity.this, mPostList.get(position));
+                LogUtils.e("sen","***"+position+"*****"+mPostList.size());
+                PostDetailActivity.gotoThis(CollectionActivity.this, mPostList.get(position),position);
             }
         });
         refreshLayout.setEnableFooterFollowWhenLoadFinished(true);
@@ -223,6 +261,8 @@ public class CollectionActivity extends MvpActivity<CollectionActView, Collectio
     }
 
 
+
+
     @Override
     public void showLoadView() {
         layoutState.changeState(StateFrameLayout.LOADING);
@@ -259,7 +299,9 @@ public class CollectionActivity extends MvpActivity<CollectionActView, Collectio
     }
 
 
-
-
-
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
 }

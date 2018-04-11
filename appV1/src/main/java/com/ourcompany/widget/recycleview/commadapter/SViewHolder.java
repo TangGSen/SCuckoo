@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ourcompany.R;
+import com.ourcompany.utils.ResourceUtils;
 
 /**
  * Author : 唐家森
@@ -74,8 +75,9 @@ public class SViewHolder extends RecyclerView.ViewHolder {
 
     public SViewHolder setImageResId(final int viewId, int resId) {
         ImageView imageView = getView(viewId);
-        imageView.setTag(R.id.loading_image_url, resId);
-        ImageLoader.getImageLoader().loadImageRes(imageView, resId);
+       // imageView.setTag(R.id.loading_image_url, resId);
+        imageView.setImageDrawable(ResourceUtils.getDrawable(resId));
+        //ImageLoader.getImageLoader().loadImageRes(imageView, resId);
 
         return this;
     }

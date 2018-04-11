@@ -47,7 +47,7 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/common_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
+                android:layout_height="48dp"
                 android:background="@color/colorPrimary"
                 android:padding="0dp"
                 app:contentInsetLeft="0dp"
@@ -142,14 +142,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/common_8dp"
-            android:background="@drawable/bg_style_theme_stroke"
+            android:background="@drawable/selector_bg_style_gray_theme"
             android:gravity="center"
             android:paddingLeft="@dimen/common_8dp"
             android:paddingRight="@dimen/common_8dp"
             android:paddingTop="@dimen/common_4dp"
             android:paddingBottom="@dimen/common_4dp"
             android:text="@string/str_vote"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/whiles"
             android:textSize="@dimen/font_12sp"
             android:visibility="gone" />
 
@@ -160,17 +160,10 @@
             android:layout_height="38dp"
             android:layout_marginLeft="@dimen/common_8dp"
             android:gravity="center"
-            android:padding="4dp"
-            android:src="@drawable/selector_ic_love" />
-
-        <ImageView
-            android:id="@+id/imgCollection"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
-            android:layout_marginLeft="@dimen/common_8dp"
-            android:gravity="center"
-            android:padding="8dp"
+            android:padding="10dp"
             android:src="@drawable/selector_ic_collection" />
+
+
 
     </LinearLayout>
 

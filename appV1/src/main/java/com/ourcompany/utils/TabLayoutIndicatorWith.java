@@ -2,8 +2,12 @@ package com.ourcompany.utils;
 
 import android.support.design.widget.TabLayout;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.ourcompany.R;
 
 import java.lang.reflect.Field;
 
@@ -62,6 +66,33 @@ public class TabLayoutIndicatorWith {
                 }
             }
         });
+
+    }
+
+    public static void resetHeight(final ViewGroup view,TabLayout tabLayout) {
+
+        for (int i = 0; i < view.getChildCount(); i++) {
+            View child = view.getChildAt(i);
+            ViewGroup.MarginLayoutParams lp = ((ViewGroup.MarginLayoutParams) child.getLayoutParams());
+            lp.height = 300;
+            lp.width = 300;
+            if (child instanceof ViewGroup) {
+
+                child.setLayoutParams(lp);
+                resetHeight((ViewGroup) child,tabLayout);
+            }
+            else if (child instanceof ImageView) {
+                LogUtils.e("sen", "找到了i");
+                lp.height = 200;
+                lp.width = 200;
+                child.setBackground(ResourceUtils.getDrawable(R.drawable.bg_main_ic_repair));
+                child.setLayoutParams(lp);
+                child.requestLayout();
+                break;
+            }
+        }
+        tabLayout.requestLayout();
+
 
     }
 }
