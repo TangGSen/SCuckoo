@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter<V>> 
     private V view;
     private P presenter;
     protected Unbinder mUnbinder;
+    protected View rootView;
     protected Handler mHandler = new Handler(Looper.getMainLooper());
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,7 +34,8 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter<V>> 
         //初始化参数
         if(initArgs(getIntent().getExtras())){
             //初始化相关参数正确才能进入界面
-            setContentView(getLayoutId());
+            rootView = getLayoutInflater().inflate(getLayoutId(),null);
+            setContentView(rootView);
             initView();
             initStateLayout();
             initLinstener();
@@ -100,6 +103,10 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter<V>> 
      */
     protected void initData(Bundle savedInstanceState){
 
+    }
+
+    protected View getRootView(){
+        return rootView;
     }
 
     /**

@@ -39,4 +39,5 @@
     <color name="gradient_center">#14b9d6</color>
     <color name="gradient_end">#495aff</color>
     <color name="colorRed">#FF6763</color>
+    <color name="bg_popu">#50000000</color>
 </resources>

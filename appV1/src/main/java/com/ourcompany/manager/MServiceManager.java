@@ -227,6 +227,13 @@ public class MServiceManager {
      * 以下是Bomb Sdk
      */
 
+    public SUser newBmobUser() {
+        SUser user = new SUser();
+        user.setUserName(Constant.CURRENT_USER.nickname.get());
+        user.setObjectId(getLocalThirdPartyId());
+        return null;
+    }
+
 
     //设置本地第三方的id 绑定到user
     private void setLocalUserThridPartyId(String id) {
@@ -246,6 +253,26 @@ public class MServiceManager {
             Constant.CURRENT_USER.setCustomField(Constant.UMSDK_COMSTOR_KEY_EXIST_ID, exist);
             Constant.CURRENT_USER.setCustomField(Constant.UMSDK_COMSTOR_KEY_THRID_ID, idstr);
         }
+    }
+
+    public String getLocalUserName() {
+        if(Constant.CURRENT_USER!=null ){
+            return Constant.CURRENT_USER.nickname.get();
+        }
+        return null;
+    }
+
+    /**
+     * 获取登陆User的图片地址
+     * @return
+     */
+    public String getLocalUserImage() {
+        try {
+            String url =  Constant.CURRENT_USER.avatar.get()[Constant.CURRENT_USER.avatar.get().length / 2];
+            return url;
+        }catch (Exception e){
+        }
+        return "";
     }
 
     /**
@@ -296,6 +323,25 @@ public class MServiceManager {
         }
 
         return 0;
+
+    }
+/**
+     * 用户的类型
+     *
+     * @return
+     */
+    public String getLoginUserTypeName() {
+        try {
+            DataType<String> idType = (DataType<String>) Constant.CURRENT_USER.getCustomField(Constant.UMSDK_COMSTOR_KEY_USER_TYPE);
+            if (idType != null) {
+                String type = (String) idType.value();
+                return type;
+            }
+        } catch (Exception e) {
+            LogUtils.e("sen", "getLocaTlhirdPartyId Exception: " + e.getMessage());
+        }
+
+        return "暂无";
 
     }
 

@@ -78,6 +78,20 @@ public class InputMethodUtils {
         }
     }
 
+
+    /**
+     * 隐藏输入法
+     */
+    public static void hideKeyboard(  View currentFocusView ) {
+        if (currentFocusView != null) {
+            IBinder token = currentFocusView.getWindowToken();
+            if (token != null) {
+                InputMethodManager im = (InputMethodManager) currentFocusView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                im.hideSoftInputFromWindow(token, 0);
+            }
+        }
+    }
+
     /**
      * 开关输入法
      *

@@ -1,5 +1,6 @@
 package com.ourcompany.widget.recycleview.commadapter;
 
+import android.content.Context;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -38,18 +39,31 @@ public class ImageLoader extends SViewHolder.HolderImageLoader {
 
     @Override
     public void loadImage(ImageView imageView, String path) {
+        Glide.with(imageView.getContext())
+                .load((String) imageView.getTag(R.id.loading_image_url))
+                .error(R.mipmap.photo)           //设置错误图片
+                .dontAnimate()
+                .placeholder(R.mipmap.photo)     //设置占位图片
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imageView);
 
-            Glide.with(imageView.getContext()).load((String)imageView.getTag(R.id.loading_image_url)).error(R.mipmap.photo)           //设置错误图片
-                    .placeholder(R.mipmap.photo)     //设置占位图片
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(imageView);
-        }
+    }
+
+    @Override
+    public void loadImage(Context context, ImageView imageView, String path) {
+        Glide.with(context).load((String) imageView.getTag(R.id.loading_image_url)).error(R.mipmap.photo)           //设置错误图片
+                .placeholder(R.mipmap.photo)     //设置占位图片
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .dontAnimate()
+                .into(imageView);
+    }
 
     @Override
     public void loadImageRes(ImageView imageView, int resId) {
         Glide.with(imageView.getContext()).load(imageView.getTag(R.id.loading_image_url)).error(R.mipmap.photo)           //设置错误图片
                 .placeholder(R.mipmap.photo)     //设置占位图片
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .dontAnimate()
                 .into(imageView);
     }
 }

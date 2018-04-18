@@ -59,8 +59,9 @@ public class PostDeailActPresenter extends MvpBasePresenter<PostDeailActView> {
         post.setObjectId(postId);
         comment.setPost(post);
         SUser user = new SUser();
-        user.setUserName(Constant.CURRENT_USER.nickname.get());
         user.setObjectId(MServiceManager.getInstance().getLocalThirdPartyId());
+        user.setImageUrl(MServiceManager.getInstance().getLocalUserImage());
+        user.setUserName(MServiceManager.getInstance().getLocalUserName());
         comment.setUser(user);
         comment.save(new SaveListener<String>() {
             @Override
@@ -194,17 +195,14 @@ public class PostDeailActPresenter extends MvpBasePresenter<PostDeailActView> {
 
     public void deleteUserVote( Vote mVote) {
         if (mVote == null) {
-            LogUtils.e("sen","vote is null");
             return;
         }
         mVote.delete(new UpdateListener() {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    LogUtils.e("sen","deleteUserVoteSuccess");
                     getView().deleteUserVoteSuccess();
                 } else {
-                    LogUtils.e("sen","optionUserVoteFail");
                     getView().optionUserVoteFail();
                 }
             }
@@ -223,6 +221,8 @@ public class PostDeailActPresenter extends MvpBasePresenter<PostDeailActView> {
         vote.setPost(post);
         SUser user = new SUser();
         user.setObjectId(MServiceManager.getInstance().getLocalThirdPartyId());
+        user.setImageUrl(MServiceManager.getInstance().getLocalUserImage());
+        user.setUserName(MServiceManager.getInstance().getLocalUserName());
         vote.setUser(user);
         vote.save(new SaveListener<String>() {
             @Override
@@ -259,23 +259,19 @@ public class PostDeailActPresenter extends MvpBasePresenter<PostDeailActView> {
         query.findObjects(new FindListener<Vote>() {
             @Override
             public void done(final List<Vote> list, BmobException e) {
-                LogUtils.e("sen", "UUUUU**********");
                 if (e == null) {
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
                             if (list.size() > 0) {
-                                LogUtils.e("sen", "U**********");
                                 getView().showIsUserVote(true, list.get(0));
                             } else {
-                                LogUtils.e("sen", "UU**********");
                                 getView().showIsUserVote(false, null);
                             }
 
                         }
                     });
                 } else {
-                    LogUtils.e("sen", "出错了**********");
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {

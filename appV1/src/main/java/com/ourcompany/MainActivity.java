@@ -7,7 +7,6 @@ import com.ourcompany.presenter.fragment.LoginFragPresenter;
 import com.ourcompany.view.fragment.LoginFragmentView;
 
 import butterknife.BindView;
-import cn.bmob.v3.Bmob;
 import company.com.commons.framework.view.impl.MvpActivity;
 
 public class MainActivity extends MvpActivity<LoginFragmentView,LoginFragPresenter> implements LoginFragmentView {
@@ -22,7 +21,6 @@ public class MainActivity extends MvpActivity<LoginFragmentView,LoginFragPresent
     @Override
     protected void initView() {
         super.initView();
-        Bmob.initialize(this,"2db1fc7ea509d3ea6639495a3a24066d");
 
     }
 

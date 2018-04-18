@@ -48,6 +48,7 @@ public abstract class RecycleCommonAdapter<D> extends RecyclerView.Adapter<SView
     @Override
     public void onBindViewHolder(SViewHolder holder, final int position) {
         bindItemData(holder,mData.get(position),position);
+        setOnItemClickBg(holder.itemView);
         if (linstener !=null){
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -58,6 +59,10 @@ public abstract class RecycleCommonAdapter<D> extends RecyclerView.Adapter<SView
                 }
             });
         }
+    }
+
+    public void setOnItemClickBg(View holder) {
+
     }
 
     public void addData(D data,int position){

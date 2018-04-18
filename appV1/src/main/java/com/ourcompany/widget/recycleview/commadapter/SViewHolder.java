@@ -1,5 +1,6 @@
 package com.ourcompany.widget.recycleview.commadapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.SparseArray;
@@ -90,7 +91,7 @@ public class SViewHolder extends RecyclerView.ViewHolder {
         }
 
         public abstract void loadImage(ImageView imageView, String path);
-
+        public abstract void loadImage(Context context, ImageView imageView, String path);
 
         public String getPath() {
             return mPath;

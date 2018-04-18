@@ -106,11 +106,41 @@
             android:name=".activity.PostDetailActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activity.FeedbackActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".activity.setting.SystemSettingActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.setting.AccountSettingAcitivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.setting.ResetPasswordAcitivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.setting.EditextUserInfoActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".activity.setting.BindNewPhoneAcitivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".activity.ImagesPreViewActvitity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
+
+
 
 
         <activity

@@ -17,4 +17,6 @@ public class LoginFragPresenter extends MvpBasePresenter<LoginFragmentView> {
     public LoginFragPresenter(Context context) {
         super(context);
     }
+
+
 }

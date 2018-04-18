@@ -1,5 +1,7 @@
 package com.ourcompany.view.activity;
 
+import com.ourcompany.bean.bmob.Post;
+
 import company.com.commons.framework.view.MvpView;
 
 /**
@@ -10,7 +12,7 @@ import company.com.commons.framework.view.MvpView;
  */
 
 public interface PublishPostActView extends MvpView {
-    void uploadSuccess();
+    void uploadSuccess(Post newPost);
 
 
     /**

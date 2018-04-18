@@ -259,7 +259,7 @@ public class PublishPostActPresenter extends MvpBasePresenter<PublishPostActView
                     getView().showToastMsg(ResourceUtils.getString(R.string.str_user_not_login_pulish));
                     return;
                 }
-                Post newPost = new Post();
+                final Post newPost = new Post();
                 //设置Post 是否需要投票
                 if (getIsPostNeedVote()) {
                     newPost.setNeedVote(Boolean.TRUE);
@@ -268,8 +268,8 @@ public class PublishPostActPresenter extends MvpBasePresenter<PublishPostActView
                 newPost.setUserId(Constant.CURRENT_USER.id.get());
                 SUser user = new SUser();
                 user.setObjectId(MServiceManager.getInstance().getLocalThirdPartyId());
-//                user.setUserName(Constant.CURRENT_USER.nickname.get());
-//                user.setImageUrl(Constant.test_user_image);
+                user.setImageUrl(MServiceManager.getInstance().getLocalUserImage());
+                user.setUserName(MServiceManager.getInstance().getLocalUserName());
                 newPost.setUser(user);
                 switch (type) {
                     case Text:
@@ -293,7 +293,7 @@ public class PublishPostActPresenter extends MvpBasePresenter<PublishPostActView
                             @Override
                             public void run() {
                                 if (e == null) {
-                                    getView().uploadSuccess();
+                                    getView().uploadSuccess(newPost);
                                 } else {
                                     getView().dealImageError(ResourceUtils.getString(R.string.str_send_fial));
                                 }

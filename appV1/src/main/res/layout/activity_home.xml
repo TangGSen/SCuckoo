@@ -20,6 +20,7 @@
         android:id="@+id/tabLayout"
         style="@style/TabLayoutStyle"
         android:layout_width="match_parent"
+        android:background="@color/whiles"
         android:layout_height="48dp"
         app:tabBackground="@android:color/transparent"/>
 </LinearLayout>

@@ -33,6 +33,10 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +81,7 @@ public class FoundNewsFragment extends MvpFragment<FoundNewsFragmentView, FoundN
     @Override
     protected void initView(View view) {
         super.initView(view);
+        EventBus.getDefault().register(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MApplication.mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recycleview.setLayoutManager(linearLayoutManager);
@@ -125,7 +130,10 @@ public class FoundNewsFragment extends MvpFragment<FoundNewsFragmentView, FoundN
 
             }
 
-
+            @Override
+            public void setOnItemClickBg(View itemView) {
+                itemView.setBackground(ResourceUtils.getDrawable(R.drawable.selector_click_bg));
+            }
         };
         recycleview.setItemAnimator(null);
         recycleview.setAdapter(recycleCommonAdapter);
@@ -158,6 +166,15 @@ public class FoundNewsFragment extends MvpFragment<FoundNewsFragmentView, FoundN
         refreshLayout.setEnableFooterFollowWhenLoadFinished(true);
         refreshLayout.setRefreshHeader(new MHeader(mActivity).setEnableLastTime(false).setTextSizeTitle(14).setAccentColor(ResourceUtils.getResColor(R.color.text_gray)).setFinishDuration(0));
         refreshLayout.setRefreshFooter(new MFooter(mActivity).setTextSizeTitle(14).setSpinnerStyle(SpinnerStyle.Scale).setAccentColor(ResourceUtils.getResColor(R.color.text_gray)).setFinishDuration(0));
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPostSubmit(Post post) {
+        if(post==null && layoutState!=null && recycleCommonAdapter!=null){
+            return;
+        }
+        layoutState.changeState(StateFrameLayout.SUCCESS);
+        recycleCommonAdapter.addData(post,0);
     }
 
 
@@ -278,5 +295,9 @@ public class FoundNewsFragment extends MvpFragment<FoundNewsFragmentView, FoundN
         refreshLayout.finishLoadMore(0, true, true);
     }
 
-
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
 }

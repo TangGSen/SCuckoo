@@ -1,29 +1,28 @@
 package com.ourcompany.fragment;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ourcompany.R;
+import com.ourcompany.activity.FeedbackActivity;
 import com.ourcompany.activity.MessageActivity;
+import com.ourcompany.activity.setting.SystemSettingActivity;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.bean.UserAccoutLoginRes;
+import com.ourcompany.manager.MServiceManager;
 import com.ourcompany.presenter.fragment.MineFragPresenter;
 import com.ourcompany.utils.Constant;
-import com.ourcompany.utils.LogUtils;
+import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.view.fragment.MineFragmentView;
+import com.ourcompany.widget.recycleview.commadapter.ImageLoader;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import company.com.commons.framework.view.impl.MvpFragment;
@@ -39,10 +38,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresenter> implements MineFragmentView {
     @BindView(R.id.img_user)
     CircleImageView mUserImage;
-    @BindView(R.id.str_user_sign)
-    TextView strUserSign;
-    @BindView(R.id.class_toolbar)
-    Toolbar classToolbar;
+    @BindView(R.id.str_user_name)
+    TextView strUserName;
+
     @BindView(R.id.personal_rootLayout)
     CoordinatorLayout personalRootLayout;
     @BindView(R.id.btnMessage)
@@ -50,6 +48,17 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
     Unbinder unbinder;
     @BindView(R.id.btCollection)
     TextView btCollection;
+    @BindView(R.id.btMyPublish)
+    TextView btMyPublish;
+    @BindView(R.id.btMyVote)
+    TextView btMyVote;
+    @BindView(R.id.btFeedback)
+    TextView btFeedback;
+    @BindView(R.id.btAboutCuckoo)
+    TextView btAboutCuckoo;
+    @BindView(R.id.btSetting)
+    TextView btSetting;
+    Unbinder unbinder1;
 
 
     @Override
@@ -73,7 +82,8 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
         return new MineFragPresenter(MApplication.mContext);
     }
 
-    @OnClick({R.id.img_user, R.id.btnMessage,R.id.btCollection})
+    @OnClick({R.id.img_user, R.id.btnMessage, R.id.btCollection, R.id.btMyPublish,
+            R.id.btMyVote, R.id.btFeedback, R.id.btAboutCuckoo, R.id.btSetting})
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
@@ -86,6 +96,18 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
                 break;
             case R.id.btCollection:
                 getPresenter().gotoCollection(mActivity);
+                break;
+            case R.id.btMyPublish:
+                break;
+            case R.id.btMyVote:
+                break;
+            case R.id.btFeedback:
+                FeedbackActivity.gotoThis(mActivity);
+                break;
+            case R.id.btAboutCuckoo:
+                break;
+            case R.id.btSetting:
+                SystemSettingActivity.gotoThis(mActivity);
                 break;
         }
     }
@@ -105,11 +127,12 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
     @Override
     public void showUserInfo() {
         if (Constant.CURRENT_USER == null) {
+            strUserName.setText(ResourceUtils.getString(R.string.str_user_notlogin_sign));
             return;
         }
-        LogUtils.e("sen", Constant.CURRENT_USER.signature.get());
-        strUserSign.setText(Constant.CURRENT_USER.signature.get());
-
+        strUserName.setText(Constant.CURRENT_USER.nickname.get());
+        mUserImage.setTag(R.id.loading_image_url, MServiceManager.getInstance().getLocalUserImage());
+        ImageLoader.getImageLoader().loadImage(mUserImage,"");
     }
 
     @Override
@@ -134,17 +157,5 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
     }
 
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
-    }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 }

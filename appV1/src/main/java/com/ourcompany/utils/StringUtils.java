@@ -25,4 +25,14 @@ public class StringUtils {
         return m.find();
     }
 
+    public static String getDealPhone(String phone){
+        char[] chars = phone.toCharArray();
+        for(int i=0;i<chars.length;i++){
+            if(i>2 && i<8){
+                chars[i]='*';
+            }
+        }
+        return String.valueOf(chars );
+    }
+
 }

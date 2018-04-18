@@ -19,13 +19,17 @@ import android.widget.TextView;
 import com.ourcompany.R;
 import com.ourcompany.adapter.ImagePickerAdapter;
 import com.ourcompany.app.MApplication;
+import com.ourcompany.bean.bmob.Post;
 import com.ourcompany.presenter.activity.PublishPostActPresenter;
 import com.ourcompany.utils.Constant;
+import com.ourcompany.utils.InputMethodUtils;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.ToastUtils;
 import com.ourcompany.view.activity.PublishPostActView;
 import com.ourcompany.widget.LoadingViewAOV;
 import com.ourcompany.widget.recycleview.commadapter.GridItemDecoration;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -247,6 +251,7 @@ public class PublishPostActivity extends MvpActivity<PublishPostActView, Publish
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btPublish:
+                InputMethodUtils.hideKeyboard(etContent);
                 //检查所有的工作流程，包括压缩图片，文字检查，图片检查，完毕后批量上传
                 LoadingViewAOV.getInstance().with(PublishPostActivity.this,btPublish,R.color.colorPrimary);
                 String text = etContent.getText().toString();
@@ -283,11 +288,13 @@ public class PublishPostActivity extends MvpActivity<PublishPostActView, Publish
     }
 
     @Override
-    public void uploadSuccess() {
+    public void uploadSuccess(Post newPost) {
         LoadingViewAOV.getInstance().close(PublishPostActivity.this,btPublish);
         if (dialogProgress != null && dialogProgress.isShowing()) {
             dialogProgress.dismiss();
         }
+        //发送给FragmenNews
+        EventBus.getDefault().post(newPost);
         showToastMsg("发送成功");
         mHandler.postDelayed(new Runnable() {
             @Override
