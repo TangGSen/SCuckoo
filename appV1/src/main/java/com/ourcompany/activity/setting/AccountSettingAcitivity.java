@@ -2,7 +2,6 @@ package com.ourcompany.activity.setting;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Switch;
@@ -16,7 +15,6 @@ import com.ourcompany.utils.ToastUtils;
 import com.ourcompany.view.activity.AccountSetingActView;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import company.com.commons.framework.view.impl.MvpActivity;
 
@@ -108,10 +106,5 @@ public class AccountSettingAcitivity extends MvpActivity<AccountSetingActView, A
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 }

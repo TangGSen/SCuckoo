@@ -13,6 +13,10 @@ import java.io.File;
  */
 
 public class Constant {
+    //读取文件相关的
+    public static final String APK_DIR = "apk";
+    public static final String URI_FOR_FILE = "com.ourcompany.fileprovider";
+
     //获取验证码的时间间隔，单位秒
     public static final int SAFETY_CODE_TIME_INTERVAL = 30;
     public static final String COUNTRY_CODE = "86";

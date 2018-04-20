@@ -11,6 +11,7 @@ import com.ourcompany.activity.MessageActivity;
 import com.ourcompany.activity.setting.SystemSettingActivity;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.bean.UserAccoutLoginRes;
+import com.ourcompany.bean.eventbus.UserLogout;
 import com.ourcompany.manager.MServiceManager;
 import com.ourcompany.presenter.fragment.MineFragPresenter;
 import com.ourcompany.utils.Constant;
@@ -126,13 +127,22 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
 
     @Override
     public void showUserInfo() {
-        if (Constant.CURRENT_USER == null) {
-            strUserName.setText(ResourceUtils.getString(R.string.str_user_notlogin_sign));
+        if (!MServiceManager.getInstance().getUserIsLogin()) {
+            userLogout();
             return;
         }
         strUserName.setText(Constant.CURRENT_USER.nickname.get());
         mUserImage.setTag(R.id.loading_image_url, MServiceManager.getInstance().getLocalUserImage());
         ImageLoader.getImageLoader().loadImage(mUserImage,"");
+    }
+
+    /**
+     * 用户退出登录了
+     */
+    public void userLogout() {
+        strUserName.setText(ResourceUtils.getString(R.string.str_user_notlogin_sign));
+        mUserImage.setImageDrawable(ResourceUtils.getDrawable(R.mipmap.photo));
+
     }
 
     @Override
@@ -156,6 +166,14 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
         }
     }
 
-
+    /**
+     * 登陆成功
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventLogout(UserLogout res) {
+        if (res != null && res.isLogout()) {
+            userLogout();
+        }
+    }
 
 }

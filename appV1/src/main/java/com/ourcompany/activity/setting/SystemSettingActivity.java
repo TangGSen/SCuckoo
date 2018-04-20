@@ -4,13 +4,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.ourcompany.R;
+import com.ourcompany.bean.bmob.SAppVersion;
+import com.ourcompany.bean.eventbus.UserLogout;
+import com.ourcompany.manager.MServiceManager;
 import com.ourcompany.presenter.activity.SystemSettingActPresenter;
+import com.ourcompany.utils.AppVersionUpdate;
+import com.ourcompany.utils.ResourceUtils;
+import com.ourcompany.utils.ToastUtils;
 import com.ourcompany.view.activity.SystemSettingActView;
+import com.ourcompany.widget.LoadingViewAOV;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -34,6 +44,7 @@ public class SystemSettingActivity extends MvpActivity<SystemSettingActView, Sys
     TextView btLogout;
     @BindView(R.id.common_toolbar)
     Toolbar commonToolbar;
+    private MAppVersionUpdateListener mAppVersionListener;
 
     public static void gotoThis(Context context) {
         Intent intent = new Intent(context, SystemSettingActivity.class);
@@ -57,6 +68,10 @@ public class SystemSettingActivity extends MvpActivity<SystemSettingActView, Sys
                 overridePendingTransition(0, 0);
             }
         });
+
+        if(!MServiceManager.getInstance().getUserIsLogin()){
+           btLogout.setVisibility(View.GONE);
+        }
 
 
     }
@@ -82,7 +97,7 @@ public class SystemSettingActivity extends MvpActivity<SystemSettingActView, Sys
 
     @Override
     public void showToastMsg(String string) {
-
+        ToastUtils.showSimpleToast(string);
     }
 
 
@@ -98,15 +113,81 @@ public class SystemSettingActivity extends MvpActivity<SystemSettingActView, Sys
             case R.id.btAccpetPush:
                 break;
             case R.id.btCheckNewVersion:
-
+                if(mAppVersionListener==null){
+                    mAppVersionListener = new MAppVersionUpdateListener();
+                    AppVersionUpdate.getInstance().setAppVersionUpdateListener(mAppVersionListener);
+                }
+                AppVersionUpdate.getInstance().update();
                 break;
             case R.id.btLogout:
+                LoadingViewAOV.getInstance().with(SystemSettingActivity.this,btLogout,R.color.whiles,R.drawable.ic_loading_v4,Gravity.CENTER);
+                getPresenter().logout();
                 break;
         }
+    }
+
+    class MAppVersionUpdateListener implements AppVersionUpdate.AppVersionUpdateListener{
+
+        @Override
+        public void onAppCheckVersioning() {
+            btCheckNewVersion.setEnabled(false);
+            LoadingViewAOV.getInstance().with(SystemSettingActivity.this,btCurrentVersion,R.color.whiles,R.drawable.ic_loading_v4, Gravity.RIGHT);
+        }
+
+        @Override
+        public void onCheckVersionError() {
+            updateFinish();
+            showToastMsg(ResourceUtils.getString(R.string.str_app_version_get_error));
+        }
+
+        @Override
+        public void onCheckVersionSuccess(SAppVersion version) {
+            updateFinish();
+            AppVersionUpdate.getInstance().showUpdateDialog(SystemSettingActivity.this,version);
+        }
+
+        @Override
+        public void onVersionNotUpdate() {
+            updateFinish();
+            showToastMsg(ResourceUtils.getString(R.string.str_app_version_is_new));
+        }
+
+        @Override
+        public void onDownloadApkSuccess(String path) {
+            AppVersionUpdate.getInstance().showInstallDialog(SystemSettingActivity.this,path);
+        }
+    }
+
+    /**
+     * 更新完成
+      */
+    private void updateFinish(){
+        btCheckNewVersion.setEnabled(true);
+        LoadingViewAOV.getInstance().close(SystemSettingActivity.this,btCurrentVersion);
+    }
+
+    @Override
+    protected void onDestroy() {
+        AppVersionUpdate.getInstance().reset();
+        super.onDestroy();
     }
 
     @Override
     public void setLocalVersionName(String localVersion) {
         btCurrentVersion.setText(localVersion);
+    }
+
+    @Override
+    public void logoutSuccess() {
+        LoadingViewAOV.getInstance().close(SystemSettingActivity.this,btLogout);
+        EventBus.getDefault().post(new UserLogout(true));
+        finish();
+        overridePendingTransition(0,0);
+    }
+
+    @Override
+    public void logoutFail() {
+        LoadingViewAOV.getInstance().close(SystemSettingActivity.this,btLogout);
+        showToastMsg(ResourceUtils.getString(R.string.str_logout_fail));
     }
 }

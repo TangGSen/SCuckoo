@@ -219,5 +219,24 @@
     <string name="hint_et_new_password">请输入新密码</string>
     <string name="str_new_old_password_same">输入新旧密码不能相同</string>
     <string name="str_change_passowrd_error">修改失败，请重试一下</string>
-    <string name="str_change_passowrd_success">修改密码成功</string>
+    <string name="str_change_passowrd_success">新密码修改成功</string>
+    <string name="str_app_version_is_new">当前已是最新版本</string>
+    <string name="str_app_version_get_error">获取版本信息失败，请重试</string>
+    <string name="str_update_title">发现新版本</string>
+    <string name="str_update_button">马上更新</string>
+    <string name="str_update_progress_title">正在更新,请稍后</string>
+    <string name="str_download_fail">下载失败</string>
+    <string name="str_download_stop">暂停下载</string>
+    <string name="str_download_finish">下载完成，请安装</string>
+    <string name="str_download_install">安装</string>
+    <string name="str_download_redownload">重新下载</string>
+    <string name="str_check_apk_info">正在检查安装文件</string>
+    <string name="str_download_apk_not_belong">非官方安装包，不能安装</string>
+    <string name="str_download_apk_is_safy">检查完毕，请安装</string>
+    <string name="str_download_apk_is_old">该版本是旧版本，不需要安装</string>
+    <string name="str_close">关闭</string>
+    <string name="str_download_is_deleted">文件已被删除</string>
+    <string name="str_download_apk_is_error">安装文件出错，不能安装</string>
+    <string name="str_install_error">安装失败</string>
+    <string name="str_logout_fail">退出登录失败，请重试</string>
 </resources>

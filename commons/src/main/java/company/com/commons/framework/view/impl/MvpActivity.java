@@ -105,7 +105,7 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter<V>> 
 
     }
 
-    protected View getRootView(){
+    public View getRootView(){
         return rootView;
     }
 

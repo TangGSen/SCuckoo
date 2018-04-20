@@ -12,4 +12,8 @@ import company.com.commons.framework.view.MvpView;
 public interface SystemSettingActView extends MvpView {
 
     void setLocalVersionName(String localVersion);
+
+    void logoutSuccess();
+
+    void logoutFail();
 }

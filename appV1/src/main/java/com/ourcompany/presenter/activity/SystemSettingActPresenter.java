@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import com.mob.ums.OperationCallback;
+import com.mob.ums.UMSSDK;
 import com.ourcompany.R;
 import com.ourcompany.app.MApplication;
+import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.view.activity.SystemSettingActView;
 
@@ -19,7 +22,7 @@ import company.com.commons.framework.presenter.MvpBasePresenter;
  */
 
 public class SystemSettingActPresenter extends MvpBasePresenter<SystemSettingActView> {
-
+    protected int  logoutCount = 0;
     public SystemSettingActPresenter(Context context) {
         super(context);
     }
@@ -41,5 +44,42 @@ public class SystemSettingActPresenter extends MvpBasePresenter<SystemSettingAct
             }
         }, 1000);
 
+    }
+
+
+
+
+    public void logout() {
+        UMSSDK.logout(new OperationCallback<Void>(){
+            @Override
+            public void onSuccess(Void aVoid) {
+                super.onSuccess(aVoid);
+                showLogoutSuccess();
+            }
+
+            @Override
+            public void onFailed(Throwable throwable) {
+                super.onFailed(throwable);
+                if(logoutCount==1){
+                    showLogoutSuccess();
+                }else{
+                    getView().logoutFail();
+                }
+                logoutCount++;
+            }
+        });
+
+
+    }
+
+    public void showLogoutSuccess(){
+        Constant.CURRENT_USER=null;
+        logoutCount = 0;
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getView().logoutSuccess();
+            }
+        },1500);
     }
 }

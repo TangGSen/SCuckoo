@@ -385,5 +385,7 @@ public class MServiceManager {
     }
 
 
-
+    public boolean getUserIsLogin() {
+        return UMSSDK.amILogin();
+    }
 }

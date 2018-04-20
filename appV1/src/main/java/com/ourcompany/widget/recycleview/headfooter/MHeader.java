@@ -138,7 +138,7 @@ public class MHeader extends InternalClassics<MHeader> implements RefreshHeader 
 //        if (ta.hasValue(R.styleable.ClassicsHeader_srlDrawableArrow)) {
 //            mArrowView.setImageDrawable(ta.getDrawable(R.styleable.ClassicsHeader_srlDrawableArrow));
 //        } else {
-////            MArrowDrawable mArrowDrawable = new MArrowDrawable();
+//            MArrowDrawable mArrowDrawable = new MArrowDrawable();
 ////            mArrowDrawable.setColor(ResourceUtils.getResColor(com.ourcompany.R.color.text_gray));
 //
 //        }

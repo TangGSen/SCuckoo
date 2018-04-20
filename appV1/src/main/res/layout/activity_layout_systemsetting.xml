@@ -100,44 +100,44 @@
                 android:textOn="  "
                 android:thumb="@drawable/swicth_thumb"
                 android:track="@drawable/swicth_track" />
+            <RelativeLayout
+                android:id="@+id/layoutVersion"
+                android:layout_width="match_parent"
+                android:layout_marginTop="4dp"
+                android:background="@color/whiles"
+                android:layout_below="@+id/tvMsgVoice"
+                android:layout_height="wrap_content">
+
 
             <TextView
                 android:id="@+id/btCheckNewVersion"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_below="@+id/tvMsgVoice"
-                android:layout_marginTop="4dp"
-                android:background="@drawable/selector_text_bg"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/common_16dp"
                 android:text="@string/str_check_new_version"
                 android:textColor="@color/colorFrist"
                 android:textSize="@dimen/fragment_font_16sp" />
 
-
             <TextView
                 android:id="@+id/btCurrentVersion"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:layout_alignBaseline="@+id/btCheckNewVersion"
-                android:layout_alignBottom="@+id/btCheckNewVersion"
-                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/btAccpetPush"
                 android:layout_marginRight="@dimen/common_16dp"
-                android:layout_marginTop="@dimen/common_8dp"
                 android:background="@null"
                 android:gravity="center_vertical"
+                android:drawableRight="@drawable/ic_enter"
                 android:paddingLeft="@dimen/common_16dp"
                 android:textColor="@color/text_gray"
                 android:textSize="14sp" />
-
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/btLogout"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_below="@+id/btCurrentVersion"
+                android:layout_below="@+id/layoutVersion"
                 android:layout_marginTop="60dp"
                 android:background="@drawable/selector_text_bg"
                 android:gravity="center"

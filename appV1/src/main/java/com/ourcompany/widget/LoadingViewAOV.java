@@ -1,11 +1,14 @@
 package com.ourcompany.widget;
 
 import android.app.Activity;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.ourcompany.R;
 import com.ourcompany.utils.ResourceUtils;
@@ -22,6 +25,8 @@ public class LoadingViewAOV {
     private View loadView;
     private int mTargetViewId = -1;
 
+
+
     private LoadingViewAOV() {
     }
 
@@ -35,9 +40,8 @@ public class LoadingViewAOV {
         }
         return instance;
     }
-
     //将view 的父控件换成自己的
-    public void with(final Activity activity, final View view, int colorBg) {
+    public void with(final Activity activity, final View view, int colorBg, int drawableResId, int gravity) {
         final ViewGroup viewParent = (ViewGroup) view.getParent();
         loadView = activity.getLayoutInflater().inflate(R.layout.layout_loading_aov, null);
         if (viewParent != null && loadView != null && loadView.getVisibility() == View.GONE) {
@@ -60,16 +64,29 @@ public class LoadingViewAOV {
             viewParent.addView(loadView);
             viewParent.removeView(view);
             mRootView.addView(view, 0);
-            View close = loadView.findViewById(R.id.imageLoadView);
+            ImageView animView = loadView.findViewById(R.id.imageLoadView);
+            ViewGroup.LayoutParams layoutParams = animView.getLayoutParams();
+            ((LinearLayout)(animView.getParent())).setGravity(gravity);
+            if(drawableResId>0){
+                animView.setImageDrawable(ResourceUtils.getDrawable(drawableResId));
+            }
             Animation circle_anim = AnimationUtils.loadAnimation(activity, R.anim.anim_loading_imag);
             LinearInterpolator interpolator = new LinearInterpolator();  //设置匀速旋转，在xml文件中设置会出现卡顿
             circle_anim.setInterpolator(interpolator);
             if (circle_anim != null) {
-                close.startAnimation(circle_anim);  //开始动画
+                animView.startAnimation(circle_anim);  //开始动画
             }
 
         }
 
+
+    }
+
+
+    //将view 的父控件换成自己的
+    public void with(final Activity activity, final View view, int colorBg) {
+
+        with(activity, view, colorBg,0,Gravity.CENTER);
 
     }
 

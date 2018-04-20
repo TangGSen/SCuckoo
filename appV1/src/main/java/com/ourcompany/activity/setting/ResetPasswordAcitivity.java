@@ -138,8 +138,11 @@ public class ResetPasswordAcitivity extends MvpActivity<ResetPasswordActView, Re
 
     @Override
     public void resetSuccess() {
+        //需要将一些Activity 关闭，然后退出登录，重新登录
+
         LoadingViewAOV.getInstance().close(ResetPasswordAcitivity.this, btFinish);
         showToastMsg(ResourceUtils.getString(R.string.str_change_passowrd_success));
         finish();
+        overridePendingTransition(0, 0);
     }
 }
