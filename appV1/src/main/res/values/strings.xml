@@ -184,7 +184,7 @@
     <string name="str_ed_my_info">编辑个人资料</string>
     <string name="str_system_setting">系统设置</string>
     <string name="str_feedback">意见反馈</string>
-    <string name="str_my_publish">我的发表</string>
+    <string name="str_my_dynamic">我的动态</string>
     <string name="str_about_cuckoo">关于布谷</string>
     <string name="hint_write_feeback">请写下你的反馈意见或者帮助内容</string>
     <string name="anonymous">*#匿名#*</string>
@@ -239,4 +239,10 @@
     <string name="str_download_apk_is_error">安装文件出错，不能安装</string>
     <string name="str_install_error">安装失败</string>
     <string name="str_logout_fail">退出登录失败，请重试</string>
+    <string name="str_terms_of_service">服务条款</string>
+    <string name="str_introduction">功能介绍</string>
+    <string name="str_copyright">Copyright © 2018-2050 Cuckoo All Rights Reserved.</string>
+    <string name="str_address">定位中</string>
+    <string name="str_choose_class">筛选</string>
+    <string name="str_address_error">定位失败</string>
 </resources>

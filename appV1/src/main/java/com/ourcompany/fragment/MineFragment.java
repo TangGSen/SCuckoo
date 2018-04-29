@@ -6,8 +6,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.ourcompany.R;
+import com.ourcompany.activity.AboutCuckooActivity;
 import com.ourcompany.activity.FeedbackActivity;
 import com.ourcompany.activity.MessageActivity;
+import com.ourcompany.activity.imui.UserInfoActivity;
 import com.ourcompany.activity.setting.SystemSettingActivity;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.bean.UserAccoutLoginRes;
@@ -49,8 +51,8 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
     Unbinder unbinder;
     @BindView(R.id.btCollection)
     TextView btCollection;
-    @BindView(R.id.btMyPublish)
-    TextView btMyPublish;
+    @BindView(R.id.btMyDynamic)
+    TextView btMyDynamic;
     @BindView(R.id.btMyVote)
     TextView btMyVote;
     @BindView(R.id.btFeedback)
@@ -83,7 +85,7 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
         return new MineFragPresenter(MApplication.mContext);
     }
 
-    @OnClick({R.id.img_user, R.id.btnMessage, R.id.btCollection, R.id.btMyPublish,
+    @OnClick({R.id.img_user, R.id.btnMessage, R.id.btCollection, R.id.btMyDynamic,
             R.id.btMyVote, R.id.btFeedback, R.id.btAboutCuckoo, R.id.btSetting})
     public void onClick(View v) {
         int id = v.getId();
@@ -98,7 +100,9 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
             case R.id.btCollection:
                 getPresenter().gotoCollection(mActivity);
                 break;
-            case R.id.btMyPublish:
+            case R.id.btMyDynamic:
+                UserInfoActivity.gotoThis(mActivity, false, MServiceManager.getInstance().getCurrentLoginUserId());
+
                 break;
             case R.id.btMyVote:
                 break;
@@ -106,6 +110,7 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
                 FeedbackActivity.gotoThis(mActivity);
                 break;
             case R.id.btAboutCuckoo:
+                AboutCuckooActivity.gotoThis(mActivity);
                 break;
             case R.id.btSetting:
                 SystemSettingActivity.gotoThis(mActivity);

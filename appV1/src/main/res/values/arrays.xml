@@ -38,6 +38,12 @@
         <item>学习</item>
     </string-array>
 
+    <string-array name="tabUserClassInfoItems">
+        <item>智能排序</item>
+        <item>好评</item>
+        <item>成交量</item>
+        <item>位置距离</item>
+    </string-array>
 
 
     <declare-styleable name="PieView">

@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context="com.ourcompany.activity.imui.LoginActivity">
 
-    <include layout="@layout/include_layout_tablayout" />
+    <include layout="@layout/include_layout_toolbarlyout" />
 
     <RelativeLayout
         android:layout_width="match_parent"

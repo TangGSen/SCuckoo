@@ -106,4 +106,9 @@ public abstract class RecycleCommonAdapter<D> extends RecyclerView.Adapter<SView
             }
         });
     }
+
+    public void addDatasInFirst(int start, List<D> data) {
+        mData.addAll(start, data);
+        notifyItemRangeInserted(start, data.size());
+    }
 }

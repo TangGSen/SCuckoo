@@ -28,9 +28,18 @@ public class AppUtils {
         return 0;
     }
 
-    static class ApkInfo {
+    public static class ApkInfo {
         private String packgeName;
         private int versionCode;
+        private String versionName;
+
+        public String getVersionName() {
+            return versionName;
+        }
+
+        public void setVersionName(String versionName) {
+            this.versionName = versionName;
+        }
 
         public String getPackgeName() {
             return packgeName;
@@ -82,6 +91,7 @@ public class AppUtils {
             apkInfo = new ApkInfo();
             apkInfo.setPackgeName(info.packageName);
             apkInfo.setVersionCode(info.versionCode);
+            apkInfo.setVersionName(info.versionName);
         } catch (Exception e) {
         }
         return apkInfo;

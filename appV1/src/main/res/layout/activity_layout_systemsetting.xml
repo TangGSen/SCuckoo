@@ -16,9 +16,15 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="?actionBarSize"
             android:background="@color/colorBg"
-            android:paddingTop="@dimen/common_8dp">
+            >
+            <View
+                android:id="@+id/emptyView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_8dp"
+                android:background="@color/whiles" />
 
             <TextView
+                android:layout_below="@+id/emptyView"
                 android:id="@+id/btEditexInfo"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
@@ -138,7 +144,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_below="@+id/layoutVersion"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="48dp"
                 android:background="@drawable/selector_text_bg"
                 android:gravity="center"
                 android:text="@string/str_exist_login"
@@ -148,7 +154,7 @@
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
 
-    <include layout="@layout/include_layout_tablayout" />
+    <include layout="@layout/include_layout_toolbarlyout" />
 
 
 </android.support.design.widget.CoordinatorLayout>

@@ -77,5 +77,13 @@ public class TimeFormatUtil {
         return (new SimpleDateFormat(Sdf)).format(date);
     }
 
+    public static Date getDateFormTimeString(String time) {
+        try {
+            return getSimpleDateFormat().parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }

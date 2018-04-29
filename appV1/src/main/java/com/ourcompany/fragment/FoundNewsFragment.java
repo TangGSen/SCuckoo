@@ -15,7 +15,6 @@ import com.ourcompany.activity.PostDetailActivity;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.bean.bmob.Post;
 import com.ourcompany.presenter.fragment.FoundNewsFragPresenter;
-import com.ourcompany.utils.LogUtils;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.TimeFormatUtil;
 import com.ourcompany.utils.ToastUtils;
@@ -265,7 +264,6 @@ public class FoundNewsFragment extends MvpFragment<FoundNewsFragmentView, FoundN
 
     @Override
     public void showOnReflshNoNewsData() {
-        LogUtils.e("sen","showOnReflshNoNewsData");
         showToastMsg(ResourceUtils.getString(R.string.str_reflsh_no_new_data));
         refreshLayout.finishRefresh(0, true);
     }

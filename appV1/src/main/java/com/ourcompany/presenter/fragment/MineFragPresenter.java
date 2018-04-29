@@ -13,10 +13,10 @@ import com.mob.ums.User;
 import com.ourcompany.R;
 import com.ourcompany.activity.CollectionActivity;
 import com.ourcompany.activity.imui.LoginActivity;
+import com.ourcompany.activity.setting.EditextUserInfoActivity;
 import com.ourcompany.manager.MServiceManager;
 import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.ResourceUtils;
-import com.ourcompany.utils.ToastUtils;
 import com.ourcompany.view.fragment.MineFragmentView;
 
 import company.com.commons.framework.presenter.MvpBasePresenter;
@@ -58,12 +58,10 @@ public class MineFragPresenter extends MvpBasePresenter<MineFragmentView> {
         if(activity==null){
             return;
         }
-
-        if( Constant.CURRENT_USER!=null){
+        if( Constant.CURRENT_USER!=null&&MServiceManager.getInstance().getUserIsLogin()){
             //去修改资料
-            ToastUtils.showSimpleToast("待开发，查看资料");
-            Intent intent = new Intent(activity, LoginActivity.class);
-            mineFragment.startActivity(intent);
+
+            EditextUserInfoActivity.gotoThis(activity);
         }else{
             //去登陆
             Intent intent = new Intent(activity, LoginActivity.class);

@@ -51,8 +51,9 @@ public class Constant {
     public static final String CACHE_DIR = MApplication.mContext.getExternalCacheDir().getAbsolutePath() + File.separator;
     public static final java.lang.String BMOB_APPKEY = "2db1fc7ea509d3ea6639495a3a24066d";
 
-
-
+    public static  LocationOption.MLocation CURRENT_CITY = null;
+    //最多5颗星
+    public static final int START_COUNT = 5;
     //保存当前的user
     public static User CURRENT_USER = null;
     //由于Activity 传递User ，但User 并不可以序列化

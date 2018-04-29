@@ -1,1 +1,1 @@
-include ':appV1', ':commons', ':liuboss', ':RxJavaDemo', ':appIM', ':libemoji', ':KeyBoard', ':RelationDemo', ':imagepicker'
+include ':appV1', ':commons', ':liuboss', ':RxJavaDemo', ':appIM', ':libemoji', ':KeyBoard', ':RelationDemo', ':imagepicker', ':citydemo', ':citypicker'

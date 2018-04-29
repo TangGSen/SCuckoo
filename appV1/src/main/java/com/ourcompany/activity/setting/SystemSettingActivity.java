@@ -61,6 +61,7 @@ public class SystemSettingActivity extends MvpActivity<SystemSettingActView, Sys
         super.initView();
         setSupportActionBar(commonToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        commonToolbar.setTitle(ResourceUtils.getString(R.string.str_system_setting));
         commonToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,8 +104,15 @@ public class SystemSettingActivity extends MvpActivity<SystemSettingActView, Sys
 
     @OnClick({R.id.btEditexInfo, R.id.btAccountSetting, R.id.btCheckNewVersion, R.id.btLogout})
     public void onViewClicked(View view) {
+        if(view.getId()==R.id.btAccountSetting ||view.getId()==R.id.btEditexInfo){
+            if(!MServiceManager.getInstance().getUserIsLogin()){
+                showToastMsg(ResourceUtils.getString(R.string.str_user_not_login));
+                return;
+            }
+        }
         switch (view.getId()) {
             case R.id.btEditexInfo:
+
                 EditextUserInfoActivity.gotoThis(SystemSettingActivity.this);
                 break;
             case R.id.btAccountSetting:

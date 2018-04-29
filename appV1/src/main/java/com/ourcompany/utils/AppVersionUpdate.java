@@ -368,11 +368,9 @@ public class AppVersionUpdate {
 
         @Override
         public void onDownloadSuccess(String path) {
-            ToastUtils.showSimpleToast(path);
             if (isDownloadDialog()) {
                 downloadDialog.dismiss();
             }
-
             if (listener != null) {
                 listener.onDownloadApkSuccess(path);
             }

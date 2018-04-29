@@ -52,5 +52,7 @@ ext{
     smartRefreshLayout ='1.1.0-alpha-1'
     statusBarUtilVersion='1.5.0'
     eventBusVersion='3.0.0'
+    statusBarUtilVersion ='1.4.0'
+    ratingBarVersion ='1.0.1'
 
 }

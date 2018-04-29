@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,6 +83,7 @@ public class EditextUserInfoActivity extends MvpActivity<EditextUserInfoActView,
     private RecycleCommonAdapter recycleCommonAdapter;
     private PopupWindow popupWindow;
     private HashMap<String, Object> userInfos;
+    private boolean isChangeImageInfo;
 
     public static void gotoThis(Context context) {
         Intent intent = new Intent(context, EditextUserInfoActivity.class);
@@ -98,6 +101,7 @@ public class EditextUserInfoActivity extends MvpActivity<EditextUserInfoActView,
         super.initView();
         setSupportActionBar(commonToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        commonToolbar.setTitle(ResourceUtils.getString(R.string.str_ed_my_info));
         commonToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,6 +119,25 @@ public class EditextUserInfoActivity extends MvpActivity<EditextUserInfoActView,
                 edNickName.setText(MServiceManager.getInstance().getLocalUserName());
             }
         }, 50);
+
+        btSubmit.setVisibility(View.GONE);
+        edNickName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                checkIsCanSubmit();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
 
@@ -188,20 +211,30 @@ public class EditextUserInfoActivity extends MvpActivity<EditextUserInfoActView,
 
 
     private void uploadImage(String path) {
-        imgUser.setTag(R.id.loading_image_url, path);
-        ImageLoader.getImageLoader().loadImage(EditextUserInfoActivity.this, imgUser, "");
+
         LoadingViewAOV.getInstance().with(EditextUserInfoActivity.this, imgUser, android.R.color.transparent);
         getPresenter().dealUserImage(path);
     }
 
-    @OnClick({R.id.imgUser, R.id.ed_nickName, R.id.tvIdentity, R.id.btSubmit})
+    @OnClick({R.id.tvImage, R.id.tvNick, R.id.tvIdentity, R.id.btSubmit, R.id.ed_nickName})
     public void onViewClicked(View view) {
-        if (view.getId() != R.id.ed_nickName) {
+        if (!MServiceManager.getInstance().getUserIsLogin()) {
+            showToastMsg(ResourceUtils.getString(R.string.str_user_not_login));
+            return;
+        }
+        if (view.getId() != R.id.tvNick || view.getId() != R.id.ed_nickName) {
             //将控件恢复状态
             InputMethodUtils.hideKeyboard(edNickName);
+            edNickName.setFocusable(false);
+            if (TextUtils.isEmpty(edNickName.getText().toString())) {
+                String localName = MServiceManager.getInstance().getLocalUserName();
+                edNickName.setText(localName);
+            }
         }
+
+
         switch (view.getId()) {
-            case R.id.imgUser:
+            case R.id.tvImage:
                 imagePicker.clear();
                 Intent intent = new Intent(EditextUserInfoActivity.this,
                         ImageGridActivity.class);
@@ -209,13 +242,16 @@ public class EditextUserInfoActivity extends MvpActivity<EditextUserInfoActView,
                 overridePendingTransition(com.imagepicker.R.anim.fade_in, com.imagepicker.R.anim.fade_out);
                 break;
             case R.id.ed_nickName:
+            case R.id.tvNick:
                 InputMethodUtils.toggleSoftInputForEt(edNickName);
+                //将光标移动到后面
+                edNickName.setSelection(edNickName.getText().toString().length());
                 break;
             case R.id.tvIdentity:
                 if (mUserTypeList != null && mUserTypeList.size() > 0) {
                     showUserTypeDialog();
                 } else {
-                    LoadingViewAOV.getInstance().with(EditextUserInfoActivity.this, tvIdentityName, R.color.colorPrimary);
+                    LoadingViewAOV.getInstance().with(EditextUserInfoActivity.this, tvIdentityName, R.color.whiles, R.drawable.ic_loading_v4, Gravity.RIGHT);
                     getPresenter().getIdentityName();
                 }
                 break;
@@ -246,12 +282,6 @@ public class EditextUserInfoActivity extends MvpActivity<EditextUserInfoActView,
             userInfos.put(Constant.UMSDK_COMSTOR_KEY_USER_TYPE, userTypeName);
 
         }
-//        if (!TextUtils.isEmpty(imagUrl)) {
-////            DataType<String> objUrl = new DataType<String>(imagUrl) {
-////            };
-//            LogUtils.e("sen", imagUrl);
-//            objectMap.put(Constant.CURRENT_USER.avatar.getName(), imagUrl);
-//        }
         String localName = MServiceManager.getInstance().getLocalUserName();
         String edText = edNickName.getText().toString();
         if (!TextUtils.isEmpty(edText)) {
@@ -266,6 +296,7 @@ public class EditextUserInfoActivity extends MvpActivity<EditextUserInfoActView,
             getPresenter().sumbmitInfo(userInfos);
         } else {
             LoadingViewAOV.getInstance().close(EditextUserInfoActivity.this, btSubmit);
+            finish();
         }
 
 
@@ -273,17 +304,13 @@ public class EditextUserInfoActivity extends MvpActivity<EditextUserInfoActView,
 
     @Override
     public void showUploadSuccess(HashMap<String, Object> res, final String path) {
-//        mHandler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                imgUser.setTag(R.id.loading_image_url, path);
-//                ImageLoader.getImageLoader().loadImage(EditextUserInfoActivity.this, imgUser, "");
-//
-//            }
-//        },50);
+        //可以显示
+        isChangeImageInfo = true;
+        checkIsCanSubmit();
+        imgUser.setTag(R.id.loading_image_url, path);
+        ImageLoader.getImageLoader().loadImage(EditextUserInfoActivity.this, imgUser, "");
         LoadingViewAOV.getInstance().close(EditextUserInfoActivity.this, imgUser);
         this.userInfos = res;
-        showToastMsg("上传成功");
     }
 
     @Override
@@ -305,6 +332,9 @@ public class EditextUserInfoActivity extends MvpActivity<EditextUserInfoActView,
 
     }
 
+    /**
+     * 获取身份info
+     */
     private void showUserTypeDialog() {
         //弹出选框
         popupWindow = new PopupWindow(EditextUserInfoActivity.this);
@@ -340,9 +370,6 @@ public class EditextUserInfoActivity extends MvpActivity<EditextUserInfoActView,
             recycleCommonAdapter.setOnItemClickLinstener(new OnItemOnclickLinstener() {
                 @Override
                 public void itemOnclickLinstener(int position) {
-                    if (position == currentChoose) {
-                        return;
-                    }
                     if (currentChoose != -1) {
                         mUserTypeList.get(currentChoose).setChooese(false);
                         recycleCommonAdapter.notifyItemChanged(currentChoose);
@@ -352,7 +379,7 @@ public class EditextUserInfoActivity extends MvpActivity<EditextUserInfoActView,
                     recycleCommonAdapter.notifyItemChanged(position);
                     tvIdentityName.setText(mUserTypeList.get(position).getTypeName());
                     popupWindow.dismiss();
-
+                    checkIsCanSubmit();
                 }
             });
         }
@@ -373,6 +400,28 @@ public class EditextUserInfoActivity extends MvpActivity<EditextUserInfoActView,
     @Override
     public void updateInfoFaild() {
         LoadingViewAOV.getInstance().close(EditextUserInfoActivity.this, btSubmit);
+
+    }
+
+    /**
+     * 检查完成的bt 是否可以提交
+     */
+    private void checkIsCanSubmit() {
+        boolean isNickNameChange = false;
+        String localName = MServiceManager.getInstance().getLocalUserName();
+        String edText = edNickName.getText().toString();
+        if (!TextUtils.isEmpty(edText)) {
+            if (!edText.equals(localName)) {
+                isNickNameChange = true;
+            }
+        }
+        if (isChangeImageInfo || currentChoose != -1 && currentChoose != MServiceManager.getInstance().getLoginUserType() || isNickNameChange) {
+            //可以显示
+            btSubmit.setVisibility(View.VISIBLE);
+        } else {
+            btSubmit.setVisibility(View.GONE);
+
+        }
 
     }
 

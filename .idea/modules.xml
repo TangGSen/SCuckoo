@@ -8,6 +8,8 @@
       <module fileurl="file://$PROJECT_DIR$/RxJavaDemo/RxJavaDemo.iml" filepath="$PROJECT_DIR$/RxJavaDemo/RxJavaDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/appIM/appIM.iml" filepath="$PROJECT_DIR$/appIM/appIM.iml" />
       <module fileurl="file://$PROJECT_DIR$/appV1/appV1.iml" filepath="$PROJECT_DIR$/appV1/appV1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/citydemo/citydemo.iml" filepath="$PROJECT_DIR$/citydemo/citydemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/citypicker/citypicker.iml" filepath="$PROJECT_DIR$/citypicker/citypicker.iml" />
       <module fileurl="file://$PROJECT_DIR$/commons/commons.iml" filepath="$PROJECT_DIR$/commons/commons.iml" />
       <module fileurl="file://$PROJECT_DIR$/imagepicker/imagepicker.iml" filepath="$PROJECT_DIR$/imagepicker/imagepicker.iml" />
       <module fileurl="file://$PROJECT_DIR$/libemoji/libemoji.iml" filepath="$PROJECT_DIR$/libemoji/libemoji.iml" />

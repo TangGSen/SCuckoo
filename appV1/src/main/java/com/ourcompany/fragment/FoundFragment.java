@@ -60,7 +60,7 @@ public class FoundFragment extends MvpFragment<FoundFragmentView, FoundFragPrese
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_layout_message;
+        return R.layout.fragment_layout_found;
     }
 
     @Override

@@ -96,10 +96,13 @@
                 android:layout_marginBottom="?actionBarSize"
                 android:background="@color/colorBg"
                 android:orientation="vertical"
-                android:paddingTop="@dimen/common_16dp">
-
+                >
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/common_16dp"
+                    android:background="@color/whiles" />
                 <TextView
-                    android:id="@+id/btMyPublish"
+                    android:id="@+id/btMyDynamic"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:background="@drawable/selector_text_bg"
@@ -107,7 +110,7 @@
                     android:drawablePadding="@dimen/common_16dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/common_16dp"
-                    android:text="@string/str_my_publish"
+                    android:text="@string/str_my_dynamic"
                     android:textColor="@color/colorFrist"
                     android:textSize="@dimen/fragment_font_16sp" />
 
@@ -133,7 +136,7 @@
                     android:id="@+id/btFeedback"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:layout_marginTop="@dimen/common_16dp"
+                    android:layout_marginTop="@dimen/common_4dp"
                     android:background="@drawable/selector_text_bg"
                     android:drawableLeft="@drawable/ic_feedback"
                     android:drawablePadding="@dimen/common_16dp"
@@ -159,11 +162,6 @@
                     android:text="@string/str_about_cuckoo"
                     android:textColor="@color/colorFrist"
                     android:textSize="@dimen/fragment_font_16sp" />
-<!--
-                <View
-                    android:layout_width="match_parent"
-                    android:background="@drawable/recycle_line_divider_padding_16_v2"
-                    android:layout_height="1dp"/>-->
 
                 <TextView
                     android:id="@+id/btSetting"

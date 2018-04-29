@@ -243,7 +243,8 @@ public class HomeActivityV2 extends MvpActivity<HomeAcitityView, HomeActPresente
         Drawable topDrawable = ResourceUtils.getDrawable(id);
         topDrawable.setBounds(0, 0, topDrawable.getMinimumWidth(), topDrawable.getMinimumHeight());
         view.setCompoundDrawables(null, topDrawable, null, null);
-
+        view.setTextSize(12);
+        view.setTextColor(ResourceUtils.getResColor(R.color.colorFrist));
         view.setText(text);
         return view;
     }
@@ -253,7 +254,8 @@ public class HomeActivityV2 extends MvpActivity<HomeAcitityView, HomeActPresente
         topDrawable.setBounds(0, 0, topDrawable.getMinimumWidth(), topDrawable.getMinimumHeight());
         textView.setCompoundDrawables(null, topDrawable, null, null);
         // textView.setSelected(isSelected);
-        textView.setTextColor(isSelected ? ResourceUtils.getResColor(R.color.colorPrimary) : ResourceUtils.getResColor(R.color.text_gray));
+        textView.setTextColor(isSelected ? ResourceUtils.getResColor(R.color.colorPrimary) : ResourceUtils.getResColor(R.color.colorFrist));
+
     }
 
 

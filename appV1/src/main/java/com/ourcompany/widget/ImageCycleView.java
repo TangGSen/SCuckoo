@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.ourcompany.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 作者：
@@ -109,7 +110,7 @@ public class ImageCycleView extends LinearLayout {
      * @param imageUrlList
      * @param imageCycleViewListener
      */
-    public void setImageResources(ArrayList<String> imageUrlList, ImageCycleViewListener imageCycleViewListener) {
+    public void setImageResources(List<String> imageUrlList, ImageCycleViewListener imageCycleViewListener) {
 
         if (imageUrlList == null || imageUrlList.size() == 0) {
             return;
@@ -242,7 +243,7 @@ public class ImageCycleView extends LinearLayout {
         /**
          * 图片资源列表
          */
-        private ArrayList<String> mAdList = new ArrayList<String>();
+        private List<String> mAdList = new ArrayList<String>();
 
         /**
          * 广告图片点击监听
@@ -251,7 +252,7 @@ public class ImageCycleView extends LinearLayout {
 
         private Context mContext;
 
-        public ImageCycleAdapter(Context context, ArrayList<String> adList, ImageCycleViewListener imageCycleViewListener) {
+        public ImageCycleAdapter(Context context, List<String> adList, ImageCycleViewListener imageCycleViewListener) {
             this.mContext = context;
             this.mAdList = adList;
             mImageCycleViewListener = imageCycleViewListener;

@@ -155,11 +155,17 @@ public class ChoseUserTypePresenter extends MvpBasePresenter<ChoseUserTypeView> 
 
     }
 
+    /**
+     * 在bmob 创建对应的user 同时创建一下默认的信息
+     *
+     * @param user
+     */
     private void saveUserBmob(User user) {
         SUser sUser = new SUser();
         sUser.setUserId( user.id.get());
         sUser.setUserName(user.nickname.get());
         sUser.setImageUrl(Constant.test_user_image);
+
         sUser.save(new SaveListener<String>() {
             @Override
             public void done(final String s, final BmobException e) {
