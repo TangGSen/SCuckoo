@@ -51,6 +51,7 @@ public class Constant {
     public static final String CACHE_DIR = MApplication.mContext.getExternalCacheDir().getAbsolutePath() + File.separator;
     public static final java.lang.String BMOB_APPKEY = "2db1fc7ea509d3ea6639495a3a24066d";
 
+
     public static  LocationOption.MLocation CURRENT_CITY = null;
     //最多5颗星
     public static final int START_COUNT = 5;
@@ -104,6 +105,23 @@ public class Constant {
     public static final int POST_IMAGES = 2;
     //Bundle UserInfo
     public static final String KEY_USER_ID = "user_id";
-    public static final java.lang.String KEY_POST_ID = "post_id";
-    public static final java.lang.String KEY_USEROBJECT_ID = "user_object_id";
+    public static final String KEY_POST_ID = "post_id";
+    public static final String KEY_USEROBJECT_ID = "user_object_id";
+    //SUser 的布谷服务数组字段
+    public static final String KEY_CUCKOO_SERVICE_ARRAY = "cuckooService";
+
+    /**
+     * 下面是各种app 获取json 的查询key
+     */
+    /**
+     * 获取布谷服务的json
+     */
+    public static final String KEY_BMOB_APP_SETTING = "key";
+
+    public static final String KEY_BMOB_CUCKOO_SERVICE = "cuckoo_service";
+
+    public static final String KEY_BMOB_USERTYPE = "user_type";
+    public static final String KEY_BMOB_MAIN_PAGE_AD = "main_page_ad";
+
+
 }

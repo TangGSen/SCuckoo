@@ -23,7 +23,7 @@ import com.mob.jimu.query.data.DataType;
 import com.ourcompany.R;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.bean.UserAccoutLoginRes;
-import com.ourcompany.bean.UserType;
+import com.ourcompany.bean.json.UserType;
 import com.ourcompany.manager.MServiceManager;
 import com.ourcompany.presenter.activity.EditextActPresenter;
 import com.ourcompany.utils.Constant;

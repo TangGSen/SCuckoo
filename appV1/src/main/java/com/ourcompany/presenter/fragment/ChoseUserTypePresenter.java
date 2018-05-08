@@ -8,20 +8,18 @@ import com.mob.jimu.query.data.DataType;
 import com.mob.ums.OperationCallback;
 import com.mob.ums.UMSSDK;
 import com.mob.ums.User;
-import com.ourcompany.bean.UserType;
+import com.ourcompany.bean.json.UserType;
+import com.ourcompany.bean.bmob.AppSettingJson;
 import com.ourcompany.bean.bmob.SUser;
-import com.ourcompany.bean.bmob.UserTypeJson;
 import com.ourcompany.manager.MServiceManager;
 import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.LogUtils;
 import com.ourcompany.view.fragment.ChoseUserTypeView;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
@@ -36,7 +34,6 @@ import company.com.commons.framework.presenter.MvpBasePresenter;
 
 public class ChoseUserTypePresenter extends MvpBasePresenter<ChoseUserTypeView> {
 
-    private BmobDate bmobDate;
 
 
     public ChoseUserTypePresenter(Context context) {
@@ -44,19 +41,14 @@ public class ChoseUserTypePresenter extends MvpBasePresenter<ChoseUserTypeView> 
     }
 
     public void getUserType() {
-        BmobQuery<UserTypeJson> query = new BmobQuery<UserTypeJson>();
-        query.order(Constant.BMOB_ORDER_DESCENDING + Constant.BMOB_CREATE);
-        //查询playerName叫“比目”的数据
-        if (bmobDate == null) {
-            bmobDate = new BmobDate(new Date(System.currentTimeMillis()));
-        }
-        query.addWhereLessThanOrEqualTo(Constant.BMOB_CREATE, bmobDate);
+        BmobQuery<AppSettingJson> query = new BmobQuery<AppSettingJson>();
+        query.addWhereEqualTo(Constant.KEY_BMOB_APP_SETTING,Constant.KEY_BMOB_USERTYPE);
         //返回50条数据，如果不加上这条语句，默认返回10条数据
         query.setLimit(1);
         //执行查询方法
-        query.findObjects(new FindListener<UserTypeJson>() {
+        query.findObjects(new FindListener<AppSettingJson>() {
             @Override
-            public void done(final List<UserTypeJson> list, BmobException e) {
+            public void done(final List<AppSettingJson> list, BmobException e) {
                 if (e == null) {
                     mHandler.post(new Runnable() {
                         @Override
@@ -64,7 +56,7 @@ public class ChoseUserTypePresenter extends MvpBasePresenter<ChoseUserTypeView> 
                             if (list.size() <= 0) {
                                 getView().showEmptyView();
                             } else {
-                                String json = list.get(0).getUserTypeJson();
+                                String json = list.get(0).getContent();
                                 LogUtils.e("sen", json);
                                 Gson gson = new Gson();
                                 UserType userType = gson.fromJson(json, UserType.class);

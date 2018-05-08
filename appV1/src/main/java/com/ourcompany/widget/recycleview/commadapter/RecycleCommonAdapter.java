@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ourcompany.utils.LogUtils;
+
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -72,7 +74,9 @@ public abstract class RecycleCommonAdapter<D> extends RecyclerView.Adapter<SView
 
     public void addDatasInLast(List<D> data){
         int size = mData.size();
+        LogUtils.e("sen","before："+size);
         mData.addAll(size,data);
+        LogUtils.e("sen","after："+mData.size());
         notifyItemRangeInserted(size,data.size());
     }
 
@@ -110,5 +114,10 @@ public abstract class RecycleCommonAdapter<D> extends RecyclerView.Adapter<SView
     public void addDatasInFirst(int start, List<D> data) {
         mData.addAll(start, data);
         notifyItemRangeInserted(start, data.size());
+    }
+
+    public void clearData() {
+        mData.clear();
+        notifyDataSetChanged();
     }
 }

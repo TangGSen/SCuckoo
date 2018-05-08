@@ -10,9 +10,9 @@ import com.mob.ums.OperationCallback;
 import com.mob.ums.UMSSDK;
 import com.ourcompany.R;
 import com.ourcompany.bean.CompressImage;
-import com.ourcompany.bean.UserType;
+import com.ourcompany.bean.json.UserType;
+import com.ourcompany.bean.bmob.AppSettingJson;
 import com.ourcompany.bean.bmob.SUser;
-import com.ourcompany.bean.bmob.UserTypeJson;
 import com.ourcompany.manager.MServiceManager;
 import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.LogUtils;
@@ -27,7 +27,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -181,24 +180,18 @@ public class EditextActPresenter extends MvpBasePresenter<EditextUserInfoActView
         EXECUTOR.execute(new Runnable() {
             @Override
             public void run() {
-                BmobQuery<UserTypeJson> query = new BmobQuery<UserTypeJson>();
-                query.order(Constant.BMOB_ORDER_DESCENDING + Constant.BMOB_CREATE);
-                //查询playerName叫“比目”的数据
-                if (bmobDate == null) {
-                    bmobDate = new BmobDate(new Date(System.currentTimeMillis()));
-                }
-                query.addWhereLessThanOrEqualTo(Constant.BMOB_CREATE, bmobDate);
-                //返回50条数据，如果不加上这条语句，默认返回10条数据
+                BmobQuery<AppSettingJson> query = new BmobQuery<AppSettingJson>();
+                query.addWhereEqualTo(Constant.KEY_BMOB_APP_SETTING,Constant.KEY_BMOB_USERTYPE);
                 query.setLimit(1);
                 //执行查询方法
-                query.findObjects(new FindListener<UserTypeJson>() {
+                query.findObjects(new FindListener<AppSettingJson>() {
                     @Override
-                    public void done(final List<UserTypeJson> list, BmobException e) {
+                    public void done(final List<AppSettingJson> list, BmobException e) {
                         if (e == null) {
                             if (list.size() <= 0) {
                                 getEmptyUserType();
                             } else {
-                                String json = list.get(0).getUserTypeJson();
+                                String json = list.get(0).getContent();
                                 Gson gson = new Gson();
                                 final UserType userType = gson.fromJson(json, UserType.class);
                                 if (userType != null) {

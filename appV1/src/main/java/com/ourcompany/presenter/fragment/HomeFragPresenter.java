@@ -4,7 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
-import com.ourcompany.bean.bmob.AdvertisementSetting;
+import com.ourcompany.bean.bmob.AppSettingJson;
 import com.ourcompany.bean.json.AdvertisementData;
 import com.ourcompany.utils.Constant;
 import com.ourcompany.view.fragment.HomeFragView;
@@ -33,18 +33,17 @@ public class HomeFragPresenter extends MvpBasePresenter<HomeFragView> {
      * 获取广告页
      */
     public void getAdsData() {
-        BmobQuery<AdvertisementSetting> query = new BmobQuery<AdvertisementSetting>();
+        BmobQuery<AppSettingJson> query = new BmobQuery<AppSettingJson>();
 
-        query.order(Constant.BMOB_ORDER_DESCENDING + Constant.BMOB_CREATE);
-        //查询playerName叫“比目”的数据
-        // 注意第二个参数表名不要写错 是系统表
-        query.setLimit(1);
+        //查询广告
+        query.addWhereEqualTo(Constant.KEY_BMOB_APP_SETTING, Constant.KEY_BMOB_MAIN_PAGE_AD);
         query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
         query.setMaxCacheAge(TimeUnit.HOURS.toMillis(1));
+        query.setLimit(1);
         //执行查询方法
-        query.findObjects(new FindListener<AdvertisementSetting>() {
+        query.findObjects(new FindListener<AppSettingJson>() {
             @Override
-            public void done(final List<AdvertisementSetting> list, BmobException e) {
+            public void done(final List<AppSettingJson> list, BmobException e) {
 
                 if (e == null) {
                     EXECUTOR.execute(new Runnable() {

@@ -1,4 +1,4 @@
-package com.ourcompany.bean;
+package com.ourcompany.bean.json;
 
 import java.util.List;
 

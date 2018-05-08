@@ -6,11 +6,14 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,6 +22,8 @@ import com.example.xlhratingbar_lib.XLHRatingBar;
 import com.ourcompany.R;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.bean.bmob.SUser;
+import com.ourcompany.fragment.ClassSerachFragment;
+import com.ourcompany.manager.ClassSerachService;
 import com.ourcompany.presenter.activity.UserClassifyActPresenter;
 import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.LocationOption;
@@ -69,16 +74,21 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
     ImageView btSerach;
     @BindView(R.id.titleBar)
     RelativeLayout titleBar;
-    @BindView(R.id.tabLayout)
-    TabLayout mTablayout;
     @BindView(R.id.btClassSerach)
     TextView btClassSerach;
+    @BindView(R.id.tabLayout)
+    TabLayout mTablayout;
     @BindView(R.id.recycleview)
     RecyclerView recycleview;
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.layoutState)
     StateFrameLayout layoutState;
+    @BindView(R.id.rightClassSerach)
+    FrameLayout rightClassSerach;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
+
     private String mTitle;
     private String[] mTiltes;
     private LocationOption.MLocation mLocation;
@@ -104,6 +114,7 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
         recycleview.setHasFixedSize(true);
         //解决嵌套在NestedScrollView 的滑动不顺的问题2
         recycleview.setNestedScrollingEnabled(true);
+
         refreshLayout.setEnableRefresh(true);
         recycleview.addItemDecoration(new SimpleDecoration(MApplication.mContext, R.drawable.recycle_line_divider_padding, 1));
 
@@ -113,8 +124,12 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
             public void bindItemData(SViewHolder holder, final SUser itemData, int position) {
                 holder.setText(R.id.tvUserName, TextUtils.isEmpty(itemData.getUserName()) ? ResourceUtils.getString(R.string.defualt_userName) : itemData.getUserName());
                 holder.setText(R.id.tvAddress, itemData.getAddress());
-                holder.setText(R.id.tvCuckooService, itemData.getCuckooService());
+                if(TextUtils.isEmpty(itemData.getCuckooServiceString())){
+                    itemData.setCuckooServiceString(getPresenter().getCuckooServiceString(itemData.getCuckooService()));
+                }
+                holder.setText(R.id.tvCuckooService, itemData.getCuckooServiceString());
                 holder.setImage(R.id.imageUser, itemData.getImageUrl());
+                holder.getView(R.id.imageAuthenV).setVisibility(itemData.getAuthenV() != null && itemData.getAuthenV() ? View.VISIBLE : View.GONE);
                 int evaluation = itemData.getEvaluation() == null ? 0 : itemData.getEvaluation() > Constant.START_COUNT ? Constant.START_COUNT : itemData.getEvaluation() < 0 ? 0 : itemData.getEvaluation();
                 ((XLHRatingBar) holder.getView(R.id.ratingBar)).setCountSelected(evaluation);
             }
@@ -129,8 +144,10 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
 
 
         refreshLayout.setRefreshHeader(new MHeader(UserClassifyActivity.this).setEnableLastTime(false).setTextSizeTitle(14).setAccentColor(ResourceUtils.getResColor(R.color.text_gray)).setFinishDuration(100));
-        refreshLayout.setRefreshFooter(new MFooter(UserClassifyActivity.this).setTextSizeTitle(14).setSpinnerStyle(SpinnerStyle.Scale).setAccentColor(ResourceUtils.getResColor(R.color.text_gray)).setFinishDuration(100));
-        refreshLayout.setEnableFooterFollowWhenLoadFinished(true);
+        refreshLayout.setRefreshFooter(new MFooter(UserClassifyActivity.this).setTextSizeTitle(12).setSpinnerStyle(SpinnerStyle.Scale).setAccentColor(ResourceUtils.getResColor(R.color.text_gray)).setFinishDuration(100));
+        refreshLayout.setEnableOverScrollDrag(true);
+        refreshLayout.setEnableFooterFollowWhenLoadFinished(false);
+        refreshLayout.setEnableOverScrollBounce(true);
         refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
@@ -149,6 +166,57 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
                 getPresenter().getDataOnLoadMore(currentIndex);
             }
         });
+
+        //mDrawerLayout的监听器
+        mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            /**
+             * 当抽屉滑动状态改变的时候被调用
+             * 状态值是STATE_IDLE（闲置--0）, STATE_DRAGGING（拖拽的--1）, STATE_SETTLING（固定--2）中之一。
+             * 抽屉打开的时候，点击抽屉，drawer的状态就会变成STATE_DRAGGING，然后变成STATE_IDLE
+             */
+            @Override
+            public void onDrawerStateChanged(int arg0) {
+            }
+
+            /**
+             * 当抽屉被滑动的时候调用此方法
+             * arg1 表示 滑动的幅度（0-1）
+             */
+            @Override
+            public void onDrawerSlide(View arg0, float arg1) {
+            }
+
+            /**
+             * 当一个抽屉被完全打开的时候被调用
+             */
+            @Override
+            public void onDrawerOpened(View arg0) {
+            }
+
+            /**
+             * 当一个抽屉完全关闭的时候调用此方法
+             */
+            @Override
+            public void onDrawerClosed(View arg0) {
+                currentIndex=0;
+                //使用这个来设置上拉加载更多的开关
+               // refreshLayout.getRefreshFooter().onStateChanged(refreshLayout, RefreshState.None,RefreshState.Loading);
+               // refreshLayout.finishLoadMore(true);
+                refreshLayout.setNoMoreData(false);
+                getPresenter().loadDataFromClassSerach(currentIndex);
+            }
+        });
+
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout != null) {
+            if (mDrawerLayout.isDrawerOpen(Gravity.END)) {
+                mDrawerLayout.closeDrawers();
+            } else super.onBackPressed();
+        } else super.onBackPressed();
     }
 
     public static void gotoThis(Context context, String title) {
@@ -199,6 +267,9 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
         getRootView().post(new Runnable() {
             @Override
             public void run() {
+                //侧菜单栏
+                ClassSerachFragment serachFragment = ClassSerachFragment.getInstance();
+                getSupportFragmentManager().beginTransaction().replace(R.id.rightClassSerach, serachFragment).commit();
                 getPresenter().getLoactionInfo(false, UserClassifyActivity.this);
             }
         });
@@ -302,9 +373,22 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
             case R.id.btSerach:
                 break;
             case R.id.btClassSerach:
+                if (!mDrawerLayout.isDrawerOpen(Gravity.END)) {
+                    mDrawerLayout.openDrawer(Gravity.END);
+                }
                 break;
         }
     }
+
+    /**
+     * 关闭侧边菜单栏
+     */
+    public void closeDrawer() {
+        if (mDrawerLayout.isDrawerOpen(Gravity.END)) {
+            mDrawerLayout.closeDrawers();
+        }
+    }
+
 
     private void showAddress() {
         CityPicker.getInstance()
@@ -317,23 +401,18 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
                     @Override
                     public void onPick(int position, City data) {
                         if (data == null) {
-                            LogUtils.e("sen", "city 没选");
                             if (mLocation != null) {
-                                LogUtils.e("sen", "city 选本地的");
                                 showAddressText(mLocation.getCity(), false);
                             } else {
-                                LogUtils.e("sen", "city 没选，并本地也没");
                                 showAddressText(null, false);
                             }
                         } else {
-                            LogUtils.e("sen", "city 已选,已修改");
                             showAddressText(data.getName(), false);
                         }
                     }
 
                     @Override
                     public void onLocate() {
-                        LogUtils.e("sen", "onLocate开始定位");
                         //开始定位
                         getPresenter().getLoactionInfo(true, UserClassifyActivity.this);
                     }
@@ -350,7 +429,6 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        LogUtils.e("sen", "onLocate开始定位");
     }
 
     @Override
@@ -360,8 +438,12 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
 
     @Override
     public void showContentView(List<SUser> list) {
-        LogUtils.e("sen", "list" + list.size());
         recycleCommonAdapter.addDatasInLast(list);
+        //修改，recycleCommonAdapter 重新加载数据，不从顶部开始显示
+        if(currentIndex==0){
+            recycleview.scrollToPosition(0);
+
+        }
         layoutState.changeState(StateFrameLayout.SUCCESS);
     }
 
@@ -369,6 +451,7 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
     @Override
     public void showLoadView() {
         layoutState.changeState(StateFrameLayout.LOADING);
+        recycleCommonAdapter.clearData();
     }
 
     @Override
@@ -410,8 +493,16 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
     }
 
     @Override
+    protected void onDestroy() {
+        ClassSerachService.getInstance().clear();
+        super.onDestroy();
+    }
+
+    @Override
     public void showOnloadMoreNoData() {
-        refreshLayout.finishLoadMore(0, true, true);
+       // refreshLayout.finishLoadMore(0, true, true);
+        refreshLayout.finishLoadMoreWithNoMoreData();
+       // refreshLayout.finishLoadMore(true);
     }
 
 }

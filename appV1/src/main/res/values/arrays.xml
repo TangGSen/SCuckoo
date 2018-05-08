@@ -39,10 +39,14 @@
     </string-array>
 
     <string-array name="tabUserClassInfoItems">
-        <item>智能排序</item>
-        <item>好评</item>
+        <item>综合</item>
         <item>成交量</item>
         <item>位置距离</item>
+    </string-array>
+    <string-array name="tabClassUserItems">
+        <item>全部</item>
+        <item>个人</item>
+        <item>公司</item>
     </string-array>
 
 

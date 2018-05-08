@@ -1,5 +1,7 @@
 package com.ourcompany.bean.bmob;
 
+import java.util.List;
+
 import cn.bmob.v3.BmobObject;
 
 /**
@@ -14,8 +16,18 @@ public class SUser extends BmobObject {
     private String userName;
     private String imageUrl;
     private String userId;
+    //将布谷弄成String
+    //这个字段在客户端使用
+    private String cuckooServiceString="";
 
-    //基础信息
+    public String getCuckooServiceString() {
+        return cuckooServiceString;
+    }
+
+    public void setCuckooServiceString(String cuckooServiceString) {
+        this.cuckooServiceString = cuckooServiceString;
+    }
+//基础信息
     /**
      * 地址
      */
@@ -40,13 +52,26 @@ public class SUser extends BmobObject {
     /**
      * 已经选择的布谷平台
      */
-    private String cuckooService;
+    private List<String> cuckooService;
 
-    public String getCuckooService() {
+    /**
+     * 已经认证
+     */
+    private Boolean isAuthenV;
+
+    public Boolean getAuthenV() {
+        return isAuthenV;
+    }
+
+    public void setAuthenV(Boolean authenV) {
+        isAuthenV = authenV;
+    }
+
+    public List<String> getCuckooService() {
         return cuckooService;
     }
 
-    public void setCuckooService(String cuckooService) {
+    public void setCuckooService(List<String> cuckooService) {
         this.cuckooService = cuckooService;
     }
 

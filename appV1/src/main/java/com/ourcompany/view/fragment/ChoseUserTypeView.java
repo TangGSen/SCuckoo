@@ -1,6 +1,6 @@
 package com.ourcompany.view.fragment;
 
-import com.ourcompany.bean.UserType;
+import com.ourcompany.bean.json.UserType;
 
 import java.util.List;
 

@@ -12,7 +12,7 @@ import com.ourcompany.R;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.bean.AccoutRsigisterBean;
 import com.ourcompany.bean.UserAccoutLoginRes;
-import com.ourcompany.bean.UserType;
+import com.ourcompany.bean.json.UserType;
 import com.ourcompany.presenter.fragment.ChoseUserTypePresenter;
 import com.ourcompany.utils.LogUtils;
 import com.ourcompany.utils.ResourceUtils;

@@ -193,10 +193,16 @@ public class MFooter extends InternalClassics<MFooter> implements RefreshFooter 
             if (noMoreData) {
                 mTitleText.setText(ResourceUtils.getString(R.string.refresh_footer_nothing));
                 arrowView.setVisibility(GONE);
-            } else {
-                mTitleText.setText(REFRESH_FOOTER_PULLING);
-                arrowView.setVisibility(VISIBLE);
+            }else{
+                //
+                super.onFinish( mRefreshKernel.getRefreshLayout(), true);
+               // ((ViewGroup)mTitleText.getParent()).setVisibility(GONE);
             }
+            //这个效果我不需要的
+//            else {
+//                mTitleText.setText(REFRESH_FOOTER_PULLING);
+//                arrowView.setVisibility(VISIBLE);
+//            }
 //            super.onFinish(mRefreshKernel.getRefreshLayout(), true);
         }
         return true;
@@ -208,6 +214,7 @@ public class MFooter extends InternalClassics<MFooter> implements RefreshFooter 
         if (!mNoMoreData) {
             switch (newState) {
                 case None:
+
                     arrowView.setVisibility(VISIBLE);
                 case PullUpToLoad:
                     mTitleText.setText(REFRESH_FOOTER_PULLING);

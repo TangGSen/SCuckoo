@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat;
 
 import com.ourcompany.app.MApplication;
 import com.ourcompany.bean.bmob.SUser;
+import com.ourcompany.manager.ClassSerachService;
 import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.LocationOption;
 import com.ourcompany.utils.LogUtils;
@@ -34,6 +35,7 @@ public class UserClassifyActPresenter extends MvpBasePresenter<UserClassifyActVi
     String[] mPermissions = {Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION};
     private boolean isCityPick;
+    private BmobQuery<SUser> bmobQuery;
 
     public UserClassifyActPresenter(Context context) {
         super(context);
@@ -123,14 +125,17 @@ public class UserClassifyActPresenter extends MvpBasePresenter<UserClassifyActVi
      * 2.按照updateAt 时间来查询
      */
 
+
     public void getData(final int start, final boolean isLoadMore) {
-        BmobQuery<SUser> query = new BmobQuery<SUser>();
-        query.order(Constant.BMOB_CREATE);
+        if (bmobQuery == null) {
+            bmobQuery = new BmobQuery<SUser>();
+        }
+        bmobQuery.order(Constant.BMOB_CREATE);
         //返回50条数据，如果不加上这条语句，默认返回10条数据
-        query.setLimit(Constant.IM_PAGESIZE);
-        query.setSkip(start * Constant.IM_PAGESIZE);
+        bmobQuery.setLimit(Constant.IM_PAGESIZE);
+        bmobQuery.setSkip(start * Constant.IM_PAGESIZE);
         //执行查询方法
-        query.findObjects(new FindListener<SUser>() {
+        bmobQuery.findObjects(new FindListener<SUser>() {
             @Override
             public void done(final List<SUser> list, BmobException e) {
                 if (e == null) {
@@ -140,8 +145,12 @@ public class UserClassifyActPresenter extends MvpBasePresenter<UserClassifyActVi
                             if (start == 0 && list.size() <= 0) {
                                 showEmptyView();
                             } else if (isLoadMore && list != null && list.size() == 0) {
+                                //没有更多的数据了
+                                LogUtils.e("sen","没有更多的数据了");
                                 getView().showOnloadMoreNoData();
                             } else {
+                                //只有成功的时候才重置搜索条件
+                                ClassSerachService.getInstance().saveCurrentSerach();
                                 getView().showContentView(list);
                                 if (isLoadMore) {
                                     getView().showOnLoadFinish();
@@ -152,6 +161,7 @@ public class UserClassifyActPresenter extends MvpBasePresenter<UserClassifyActVi
 
 
                 } else {
+                    LogUtils.e("sen", "**3");
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -195,23 +205,25 @@ public class UserClassifyActPresenter extends MvpBasePresenter<UserClassifyActVi
      */
 
     public void getDataOnReFresh(String moreTime,String NoInobjectId) {
-        BmobQuery<SUser> query = new BmobQuery<SUser>();
-        query.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);   // 先从缓存获取数据，如果没有，再从网络获取。
-        query.include(Constant.BMOB_POST_USER);
-        query.order(Constant.BMOB_CREATE);
+        if (bmobQuery == null) {
+            bmobQuery = new BmobQuery<SUser>();
+        }
+        bmobQuery.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);   // 先从缓存获取数据，如果没有，再从网络获取。
+        bmobQuery.include(Constant.BMOB_POST_USER);
+        bmobQuery.order(Constant.BMOB_CREATE);
         Date date =  TimeFormatUtil.getDateFormTimeString(moreTime);
         if(date!=null){
             BmobDate bmobDate =   new BmobDate(date);
-            query.addWhereGreaterThan(Constant.BMOB_CREATE,bmobDate);
+            bmobQuery.addWhereLessThan(Constant.BMOB_CREATE, bmobDate);
         }else{
             getView().showOnReflshError();
             return;
         }
 
-        query.addWhereNotEqualTo(Constant.BMOB_OBJECT_ID,NoInobjectId);
-        query.setLimit(Constant.IM_PAGESIZE);
+        bmobQuery.addWhereNotEqualTo(Constant.BMOB_OBJECT_ID, NoInobjectId);
+        bmobQuery.setLimit(Constant.IM_PAGESIZE);
         //执行查询方法
-        query.findObjects(new FindListener<SUser>() {
+        bmobQuery.findObjects(new FindListener<SUser>() {
             @Override
             public void done(final List<SUser> list, BmobException e) {
                 LogUtils.e("sen","getDataOnReFresh");
@@ -237,5 +249,42 @@ public class UserClassifyActPresenter extends MvpBasePresenter<UserClassifyActVi
 
     public void getDataOnLoadMore(int currentIndex) {
         getData(currentIndex, true);
+    }
+
+
+    /**
+     * 加载数据策略
+     *
+     * @param currentIndex
+     */
+    public void loadDataFromClassSerach(int currentIndex) {
+        //首先判断需要加载不
+        if (ClassSerachService.getInstance().isAnbleLoadding()) {
+            getView().showLoadView();
+            LogUtils.e("sen", "可以加载了");
+            bmobQuery = ClassSerachService.getInstance().getKeyWordCondition();
+            if (bmobQuery == null) {
+                bmobQuery = new BmobQuery<>();
+            }
+            getData(currentIndex, false);
+
+        } else {
+            LogUtils.e("sen", "不需要加载");
+        }
+    }
+
+    public String getCuckooServiceString(List<String> cuckooService) {
+        if (cuckooService == null) {
+            return "";
+        }
+        StringBuilder builder = new StringBuilder();
+        int size = cuckooService.size();
+        for (int i = 0; i < size; i++) {
+            builder.append(cuckooService.get(i));
+            if (i != size - 1) {
+                builder.append("|");
+            }
+        }
+        return builder.toString();
     }
 }

@@ -40,4 +40,5 @@
     <color name="gradient_end">#495aff</color>
     <color name="colorRed">#FF6763</color>
     <color name="bg_popu">#50000000</color>
+    <color name="colorBgV2">#EEEEEE</color>
 </resources>
