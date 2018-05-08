@@ -16,6 +16,7 @@ import com.ourcompany.utils.PermissionsUitls;
 import com.ourcompany.utils.TimeFormatUtil;
 import com.ourcompany.view.activity.UserClassifyActView;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,6 +37,8 @@ public class UserClassifyActPresenter extends MvpBasePresenter<UserClassifyActVi
             Manifest.permission.ACCESS_FINE_LOCATION};
     private boolean isCityPick;
     private BmobQuery<SUser> bmobQuery;
+    List<BmobQuery<SUser>> queries = new ArrayList<BmobQuery<SUser>>();
+    private BmobQuery<SUser> mSecondClass;
 
     public UserClassifyActPresenter(Context context) {
         super(context);
@@ -127,9 +130,7 @@ public class UserClassifyActPresenter extends MvpBasePresenter<UserClassifyActVi
 
 
     public void getData(final int start, final boolean isLoadMore) {
-        if (bmobQuery == null) {
-            bmobQuery = new BmobQuery<SUser>();
-        }
+        createDefualQuery();
         bmobQuery.order(Constant.BMOB_CREATE);
         //返回50条数据，如果不加上这条语句，默认返回10条数据
         bmobQuery.setLimit(Constant.IM_PAGESIZE);
@@ -182,6 +183,22 @@ public class UserClassifyActPresenter extends MvpBasePresenter<UserClassifyActVi
 
     }
 
+    /**
+     * 创建默认的查询条件
+     */
+    private void createDefualQuery() {
+        if (bmobQuery == null) {
+            bmobQuery = new BmobQuery<SUser>();
+            if (mSecondClass != null) {
+                queries.clear();
+                queries.add(mSecondClass);
+            }
+            if (queries.size() > 0) {
+                bmobQuery.and(queries);
+            }
+        }
+    }
+
     private void showEmptyView() {
         mHandler.post(new Runnable() {
             @Override
@@ -205,9 +222,8 @@ public class UserClassifyActPresenter extends MvpBasePresenter<UserClassifyActVi
      */
 
     public void getDataOnReFresh(String moreTime,String NoInobjectId) {
-        if (bmobQuery == null) {
-            bmobQuery = new BmobQuery<SUser>();
-        }
+        createDefualQuery();
+
         bmobQuery.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);   // 先从缓存获取数据，如果没有，再从网络获取。
         bmobQuery.include(Constant.BMOB_POST_USER);
         bmobQuery.order(Constant.BMOB_CREATE);
@@ -262,10 +278,26 @@ public class UserClassifyActPresenter extends MvpBasePresenter<UserClassifyActVi
         if (ClassSerachService.getInstance().isAnbleLoadding()) {
             getView().showLoadView();
             LogUtils.e("sen", "可以加载了");
-            bmobQuery = ClassSerachService.getInstance().getKeyWordCondition();
-            if (bmobQuery == null) {
-                bmobQuery = new BmobQuery<>();
+            BmobQuery<SUser> keyWordCondition = ClassSerachService.getInstance().getKeyWordCondition();
+            BmobQuery<SUser> classCondition = ClassSerachService.getInstance().getClassCondition();
+
+            queries.clear();
+            if (mSecondClass != null) {
+                queries.add(mSecondClass);
             }
+            if (keyWordCondition != null) {
+                queries.add(keyWordCondition);
+            }
+            if (classCondition != null) {
+                queries.add(classCondition);
+            }
+            //新条件变了重新new
+            bmobQuery = new BmobQuery<>();
+            //大于0才把条件加入
+            if (queries.size() > 0) {
+                bmobQuery.and(queries);
+            }
+
             getData(currentIndex, false);
 
         } else {
@@ -286,5 +318,9 @@ public class UserClassifyActPresenter extends MvpBasePresenter<UserClassifyActVi
             }
         }
         return builder.toString();
+    }
+
+    public void setSecondClass(String mTitle) {
+        mSecondClass = ClassSerachService.getInstance().getSecondClassCondition(mTitle);
     }
 }

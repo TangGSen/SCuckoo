@@ -143,7 +143,7 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
         });
 
 
-        refreshLayout.setRefreshHeader(new MHeader(UserClassifyActivity.this).setEnableLastTime(false).setTextSizeTitle(14).setAccentColor(ResourceUtils.getResColor(R.color.text_gray)).setFinishDuration(100));
+        refreshLayout.setRefreshHeader(new MHeader(UserClassifyActivity.this).setEnableLastTime(false).setTextSizeTitle(12).setAccentColor(ResourceUtils.getResColor(R.color.text_gray)).setFinishDuration(100));
         refreshLayout.setRefreshFooter(new MFooter(UserClassifyActivity.this).setTextSizeTitle(12).setSpinnerStyle(SpinnerStyle.Scale).setAccentColor(ResourceUtils.getResColor(R.color.text_gray)).setFinishDuration(100));
         refreshLayout.setEnableOverScrollDrag(true);
         refreshLayout.setEnableFooterFollowWhenLoadFinished(false);
@@ -200,8 +200,6 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
             public void onDrawerClosed(View arg0) {
                 currentIndex=0;
                 //使用这个来设置上拉加载更多的开关
-               // refreshLayout.getRefreshFooter().onStateChanged(refreshLayout, RefreshState.None,RefreshState.Loading);
-               // refreshLayout.finishLoadMore(true);
                 refreshLayout.setNoMoreData(false);
                 getPresenter().loadDataFromClassSerach(currentIndex);
             }
@@ -273,7 +271,9 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
                 getPresenter().getLoactionInfo(false, UserClassifyActivity.this);
             }
         });
+        getPresenter().setSecondClass(mTitle);
         getPresenter().getData(currentIndex, false);
+
     }
 
     @Override

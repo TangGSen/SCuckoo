@@ -1,5 +1,6 @@
 package com.ourcompany.manager;
 
+import android.text.TextUtils;
 import android.util.SparseArray;
 
 import com.ourcompany.bean.bmob.SUser;
@@ -297,6 +298,35 @@ public class ClassSerachService {
             }
         }
         query.addWhereContainsAll(Constant.KEY_CUCKOO_SERVICE_ARRAY, stringList);
+        return query;
+    }
+    //分类的搜索条件
+    public BmobQuery<SUser> getClassCondition() {
+        //使用当前的currenKeyword serach
+        if (mClassList == null ||currentClassIndexs==null ||currentClassIndexs.size()<=0) {
+            return null;
+        }
+        //条件2
+        Integer classIndex = currentClassIndexs.get(KEY_CLASS_INDEX);
+        //如果是全部就不需要添加这个条件
+        List<String> stringList = new ArrayList<>();
+        if (classIndex != null && classIndex != 0 && classIndex<mClassList.size()) {
+            BmobQuery<SUser> query= new BmobQuery<SUser>();
+            stringList.add(mClassList.get(classIndex).getClassType());
+            query.addWhereContainsAll(Constant.KEY_USER_FIRST_CLASS, stringList);
+            return query;
+        }
+        return null;
+    }
+
+    public BmobQuery<SUser> getSecondClassCondition(String mTitle) {
+        if(TextUtils.isEmpty(mTitle)){
+            return null;
+        }
+        BmobQuery<SUser> query= new BmobQuery<SUser>();
+        List<String> stringList = new ArrayList<>();
+        stringList.add(mTitle);
+        query.addWhereContainsAll(Constant.KEY_USER_SECOND_CLASS, stringList);
         return query;
     }
 }
