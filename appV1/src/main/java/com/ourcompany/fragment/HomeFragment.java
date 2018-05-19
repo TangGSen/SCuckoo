@@ -84,7 +84,7 @@ public class HomeFragment extends MvpFragment<HomeFragView, HomeFragPresenter> i
         iv.setTag(R.id.nine_layout_of_index, position);
         ImageView imageView = iv.findViewById(R.id.image);
         imageView.setImageDrawable(ResourceUtils.getDrawable(resId[position]));
-        imageView.setBackground((ResourceUtils.getDrawable(R.drawable.bg_main_ic_repair)));
+        imageView.setBackground((ResourceUtils.getDrawable(R.drawable.bg_test)));
         TextView textView = iv.findViewById(R.id.tvItemName);
         textView.setText(mTiltes[position]);
         iv.setOnClickListener(onClickListener);

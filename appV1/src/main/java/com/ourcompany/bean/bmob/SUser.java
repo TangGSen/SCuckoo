@@ -1,5 +1,7 @@
 package com.ourcompany.bean.bmob;
 
+import com.ourcompany.utils.Constant;
+
 import java.util.List;
 
 import cn.bmob.v3.BmobObject;
@@ -66,17 +68,7 @@ public class SUser extends BmobObject {
         this.secondClass = secondClass;
     }
 
-    //将布谷弄成String
-    //这个字段在客户端使用
-    private String cuckooServiceString="";
 
-    public String getCuckooServiceString() {
-        return cuckooServiceString;
-    }
-
-    public void setCuckooServiceString(String cuckooServiceString) {
-        this.cuckooServiceString = cuckooServiceString;
-    }
 //基础信息
     /**
      * 地址
@@ -182,6 +174,11 @@ public class SUser extends BmobObject {
     }
 
     public Integer getEvaluation() {
+        if(evaluation==null || evaluation<0){
+            return 0;
+        }else if(evaluation> Constant.START_COUNT){
+            return Constant.START_COUNT;
+        }
         return evaluation;
     }
 

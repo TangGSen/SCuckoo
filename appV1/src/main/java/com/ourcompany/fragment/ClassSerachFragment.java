@@ -18,6 +18,7 @@ import com.ourcompany.app.MApplication;
 import com.ourcompany.bean.json.CuckooServiceJson;
 import com.ourcompany.manager.ClassSerachService;
 import com.ourcompany.presenter.fragment.ClassSerachFragPresenter;
+import com.ourcompany.utils.DisplayUtils;
 import com.ourcompany.utils.ToastUtils;
 import com.ourcompany.view.fragment.ClassSerachFragmentView;
 import com.ourcompany.widget.recycleview.commadapter.GridItemDecoration;
@@ -144,13 +145,12 @@ public class ClassSerachFragment extends MvpFragment<ClassSerachFragmentView, Cl
         if (serviceJson.getCuckooClass() != null) {
             int length = serviceJson.getCuckooClass().size();
             ClassSerachService.getInstance().getClassList().addAll(serviceJson.getCuckooClass());
-            float density = getResources().getDisplayMetrics().density;
             for (int i = 0; i < length; i++) {
                 RadioButton radioView = (RadioButton) View.inflate(MApplication.mContext, R.layout.layout_item_radiobutton, null);
                 RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
 
-                params.setMargins(0, 0, (int) (8 * density), 0);
+                params.setMargins(0, 0, DisplayUtils.dip2px(8), 0);
                 radioView.setLayoutParams(params);
                 radioView.setText(serviceJson.getCuckooClass().get(i).getClassType());
                 radioView.setTag(R.id.tag_position, i);

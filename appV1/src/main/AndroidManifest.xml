@@ -15,7 +15,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 允许读取手机状态 用于创建BmobInstallation -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -30,24 +29,23 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-
     <!-- 需要运行时注册的权限 -->
     <!-- 用于进行网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- 用于访问GPS定位 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- 用于提高GPS定位速度 -->
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <!-- 读取缓存数据 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- 用于读取手机当前的状态 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!-- 更改设置 -->
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <!-- 3.2.0版本增加 -->
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <!-- 3.2.0版本增加 -->
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
 
     <application
         android:name=".app.MApplication"
@@ -63,11 +61,10 @@
         <!-- 设置key -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="a457cbc1302b03472f205256d6e39508"/>
+            android:value="a457cbc1302b03472f205256d6e39508" />
         <!-- 定位需要的服务 -->
-        <service android:name="com.amap.api.location.APSService">
+        <service android:name="com.amap.api.location.APSService"></service>
 
-        </service>
         <activity
             android:name=".activity.SplashActivity"
             android:launchMode="standard"
@@ -83,15 +80,12 @@
             android:name=".activity.imui.LoginActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.imui.ResigisterAccountActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.imui.FindPasswordActivity"
             android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".activity.imui.SearchActivity"
             android:screenOrientation="portrait" />
@@ -99,55 +93,50 @@
             android:name=".activity.imui.UserInfoActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.UserClassifyDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.imui.friends.FriendRequestActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.imui.ChatingActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".im.ui.ChatActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MessageActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.CollectionActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.PublishPostActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustNothing" />
-
         <activity
             android:name=".activity.HomeActivityV2"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustNothing" />
-
-
         <activity
             android:name=".activity.PostDetailActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".activity.FeedbackActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".activity.AboutCuckooActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AboutCuckooActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.UserClassifyActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" android:theme="@style/SCityStyle"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/SCityStyle" />
         <activity
             android:name=".activity.setting.SystemSettingActivity"
             android:launchMode="singleTop"
@@ -160,25 +149,19 @@
             android:name=".activity.setting.ResetPasswordAcitivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.setting.EditextUserInfoActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".activity.setting.BindNewPhoneAcitivity"
+        <activity
+            android:name=".activity.setting.BindNewPhoneAcitivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ImagesPreViewActvitity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
-
-
-
-
         <activity
             android:name="imagepicker.ui.ImageGridActivity"
             android:configChanges="orientation|screenSize"
@@ -195,13 +178,11 @@
             android:configChanges="orientation|screenSize"
             android:exported="false"
             android:theme="@style/ImagePickerThemeFullScreen" />
-
         <activity
             android:name="imagepicker.ui.ImagePreviewDelActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false"
             android:theme="@style/ImagePickerThemeFullScreen" />
-
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -212,6 +193,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
 
     </application>
 

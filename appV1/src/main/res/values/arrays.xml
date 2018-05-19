@@ -24,6 +24,8 @@
         <item>关注</item>
         <item>粉丝</item>
     </string-array>
+
+
     <!--帖子评论的投票的-->
     <string-array name="tabPostDealtItems">
         <item>评论</item>
@@ -43,6 +45,19 @@
         <item>成交量</item>
         <item>位置距离</item>
     </string-array>
+
+    <string-array name="tabUserClassifyDetailItems">
+        <item>基础信息</item>
+        <item>团队</item>
+        <item>案例</item>
+        <item>评价</item>
+    </string-array>
+
+    <string-array name="tabSortItems">
+        <item>综合排序</item>
+        <item>评论从高到低</item>
+    </string-array>
+
     <string-array name="tabClassUserItems">
         <item>全部</item>
         <item>个人</item>

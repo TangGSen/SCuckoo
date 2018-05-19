@@ -10,6 +10,7 @@
     <color name="bg_gray_stycle0">#e6e6e6</color>
     <color name="tab_bgcolor">#FFFFFF</color>
     <color name="whiles">#FFFFFF</color>
+    <color name="alpha_whiles">#F0FFFFFF</color>
     <color name="not_white_v1">#FFF7F7F7</color>
     <color name="not_white_v2">#FFF9F9F9</color>
 
@@ -41,4 +42,19 @@
     <color name="colorRed">#FF6763</color>
     <color name="bg_popu">#50000000</color>
     <color name="colorBgV2">#EEEEEE</color>
+
+    <color name="gradient_start_red">#F6356F</color>
+    <color name="gradient_center_red">#FF5F50</color>
+
+    <color name="gradient_start_blud">#7367F0</color>
+    <color name="gradient_end_blud">#CE9FFC</color>
+    <!--
+        <color name="gradient_start_blud">#7367F0</color>
+        <color name="gradient_end_blud">#CE9FFC</color>
+
+        <color name="gradient_start_blud">#7367F0</color>
+        <color name="gradient_end_blud">#CE9FFC</color>
+
+        <color name="gradient_start_blud">#7367F0</color>
+        <color name="gradient_end_blud">#CE9FFC</color>-->
 </resources>

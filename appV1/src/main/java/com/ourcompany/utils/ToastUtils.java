@@ -1,5 +1,6 @@
 package com.ourcompany.utils;
 
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ public class ToastUtils {
     private static Toast mImageToast;
 
     public static void showSimpleToast(String content){
+        if(TextUtils.isEmpty(content))return;
         if(mSimpleToast==null){
             mSimpleToast= Toast.makeText(MApplication.mContext,content,Toast.LENGTH_SHORT);
         }else{

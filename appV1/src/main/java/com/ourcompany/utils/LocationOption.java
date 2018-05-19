@@ -135,9 +135,11 @@ public class LocationOption {
                         .setCityCode(location.getCityCode()));
                     } else {
                         //定位失败
+                        LogUtils.e("sen","****0");
                         mLocationListener.onFail();
                     }
                 } else {
+                    LogUtils.e("sen","****1");
                     //定位失败
                     mLocationListener.onFail();
                 }

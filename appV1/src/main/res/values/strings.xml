@@ -253,4 +253,10 @@
     <string name="str_class_company">公司</string>
     <string name="str_is_authenv">是否已认证</string>
     <string name="str_authenv">已认证</string>
+    <string name="info_address">公司地址</string>
+    <string name="info_business_hours">营业时间</string>
+    <string name="info_service_area">服务范围</string>
+    <string name="info_price_range">承接价格</string>
+    <string name="str_team_design">设计团队</string>
+    <string name="str_team_worker">施工团队</string>
 </resources>

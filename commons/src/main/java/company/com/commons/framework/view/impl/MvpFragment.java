@@ -42,8 +42,9 @@ public abstract class MvpFragment<V extends MvpView, P extends MvpPresenter<V>> 
             //mRootView 为空时，添加到container
             int layoutId = getLayoutId();
             View root = inflater.inflate(layoutId, container, false);
-            initView(root);
             mRootView = root;
+            initView(root);
+
         } else {
             //mRootView 不为空时，先从父->移除
             if (mRootView.getParent() != null) {

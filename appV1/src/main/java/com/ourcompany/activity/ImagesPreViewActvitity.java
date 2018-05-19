@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.jaeger.library.StatusBarUtil;
 import com.ourcompany.R;
 import com.ourcompany.adapter.ImagePagePreviewAdapter;
 import com.ourcompany.app.MApplication;
@@ -102,7 +101,8 @@ public class ImagesPreViewActvitity extends MvpActivity<ImagePreviewActView, Ima
     @Override
     protected void initView() {
         super.initView();
-        StatusBarUtil.setColor(this,R.color.black);
+        //
+       // StatusBarUtil.setColor(this,R.color.black);
         // 滑动ViewPager的时候，根据外界的数据改变当前的选中状态和当前的图片的位置描述文本
         mViewPager
                 .addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {

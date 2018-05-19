@@ -68,6 +68,19 @@ public class SViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
+    /**
+     * 设置圆角image
+     * @param viewId
+     * @param url
+     * @return
+     */
+    public SViewHolder setImage(int viewId, String url,int round) {
+        ImageView imageView = getView(viewId);
+        imageView.setTag(R.id.loading_image_url, url);
+        ImageLoader.getImageLoader().loadImageRound(imageView, url,round);
+        return this;
+    }
+
     public SViewHolder setViewEnable(int viewId, boolean able) {
         View view = getView(viewId);
         view.setEnabled(able);
@@ -98,6 +111,8 @@ public class SViewHolder extends RecyclerView.ViewHolder {
         }
 
         public abstract void loadImageRes(ImageView imageView, int resId);
+
+        public abstract void loadImageRound(ImageView imageView, String url, int round);
     }
 
 

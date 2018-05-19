@@ -9,9 +9,9 @@ import company.com.commons.framework.presenter.MvpBasePresenter;
  * Created by Administrator on 2017/8/20.
  */
 
-public class MainPresenter extends MvpBasePresenter<MainView> {
+public class EmptyMvpPresenter extends MvpBasePresenter<EmptyMvpView> {
 
-    public MainPresenter(Context context) {
+    public EmptyMvpPresenter(Context context) {
         super(context);
     }
 

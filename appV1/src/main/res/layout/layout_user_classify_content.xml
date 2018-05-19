@@ -42,15 +42,15 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="0.7dp"
+            android:layout_height="0.6dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/colorBg" />
+            android:background="@color/colorBgV2" />
     </RelativeLayout>
 
     <TextView
         android:id="@+id/btClassSerach"
         android:layout_width="wrap_content"
-        android:layout_height="38dp"
+        android:layout_height="42dp"
         android:drawableLeft="@drawable/ic_class_serach"
         android:drawablePadding="@dimen/common_4dp"
         android:gravity="center_vertical"
@@ -65,17 +65,25 @@
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="0dp"
-        android:layout_height="38dp"
+        android:layout_height="42dp"
         android:layout_gravity="left"
-        android:paddingLeft="@dimen/common_8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/btClassSerach"
         app:layout_constraintTop_toBottomOf="@id/titleBar"
-        app:tabGravity="center"
-        app:tabIndicatorHeight="1dp"
+        app:tabIndicatorHeight="0dp"
         app:tabMode="scrollable"
-        app:tabSelectedTextColor="@color/colorPrimary"
-        app:tabTextColor="@color/colorFrist" />
+        app:tabBackground="@android:color/transparent"
+        app:tabGravity="fill"
+        />
+    <View
+        android:id="@+id/mPupoPositionView"
+        android:layout_width="0dp"
+        android:layout_height="0.6dp"
+        android:background="@color/colorBgV2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tabLayout"
+        />
 
     <com.ourcompany.widget.StateFrameLayout
         android:id="@+id/layoutState"
@@ -85,7 +93,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tabLayout"
+        app:layout_constraintTop_toBottomOf="@id/mPupoPositionView"
         app:loadingLayoutResId="@layout/layout_loading_top">
 
         <include layout="@layout/layout_with_refresh_recycleview" />

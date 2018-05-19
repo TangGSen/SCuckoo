@@ -52,8 +52,7 @@ public class Constant {
     public static final java.lang.String BMOB_APPKEY = "2db1fc7ea509d3ea6639495a3a24066d";
 
 
-
-    public static  LocationOption.MLocation CURRENT_CITY = null;
+    public static LocationOption.MLocation CURRENT_CITY = null;
     //最多5颗星
     public static final int START_COUNT = 5;
     //保存当前的user
@@ -95,12 +94,12 @@ public class Constant {
     //评论喜欢的字段
     public static final String BMOB_LIKES = "likes";
     //post 喜欢的总数
-    public static final String BMOB_LIKE_COUNT ="likeCount";
+    public static final String BMOB_LIKE_COUNT = "likeCount";
     //Post 评论的总数
-    public static final String BMOB_COMMENT_COUNT ="commentCount";
+    public static final String BMOB_COMMENT_COUNT = "commentCount";
     //评论的总数
-    public static final int BMOB_ADD_1= 1;
-    public static final int BMOB_REMOVE_1= -1;
+    public static final int BMOB_ADD_1 = 1;
+    public static final int BMOB_REMOVE_1 = -1;
     //分两种
     public static final int POST_TEXT = 1;
     public static final int POST_IMAGES = 2;
@@ -112,6 +111,11 @@ public class Constant {
     public static final String KEY_CUCKOO_SERVICE_ARRAY = "cuckooService";
     public static final String KEY_USER_FIRST_CLASS = "fristClass";
     public static final String KEY_USER_SECOND_CLASS = "secondClass";
+
+    //team meneber 相关的
+    public static final String KEY_TEAM_TYPE = "team_type";
+    public static final int TEAM_TYPE_DESINGE = 0;
+    public static final int TEAM_TYPE_WORKER = 1;
 
     /**
      * 下面是各种app 获取json 的查询key

@@ -3,7 +3,6 @@ package com.ourcompany.widget;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -121,7 +120,7 @@ public class NineGridlayout extends ViewGroup {
                 //解决bug
 
                 try {
-                    removeViews(newViewCount, oldViewCount - 1);
+                    removeViews(newViewCount, oldViewCount - newViewCount);
                 }catch (Exception e){
                     LogUtils.e("sen",e.getMessage()+"**"+e.getLocalizedMessage());
                 }

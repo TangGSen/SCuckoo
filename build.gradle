@@ -11,7 +11,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.2'
         // 注册MobSDK
         classpath 'com.mob.sdk:MobSDK:+'
         // NOTE: Do not place your application dependencies here; they belong
@@ -27,7 +27,19 @@ allprojects {
         maven { url "https://raw.github.com/bmob/bmob-android-sdk/master" }
 
     }
+    //gradle强制surpport 使用指定的版本
+
+    configurations.all {
+        resolutionStrategy {
+            eachDependency { DependencyResolveDetails details ->
+                if (details.requested.group == 'com.android.support') {
+                    details.useVersion "27.1.1"
+                }
+            }
+        }
+    }
 }
+
 
 task clean(type: Delete) {
     delete rootProject.buildDir
@@ -40,7 +52,7 @@ ext{
     versionName = '1.0.0'
 
     //相关依赖库版本
-    supportVersion ='26.1.0'
+    supportVersion ='27.1.1'
     butterknifeVersion = '8.8.1'
     bmobHttpLegacyVersion = '1.0'
     bmobSdkVersion = '3.5.9'

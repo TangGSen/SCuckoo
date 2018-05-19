@@ -1,8 +1,10 @@
 package com.ourcompany.activity;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -11,10 +13,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,17 +34,17 @@ import com.ourcompany.bean.bmob.SUser;
 import com.ourcompany.fragment.ClassSerachFragment;
 import com.ourcompany.manager.ClassSerachService;
 import com.ourcompany.presenter.activity.UserClassifyActPresenter;
-import com.ourcompany.utils.Constant;
+import com.ourcompany.utils.DisplayUtils;
 import com.ourcompany.utils.LocationOption;
 import com.ourcompany.utils.LogUtils;
 import com.ourcompany.utils.ResourceUtils;
-import com.ourcompany.utils.TabLayoutIndicatorWith;
+import com.ourcompany.utils.ToastUtils;
 import com.ourcompany.view.activity.UserClassifyActView;
+import com.ourcompany.widget.FlowLayout;
 import com.ourcompany.widget.StateFrameLayout;
 import com.ourcompany.widget.recycleview.commadapter.OnItemOnclickLinstener;
 import com.ourcompany.widget.recycleview.commadapter.RecycleCommonAdapter;
 import com.ourcompany.widget.recycleview.commadapter.SViewHolder;
-import com.ourcompany.widget.recycleview.commadapter.SimpleDecoration;
 import com.ourcompany.widget.recycleview.headfooter.MFooter;
 import com.ourcompany.widget.recycleview.headfooter.MHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -52,6 +61,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import company.com.commons.framework.view.impl.MvpActivity;
 
@@ -88,6 +98,9 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
     FrameLayout rightClassSerach;
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
+    @BindView(R.id.mPupoPositionView)
+    View mPupoPositionView;
+
 
     private String mTitle;
     private String[] mTiltes;
@@ -95,8 +108,10 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
     private RecycleCommonAdapter<SUser> recycleCommonAdapter;
     private List<SUser> mUserList = new ArrayList<>();
     private int currentIndex;
-
-
+    private int tabResSeletedId[] = new int[]{R.drawable.ic_triangle_one_up, -1, R.drawable.ic_triangle_two};
+    private int tabResNormalId[] = new int[]{R.drawable.ic_triangle_one_up_normal, -1, R.drawable.ic_triangle_two_normal};
+    private PopupWindow popupWindow;
+    private int currentTabSeleted = 0;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_user_classify;
@@ -109,29 +124,31 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MApplication.mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         //解决嵌套在NestedScrollView 的滑动不顺的问题1
-
         recycleview.setLayoutManager(linearLayoutManager);
         recycleview.setHasFixedSize(true);
         //解决嵌套在NestedScrollView 的滑动不顺的问题2
         recycleview.setNestedScrollingEnabled(true);
 
         refreshLayout.setEnableRefresh(true);
-        recycleview.addItemDecoration(new SimpleDecoration(MApplication.mContext, R.drawable.recycle_line_divider_padding, 1));
+        // recycleview.addItemDecoration(new SimpleDecoration(MApplication.mContext, R.drawable.recycle_line_divider_padding, 1));
 
         recycleCommonAdapter = new RecycleCommonAdapter<SUser>(
                 MApplication.mContext, mUserList, R.layout.layout_item_class_suser) {
             @Override
             public void bindItemData(SViewHolder holder, final SUser itemData, int position) {
                 holder.setText(R.id.tvUserName, TextUtils.isEmpty(itemData.getUserName()) ? ResourceUtils.getString(R.string.defualt_userName) : itemData.getUserName());
-                holder.setText(R.id.tvAddress, itemData.getAddress());
-                if(TextUtils.isEmpty(itemData.getCuckooServiceString())){
-                    itemData.setCuckooServiceString(getPresenter().getCuckooServiceString(itemData.getCuckooService()));
+                holder.setImage(R.id.imageUser, itemData.getImageUrl(), DisplayUtils.dip2px(2));
+                if (itemData.getAuthenV() != null && itemData.getAuthenV()) {
+                    Drawable drawable = getResources().getDrawable(R.drawable.ic_authen_v);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    ((TextView) holder.getView(R.id.tvUserName)).setCompoundDrawables(null, null, drawable, null);
+                    ((TextView) holder.getView(R.id.tvUserName)).setCompoundDrawablePadding(DisplayUtils.dip2px(4));
                 }
-                holder.setText(R.id.tvCuckooService, itemData.getCuckooServiceString());
-                holder.setImage(R.id.imageUser, itemData.getImageUrl());
-                holder.getView(R.id.imageAuthenV).setVisibility(itemData.getAuthenV() != null && itemData.getAuthenV() ? View.VISIBLE : View.GONE);
-                int evaluation = itemData.getEvaluation() == null ? 0 : itemData.getEvaluation() > Constant.START_COUNT ? Constant.START_COUNT : itemData.getEvaluation() < 0 ? 0 : itemData.getEvaluation();
-                ((XLHRatingBar) holder.getView(R.id.ratingBar)).setCountSelected(evaluation);
+                ((XLHRatingBar) holder.getView(R.id.ratingBar)).setCountSelected(itemData.getEvaluation());
+                if (itemData.getCuckooService() != null && itemData.getCuckooService().size() > 0) {
+                    int size = itemData.getCuckooService().size();
+                    setFlowlayoutItem(((FlowLayout) holder.getView(R.id.layoutCuckooService)), position, size, itemData.getCuckooService());
+                }
             }
         };
         recycleview.setItemAnimator(null);
@@ -139,6 +156,7 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
         recycleCommonAdapter.setOnItemClickLinstener(new OnItemOnclickLinstener() {
             @Override
             public void itemOnclickLinstener(int position) {
+                UserClassifyDetailActivity.gotoThis(UserClassifyActivity.this,mUserList.get(position));
             }
         });
 
@@ -198,7 +216,7 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
              */
             @Override
             public void onDrawerClosed(View arg0) {
-                currentIndex=0;
+                currentIndex = 0;
                 //使用这个来设置上拉加载更多的开关
                 refreshLayout.setNoMoreData(false);
                 getPresenter().loadDataFromClassSerach(currentIndex);
@@ -207,6 +225,102 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
 
 
     }
+
+    /**
+     * @param flowLayout
+     * @param position      当前flowlayout处于的位置
+     * @param newViewCount  最新的view的数量，需要跟cuckooService size一致
+     * @param cuckooService
+     */
+    private void setFlowlayoutItem(FlowLayout flowLayout, int position, int newViewCount, List<String> cuckooService) {
+        //view的创建，这里做一个view的重用
+        if (flowLayout == null)
+            return;
+        flowLayout.setTag(R.id.nine_layout_of_index, position);
+        if (flowLayout.getChildCount() <= 0) {
+
+            int i = 0;
+            while (i < newViewCount) {
+                TextView textView = generateItemView(i);
+                flowLayout.addView(textView, generateDefaultLayoutParams());
+                i++;
+            }
+
+        } else {
+            int oldViewCount = flowLayout.getChildCount();
+            if (oldViewCount > newViewCount) {
+                try {
+                    flowLayout.removeViews(newViewCount, oldViewCount - newViewCount);
+                } catch (Exception e) {
+                }
+            } else if (oldViewCount < newViewCount) {
+                for (int i = 0; i < newViewCount - oldViewCount; i++) {
+                    //这是增加的view
+                    TextView iv = generateItemView(i + oldViewCount);
+                    flowLayout.addView(iv, generateDefaultLayoutParams());
+                }
+            }
+        }
+        //赋值
+        if (flowLayout.getChildCount() > 0 && flowLayout.getChildCount() == newViewCount) {
+            for (int i = 0; i < newViewCount; i++) {
+                ((TextView) flowLayout.getChildAt(i)).setText(cuckooService.get(i));
+            }
+        }
+
+    }
+
+    /**
+     * FlowLayout相关的
+     */
+
+
+    private View.OnClickListener onFlowLayoutItemClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            //获取当前的父控件的
+            Integer parent = (Integer) ((ViewGroup) v.getParent()).getTag(R.id.nine_layout_of_index);
+            if (parent != null && parent < mUserList.size()) {
+                Integer child = (Integer) v.getTag(R.id.nine_layout_of_index);
+                if (child != null && mUserList.get(parent).getCuckooService() != null && child < mUserList.get(parent).getCuckooService().size()) {
+                    showToastMsg(mUserList.get(parent).getCuckooService().get(child));
+                }
+            }
+        }
+    };
+    //设置layout params
+
+    private TextView generateItemView(int position) {
+        TextView textView = (TextView) View.inflate(MApplication.mContext, R.layout.layout_item_textview, null);
+        textView.setTag(R.id.nine_layout_of_index, position);
+        textView.setOnClickListener(onFlowLayoutItemClick);
+        return textView;
+    }
+
+    private ViewGroup.MarginLayoutParams generateDefaultLayoutParams() {
+
+        int leftPx = 0;
+        int rightPx = 0;
+        int topPx = 0;
+        int bottomPx = 0;
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        ViewGroup.MarginLayoutParams marginParams = null;
+        //获取view的margin设置参数
+        //不存在时创建一个新的参数
+        marginParams = new ViewGroup.MarginLayoutParams(params);
+
+        //根据DP与PX转换计算值
+        rightPx = DisplayUtils.dip2px(4);
+        bottomPx = DisplayUtils.dip2px(4);
+        //设置margin
+        marginParams.setMargins(leftPx, topPx, rightPx, bottomPx);
+        return marginParams;
+    }
+
+    /**
+     * Flowlayout相关的结束
+     */
 
     @Override
     public void onBackPressed() {
@@ -253,13 +367,34 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
     protected void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
         tvTitle.setText(TextUtils.isEmpty(mTitle) ? "" : mTitle);
-        TabLayoutIndicatorWith.resetWith(mTablayout);
+
 
         mTiltes = ResourceUtils.getStringArray(R.array.tabUserClassInfoItems);
-        for (int i = 0; i < mTiltes.length; i++) {
-            mTablayout.addTab(mTablayout.newTab().setText(mTiltes[i]));
+        int size = mTiltes.length;
+        for (int i = 0; i < size; i++) {
+            View newTab = LayoutInflater.from(this).inflate(R.layout.layout_tab_textview, null);
+            TextView tv = (TextView) newTab.findViewById(R.id.tabText);
+            ImageView im = (ImageView) newTab.findViewById(R.id.tabIcon);
+            if (tabResSeletedId[i] > 0) {
+                if (i == 0) {
+                    im.setImageResource(tabResSeletedId[i]);
+                } else {
+                    im.setImageResource(tabResNormalId[i]);
+                }
+            } else {
+                im.setVisibility(View.GONE);
+            }
+
+            tv.setText(mTiltes[i]);
+            if (i == 0) {
+                tv.setTextColor(ResourceUtils.getResColor(R.color.colorPrimary));
+            } else {
+                tv.setTextColor(ResourceUtils.getResColor(R.color.colorFrist));
+            }
+            mTablayout.addTab(mTablayout.newTab().setCustomView(newTab));
+            newTab.setTag(R.id.nine_layout_of_index, i);
+            newTab.setOnTouchListener(onTabTouchListener);
         }
-        //tablayout 和viewpager 联动
         mTablayout.addOnTabSelectedListener(new MOnTabSelectedListener());
         //开始定位
         getRootView().post(new Runnable() {
@@ -276,11 +411,119 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
 
     }
 
+    /**
+     * tab 点击触摸事件
+     */
+
+
+    private View.OnTouchListener onTabTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            Integer index = (Integer) view.getTag(R.id.nine_layout_of_index);
+            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                if (index != null) {
+
+                    if (index == 0) {
+                        if (mTablayout.getTabAt(index).isSelected()) {
+                            if (popupWindow != null && popupWindow.isShowing()) {
+                                popupWindow.dismiss();
+                            } else {
+                                ImageView imageView = mTablayout.getTabAt(0).getCustomView().findViewById(R.id.tabIcon);
+                                ObjectAnimator animator = ObjectAnimator.ofFloat(imageView, "rotation", 0, 180);
+                                animator.setDuration(200);
+                                animator.setInterpolator(new DecelerateInterpolator());
+                                animator.start();
+                                showSortDialog();
+                            }
+
+                        }
+                    } else {
+                        //点击其他的就关闭
+                        if (popupWindow != null && popupWindow.isShowing()) {
+                            popupWindow.dismiss();
+                        }
+                    }
+                    mTablayout.getTabAt(index).select();
+                }
+            }
+            return true;
+        }
+    };
+
+    private void showSortDialog() {
+        //弹出选框
+        popupWindow = new PopupWindow(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.layout_pupo_tab_content, null);
+        View dismissView = view.findViewById(R.id.mDismissView);
+        RadioGroup radioGroup = view.findViewById(R.id.radioGroup);
+        dismissView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+            }
+        });
+        final Drawable drawable = ResourceUtils.getDrawable(R.drawable.ic_checkbox_check_style_v2);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        final String[] tabItems = ResourceUtils.getStringArray(R.array.tabSortItems);
+        int size = tabItems.length;
+        for (int i = 0; i < size; i++) {
+            RadioButton radioView = (RadioButton) View.inflate(MApplication.mContext, R.layout.layout_item_popup_for_tab, null);
+            RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    DisplayUtils.dip2px(38));
+            radioView.setLayoutParams(params);
+            radioView.setText(tabItems[i]);
+            radioView.setTag(R.id.tag_position, i);
+            radioView.setId(i);
+            if (i == currentTabSeleted) {
+                radioView.setCompoundDrawables(null, null, drawable, null);
+                radioView.setChecked(true);
+            }
+            radioGroup.addView(radioView, params);
+        }
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int checkId) {
+                int size = radioGroup.getChildCount();
+                   for (int i = 0; i < size; i++) {
+                    RadioButton radioButton = (RadioButton) radioGroup.getChildAt(i);
+                    if (radioButton.getId() == checkId) {
+                        currentTabSeleted =checkId;
+                        radioButton.setCompoundDrawables(null, null, drawable, null);
+                    } else {
+                        radioButton.setCompoundDrawables(null, null, null, null);
+                    }
+                       ((TextView) mTablayout.getTabAt(0).getCustomView().findViewById(R.id.tabText)).setText(tabItems[checkId].substring(0,2));
+                    if(popupWindow!=null){
+                        popupWindow.dismiss();
+                    }
+                }
+            }
+        });
+        popupWindow.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
+        popupWindow.setHeight(LinearLayout.LayoutParams.MATCH_PARENT);
+        popupWindow.setBackgroundDrawable(ResourceUtils.getDrawable(R.drawable.bg_pupowidowns));
+        popupWindow.setFocusable(false);
+        popupWindow.setOutsideTouchable(false);
+        popupWindow.setContentView(view);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                //将第一个tab 复原
+                ImageView imageView = mTablayout.getTabAt(0).getCustomView().findViewById(R.id.tabIcon);
+                ObjectAnimator animator = ObjectAnimator.ofFloat(imageView, "rotation", -180, 0);
+                animator.setDuration(200);
+                animator.setInterpolator(new DecelerateInterpolator());
+                animator.start();
+            }
+        });
+        popupWindow.showAsDropDown(mPupoPositionView, 0, 0);
+    }
+
     @Override
     public void showMLocation(LocationOption.MLocation location, boolean isCityPick) {
         mLocation = location;
         if (mLocation != null) {
-
             showAddressText(location.getCity(), isCityPick);
         } else {
             showAddressText(null, isCityPick);
@@ -327,6 +570,13 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
         showAddressText(null, isCityPick);
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
+
 
     class MOnTabSelectedListener implements TabLayout.OnTabSelectedListener {
         public MOnTabSelectedListener() {
@@ -334,12 +584,28 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
 
         @Override
         public void onTabSelected(TabLayout.Tab tab) {
-            int position = tab.getPosition();
+            int tabPositon = tab.getPosition();
+            TextView tv = (TextView) tab.getCustomView().findViewById(R.id.tabText);
+            ImageView im = (ImageView) tab.getCustomView().findViewById(R.id.tabIcon);
+            tv.setTextColor(ResourceUtils.getResColor(R.color.colorPrimary));
+            if (tabResSeletedId[tabPositon] > 0) {
+                im.setImageResource(tabResSeletedId[tabPositon]);
+            } else {
+                im.setVisibility(View.GONE);
+            }
         }
 
         @Override
         public void onTabUnselected(TabLayout.Tab tab) {
-
+            TextView tv = (TextView) tab.getCustomView().findViewById(R.id.tabText);
+            tv.setTextColor(ResourceUtils.getResColor(R.color.colorFrist));
+            int tabPositon = tab.getPosition();
+            ImageView im = (ImageView) tab.getCustomView().findViewById(R.id.tabIcon);
+            if (tabResNormalId[tabPositon] > 0) {
+                im.setImageResource(tabResNormalId[tabPositon]);
+            } else {
+                im.setVisibility(View.GONE);
+            }
         }
 
         @Override
@@ -361,7 +627,7 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
 
     @Override
     public void showToastMsg(String string) {
-
+        ToastUtils.showSimpleToast(string);
     }
 
     @OnClick({R.id.btAddress, R.id.btSerach, R.id.btClassSerach})
@@ -440,7 +706,7 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
     public void showContentView(List<SUser> list) {
         recycleCommonAdapter.addDatasInLast(list);
         //修改，recycleCommonAdapter 重新加载数据，不从顶部开始显示
-        if(currentIndex==0){
+        if (currentIndex == 0) {
             recycleview.scrollToPosition(0);
 
         }
@@ -500,9 +766,9 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
 
     @Override
     public void showOnloadMoreNoData() {
-       // refreshLayout.finishLoadMore(0, true, true);
+        // refreshLayout.finishLoadMore(0, true, true);
         refreshLayout.finishLoadMoreWithNoMoreData();
-       // refreshLayout.finishLoadMore(true);
+        // refreshLayout.finishLoadMore(true);
     }
 
 }

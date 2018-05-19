@@ -5,7 +5,9 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.ourcompany.R;
+import com.ourcompany.utils.GlideRoundTransform;
 
 /**
  * Author : 唐家森
@@ -64,6 +66,16 @@ public class ImageLoader extends SViewHolder.HolderImageLoader {
                 .placeholder(R.mipmap.photo)     //设置占位图片
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .dontAnimate()
+                .into(imageView);
+    }
+
+    @Override
+    public void loadImageRound(ImageView imageView, String url, int round) {
+        Glide.with(imageView.getContext()).load(imageView.getTag(R.id.loading_image_url)).error(R.mipmap.photo)           //设置错误图片
+                .placeholder(R.mipmap.photo)     //设置占位图片
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .dontAnimate()
+                .transform(new CenterCrop(imageView.getContext()),new GlideRoundTransform(imageView.getContext(), round))
                 .into(imageView);
     }
 }

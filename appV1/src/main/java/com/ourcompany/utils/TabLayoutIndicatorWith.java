@@ -29,7 +29,7 @@ public class TabLayoutIndicatorWith {
                     //拿到tabLayout的mTabStrip属性
                     LinearLayout mTabStrip = (LinearLayout) tabLayout.getChildAt(0);
 
-                    int dp10 = DisplayUtils.dip2px(tabLayout.getContext(), 10);
+                    int dp10 = DisplayUtils.dip2px( 10);
 
                     for (int i = 0; i < mTabStrip.getChildCount(); i++) {
                         View tabView = mTabStrip.getChildAt(i);

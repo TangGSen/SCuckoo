@@ -1,10 +1,9 @@
 apply plugin: 'com.android.library'
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
 
@@ -25,12 +24,12 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    compile "com.jakewharton:butterknife:$rootProject.ext.butterknifeVersion"
+    implementation "com.jakewharton:butterknife:$rootProject.ext.butterknifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterknifeVersion"
-    compile "com.android.support:appcompat-v7:$rootProject.ext.supportVersion"
-    compile "com.android.support:recyclerview-v7:$rootProject.ext.supportVersion"
-    compile "com.android.support:design:$rootProject.ext.supportVersion"
-    compile "com.android.support:palette-v7:$rootProject.ext.supportVersion"
-    compile "com.orhanobut:logger:$rootProject.ext.loggerVersion"
+    api "com.android.support:appcompat-v7:$rootProject.ext.supportVersion"
+    api "com.android.support:recyclerview-v7:$rootProject.ext.supportVersion"
+    api "com.android.support:design:$rootProject.ext.supportVersion"
+    api "com.android.support:palette-v7:$rootProject.ext.supportVersion"
+    api "com.orhanobut:logger:$rootProject.ext.loggerVersion"
 
 }
