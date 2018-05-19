@@ -1,0 +1,86 @@
+apply plugin: 'com.android.application'
+//SMSSDK 添加插件
+apply plugin: "com.mob.sdk"
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "com.ourcompany"
+        minSdkVersion 16
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters "armeabi-v7a"
+        }
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++11 -frtti -fexceptions"
+                abiFilters 'armeabi-v7a'
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+
+
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
+
+
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+}
+
+// 在MobSDK的扩展中注册SMSSDK的相关信息
+MobSDK {
+//    appKey "23f04acf8a9c4"
+//    appSecret "b9997fb5f7bf7dbab1bf75af2157a2c2"
+    appKey "24f4bb24e957e"
+    appSecret "c3231bbab128056dd04a007b16f72d5a"
+
+    SMSSDK {
+        gui false
+    }
+    UMSSDK {
+        gui true
+    }
+    MobIM {}
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    //    compile "cn.bmob.android:http-legacy:$rootProject.ext.bmobHttpLegacyVersion"
+    implementation "cn.bmob.android:bmob-sdk:$rootProject.ext.bmobSdkVersion"
+    implementation "com.jakewharton:butterknife:$rootProject.ext.butterknifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterknifeVersion"
+    implementation "de.hdodenhof:circleimageview:$rootProject.ext.circleViewVersion"
+    implementation project(':commons')
+    // compile "com.github.bumptech.glide:glide:$rootProject.ext.glideVersion"
+    //RxJava
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.ext.rxAndroidVersion"
+    implementation project(':libemoji')
+    implementation project(':imagepicker')
+    implementation "com.scwang.smartrefresh:SmartRefreshLayout:$rootProject.ext.smartRefreshLayout"
+    api "com.android.support:cardview-v7:$rootProject.ext.supportVersion"
+    // compile "com.jaeger.statusbarutil:library:$rootProject.ext.statusBarUtilVersion"
+    implementation "org.greenrobot:eventbus:$rootProject.ext.eventBusVersion"
+    implementation "com.xingliuhua:xlhratingbar_lib:$rootProject.ext.ratingBarVersion"
+    implementation project(':citypicker')
+    implementation files('libs/AMap_Location_V4.0.0_20180423.jar')
+
+
+}
