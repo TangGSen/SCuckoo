@@ -32,6 +32,13 @@ public class UserClassTeamFragment extends MvpFragment<EmptyMvpView, EmptyMvpPre
     @BindView(R.id.mConstraintLayout)
     ConstraintLayout mConstraintLayout;
     Unbinder unbinder;
+    private String mUserId;
+
+    @Override
+    protected void initArgs(Bundle bundle) {
+        super.initArgs(bundle);
+        mUserId = bundle.getString(Constant.BMOB_SUSER_ID);
+    }
 
     @Override
     public void showToastMsg(String string) {
@@ -60,6 +67,7 @@ public class UserClassTeamFragment extends MvpFragment<EmptyMvpView, EmptyMvpPre
         UserClassTeamDeatilFragment designFragment = new UserClassTeamDeatilFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(Constant.KEY_TEAM_TYPE,Constant.TEAM_TYPE_DESINGE);
+        bundle.putString(Constant.BMOB_SUSER_ID, mUserId);
         designFragment.setArguments(bundle);
         transaction.replace(R.id.layoutDesign, designFragment);
         transaction.commit();
@@ -69,6 +77,7 @@ public class UserClassTeamFragment extends MvpFragment<EmptyMvpView, EmptyMvpPre
         UserClassTeamDeatilFragment workerFragment = new UserClassTeamDeatilFragment();
         Bundle bundle2 = new Bundle();
         bundle2.putInt(Constant.KEY_TEAM_TYPE,Constant.TEAM_TYPE_WORKER);
+        bundle2.putString(Constant.BMOB_SUSER_ID, mUserId);
         workerFragment.setArguments(bundle2);
         transaction.replace(R.id.layoutWorker, workerFragment);
         transaction.commit();

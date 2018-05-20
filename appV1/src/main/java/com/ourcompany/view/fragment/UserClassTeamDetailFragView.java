@@ -1,5 +1,9 @@
 package com.ourcompany.view.fragment;
 
+import com.ourcompany.bean.bmob.TeamMember;
+
+import java.util.List;
+
 import company.com.commons.framework.view.MvpView;
 
 /**
@@ -10,4 +14,9 @@ import company.com.commons.framework.view.MvpView;
  */
 
 public interface UserClassTeamDetailFragView extends MvpView {
+    void showErrorView();
+
+    void showEmptyView();
+
+    void showDataView(List<TeamMember> list);
 }

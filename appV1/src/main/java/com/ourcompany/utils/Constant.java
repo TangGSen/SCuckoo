@@ -39,7 +39,7 @@ public class Constant {
      * 数量相关
      */
     //im 每页加加载10
-    public static final int IM_PAGESIZE = 10;
+    public static final int IM_PAGESIZE = 20;
 
     //添加好友时，捎一句话的数量
     public static final int MAX_ADD_FRIEND_MESSAGE = 20;
@@ -116,6 +116,8 @@ public class Constant {
     public static final String KEY_TEAM_TYPE = "team_type";
     public static final int TEAM_TYPE_DESINGE = 0;
     public static final int TEAM_TYPE_WORKER = 1;
+    public static final String BMOB_CASECOUNT = "caseCount";
+    public static final String BMOB_MEMBERTYPE = "memberType";
 
     /**
      * 下面是各种app 获取json 的查询key

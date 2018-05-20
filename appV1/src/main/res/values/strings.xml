@@ -259,4 +259,6 @@
     <string name="info_price_range">承接价格</string>
     <string name="str_team_design">设计团队</string>
     <string name="str_team_worker">施工团队</string>
+    <string name="str_case">作品</string>
+    <string name="str_work_age">经验</string>
 </resources>

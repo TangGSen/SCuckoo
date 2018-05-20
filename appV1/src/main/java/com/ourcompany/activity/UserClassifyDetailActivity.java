@@ -21,6 +21,7 @@ import com.ourcompany.fragment.user_class_detail.UserClassBaseInfoFragment;
 import com.ourcompany.fragment.user_class_detail.UserClassTeamFragment;
 import com.ourcompany.interfaces.MOnTabSelectedListener;
 import com.ourcompany.presenter.activity.UserDetailActPresenter;
+import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.DisplayUtils;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.TabLayoutIndicatorWith;
@@ -98,6 +99,7 @@ public class UserClassifyDetailActivity extends MvpActivity<UserClassifyDetailAc
     @Override
     protected void initView() {
         super.initView();
+        getWindow().setBackgroundDrawable(null);
         setSupportActionBar(commonToolbar);
         commonToolbar.setNavigationIcon(R.drawable.ic_back_v3);
         commonToolbar.setContentInsetStartWithNavigation(0);
@@ -124,9 +126,9 @@ public class UserClassifyDetailActivity extends MvpActivity<UserClassifyDetailAc
             mTablayout.addTab(mTablayout.newTab().setText(mTiltes[i]));
             if (i == 1) {
                 UserClassTeamFragment teamFragment = new UserClassTeamFragment();
-//                    Bundle bundle = new Bundle();
-//                    bundle.putSerializable(KEY_BUNDLE_USER, mUser);
-//                    infoFragment.setArguments(bundle);
+                Bundle bundle = new Bundle();
+                bundle.putString(Constant.BMOB_SUSER_ID, mUser.getObjectId());
+                teamFragment.setArguments(bundle);
                 fragments.add(teamFragment);
             } else {
                 UserClassBaseInfoFragment infoFragment = new UserClassBaseInfoFragment();

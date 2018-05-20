@@ -1,5 +1,10 @@
 package com.ourcompany.bean.bmob;
 
+import android.text.TextUtils;
+
+import com.ourcompany.R;
+import com.ourcompany.utils.ResourceUtils;
+
 import cn.bmob.v3.BmobObject;
 
 /**
@@ -17,6 +22,30 @@ public class TeamMember extends BmobObject {
     private Integer workAge;//工作年限
     private String memberImage;//成员的用户url
     private Integer memberType;//0 表示设计团队的，1 表示施工团队的
+
+    private String otherInfo;//其他信息
+    public String getOtherInfo(){
+        if(TextUtils.isEmpty(otherInfo)){
+            StringBuilder builder = new StringBuilder();
+            builder.append(ResourceUtils.getString(R.string.str_case));
+            builder.append(" ");
+            if(caseCount==null || (caseCount!=null &&caseCount<0)){
+                builder.append("0");
+            }else{
+                builder.append(caseCount);
+            }
+            builder.append(" ");
+            builder.append(ResourceUtils.getString(R.string.str_work_age));
+            builder.append(" ");
+            if(workAge==null || (workAge!=null &&workAge<0)){
+                builder.append("0");
+            }else{
+                builder.append(workAge);
+            }
+            otherInfo = builder.toString();
+        }
+        return otherInfo;
+    }
 
     public Integer getMemberType() {
         return memberType;

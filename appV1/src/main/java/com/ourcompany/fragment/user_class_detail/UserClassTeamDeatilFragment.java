@@ -2,6 +2,7 @@ package com.ourcompany.fragment.user_class_detail;
 
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -9,13 +10,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ourcompany.R;
-import com.ourcompany.activity.imui.UserInfoActivity;
 import com.ourcompany.app.MApplication;
-import com.ourcompany.bean.bmob.Comment;
+import com.ourcompany.bean.bmob.TeamMember;
 import com.ourcompany.presenter.activity.UserClassTeamDetailFragPresenter;
 import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.ResourceUtils;
-import com.ourcompany.utils.TimeFormatUtil;
 import com.ourcompany.utils.ToastUtils;
 import com.ourcompany.view.fragment.UserClassTeamDetailFragView;
 import com.ourcompany.widget.StateFrameLayout;
@@ -50,8 +49,9 @@ public class UserClassTeamDeatilFragment extends MvpFragment<UserClassTeamDetail
     private int mCurrentIndex;
     private int teamType;
 
-    private RecycleCommonAdapter<Comment> recycleCommonAdapter;
-    private List<Comment> mCommentList = new ArrayList<>();
+    private RecycleCommonAdapter<TeamMember> recycleCommonAdapter;
+    private List<TeamMember> mTeamMemberList = new ArrayList<>();
+    private String mUserId;
 
     @Override
     public void showToastMsg(String string) {
@@ -79,13 +79,14 @@ public class UserClassTeamDeatilFragment extends MvpFragment<UserClassTeamDetail
         Bundle res = getArguments();
         if (res != null) {
             teamType = res.getInt(Constant.KEY_TEAM_TYPE);
+            mUserId = bundle.getString(Constant.BMOB_SUSER_ID);
         }
     }
 
     @Override
     protected void initData() {
         super.initData();
-        getPresenter().getData(mCurrentIndex);
+        getPresenter().getData(mCurrentIndex,teamType,mUserId);
     }
 
     @Override
@@ -106,25 +107,22 @@ public class UserClassTeamDeatilFragment extends MvpFragment<UserClassTeamDetail
             text = ResourceUtils.getString(R.string.str_team_worker);
         }
         mTitle.setText(text);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MApplication.mContext);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        //解决嵌套在NestedScrollView 的滑动不顺的问题1
 
-        recycleCommonAdapter = new RecycleCommonAdapter<Comment>(
-                MApplication.mContext, mCommentList, R.layout.layout_item_comment) {
+        recycleview.setLayoutManager(linearLayoutManager);
+        recycleview.setHasFixedSize(true);
+        recycleCommonAdapter = new RecycleCommonAdapter<TeamMember>(
+                MApplication.mContext, mTeamMemberList, R.layout.layout_item_user_team_meneber) {
             @Override
-            public void bindItemData(SViewHolder holder, final Comment itemData, int position) {
-                holder.setText(R.id.tvUserName, itemData.getUser() == null ? ResourceUtils.getString(R.string.defualt_userName) : TextUtils.isEmpty(itemData.getUser().getUserName()) ? ResourceUtils.getString(R.string.defualt_userName) : itemData.getUser().getUserName());
-                holder.setText(R.id.tvContent, itemData.getContent());
-                holder.setText(R.id.tvTime, TimeFormatUtil.getIntervalFormString(itemData.getCreatedAt()));
-                holder.setImage(R.id.imgUser, itemData.getUser() == null ? "" : itemData.getUser().getImageUrl());
-                holder.getView(R.id.imgUser).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String userId = "";
-                        if (itemData.getUser() != null && !TextUtils.isEmpty(itemData.getUser().getUserId())) {
-                            userId = itemData.getUser().getUserId();
-                        }
-                        UserInfoActivity.gotoThis(mActivity, false, userId);
-                    }
-                });
+            public void bindItemData(SViewHolder holder, final TeamMember itemData, int position) {
+                holder.setText(R.id.tvUserName, TextUtils.isEmpty(itemData.getMemberName()) ?
+                        ResourceUtils.getString(R.string.defualt_userName) : itemData.getMemberName());
+                holder.setImage(R.id.imgUser, itemData.getMemberImage());
+
+                holder.setText(R.id.otherInfoText,itemData.getOtherInfo());
+
             }
 
 
@@ -149,4 +147,19 @@ public class UserClassTeamDeatilFragment extends MvpFragment<UserClassTeamDetail
     }
 
 
+    @Override
+    public void showErrorView() {
+        layoutState.changeState(StateFrameLayout.EMPTY);
+    }
+
+    @Override
+    public void showEmptyView() {
+        layoutState.changeState(StateFrameLayout.EMPTY);
+    }
+
+    @Override
+    public void showDataView(List<TeamMember> list) {
+        recycleCommonAdapter.addDatasInLast(list);
+        layoutState.changeState(StateFrameLayout.SUCCESS);
+    }
 }

@@ -61,7 +61,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import company.com.commons.framework.view.impl.MvpActivity;
 
@@ -555,7 +554,6 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
                                 LocateState.SUCCESS);
             }
         } else {
-            LogUtils.e("sen", "city error");
             if (isCityPick) {
                 CityPicker.getInstance()
                         .locateComplete(new LocatedCity(ResourceUtils.getString(R.string.str_address_error), "0", "0"),
@@ -570,12 +568,7 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
         showAddressText(null, isCityPick);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 
 
     class MOnTabSelectedListener implements TabLayout.OnTabSelectedListener {

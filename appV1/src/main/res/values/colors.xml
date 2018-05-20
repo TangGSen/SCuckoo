@@ -16,7 +16,7 @@
 
     <color name="half_transparent">#00FFFFFF</color>
     <color name="colorWhite">#FFFFFF</color>
-    <color name="colorBg">#f5f5f5</color>
+    <color name="colorBg">#F3F6F8</color>
     <color name="colorBlack33">#333333</color>
 
     <color name="colorFrist">#333333</color>
@@ -41,7 +41,7 @@
     <color name="gradient_end">#495aff</color>
     <color name="colorRed">#FF6763</color>
     <color name="bg_popu">#50000000</color>
-    <color name="colorBgV2">#EEEEEE</color>
+    <color name="colorBgV2">#F3F6F8</color>
 
     <color name="gradient_start_red">#F6356F</color>
     <color name="gradient_center_red">#FF5F50</color>
