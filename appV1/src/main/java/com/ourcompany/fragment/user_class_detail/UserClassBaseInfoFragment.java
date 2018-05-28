@@ -64,6 +64,8 @@ public class UserClassBaseInfoFragment extends MvpFragment<LoginFragmentView, Lo
         super.initView(view);
     }
 
+
+
     @Override
     protected void initData() {
         super.initData();

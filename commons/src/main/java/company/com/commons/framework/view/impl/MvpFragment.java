@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,10 @@ public abstract class MvpFragment<V extends MvpView, P extends MvpPresenter<V>> 
     protected View mRootView;
     protected Activity mActivity;
     protected Unbinder mUnbinder;
-
+    //是否已经加载过数据
+    protected boolean mIsLoadData;
+    //是否已经初始化视图
+    protected boolean isPrepared ;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -51,7 +55,7 @@ public abstract class MvpFragment<V extends MvpView, P extends MvpPresenter<V>> 
                 ((ViewGroup) mRootView.getParent()).removeView(mRootView);
             }
         }
-
+        isPrepared = true;
         return mRootView;
     }
 
@@ -93,11 +97,42 @@ public abstract class MvpFragment<V extends MvpView, P extends MvpPresenter<V>> 
     protected void initView(View view) {
         mUnbinder = ButterKnife.bind(this, view);
         initStateLayout(view);
+
     }
 
     protected void initStateLayout(View view){
 
     }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isCanLoadData();
+
+    }
+
+    private void isCanLoadData() {
+        if (!isPrepared) {
+            return;
+        }
+        Log.e("sen", "setUserVisibleHint: 1" );
+        if (getUserVisibleHint()) {
+            //fragment可见时加载数据，用一个方法来实现
+            if(!mIsLoadData){
+                Log.e("sen", "setUserVisibleHint: 2" );
+                mIsLoadData=!mIsLoadData;
+                Log.e("sen","可见*正在加载");
+                initData();
+            }else{
+                Log.e("sen","可见*加载过");
+            }
+        } else {
+            Log.e("sen","不可见");
+            //不可见时不执行操作
+        }
+    }
+
+
     /**
      * 初始化数据
      */
@@ -129,8 +164,10 @@ public abstract class MvpFragment<V extends MvpView, P extends MvpPresenter<V>> 
         if (presenter != null && view != null) {
             presenter.attachView(view);
         }
-
-        initData();
+        Log.e("sen", "onActivityCreated: 1" );
+        //放在可见的情况下才加载数据
+       // initData();
+        isCanLoadData();
     }
 
 
@@ -145,9 +182,13 @@ public abstract class MvpFragment<V extends MvpView, P extends MvpPresenter<V>> 
     }
 
 
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+//        mIsLoadData = false;
+//        isPrepared = false;
 
     }
 

@@ -44,6 +44,8 @@ public class HomeFragment extends MvpFragment<HomeFragView, HomeFragPresenter> i
     private List<AdvertisementData.AdSettingBean> adDatas;
     private String[] mTiltes;
     int resId[] = new int[]{R.drawable.ic_design, R.drawable.ic_working, R.drawable.ic_supervisor, R.drawable.ic_repair, R.drawable.ic_learning};
+    int resIdBg[] = new int[]{R.drawable.bg_gradient_violet, R.drawable.bg_gradient_violet, R.drawable.bg_gradient_blud,
+            R.drawable.bg_gradient_blud, R.drawable.bg_gradient_violet};
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -84,7 +86,7 @@ public class HomeFragment extends MvpFragment<HomeFragView, HomeFragPresenter> i
         iv.setTag(R.id.nine_layout_of_index, position);
         ImageView imageView = iv.findViewById(R.id.image);
         imageView.setImageDrawable(ResourceUtils.getDrawable(resId[position]));
-        imageView.setBackground((ResourceUtils.getDrawable(R.drawable.bg_test)));
+        imageView.setBackground((ResourceUtils.getDrawable(resIdBg[position])));
         TextView textView = iv.findViewById(R.id.tvItemName);
         textView.setText(mTiltes[position]);
         iv.setOnClickListener(onClickListener);

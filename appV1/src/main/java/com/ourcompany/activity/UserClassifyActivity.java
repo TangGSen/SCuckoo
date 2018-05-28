@@ -343,10 +343,7 @@ public class UserClassifyActivity extends MvpActivity<UserClassifyActView, UserC
 
     @Override
     protected boolean initArgs(Bundle bundle) {
-        Bundle bun = getIntent().getBundleExtra(KEY_INTENT);
-        if (bun != null) {
-            mTitle = bun.getString(KEY_BUNDLE_TITLE);
-        }
+
 
         return super.initArgs(bundle);
     }

@@ -72,6 +72,9 @@ public class TeamMember extends BmobObject {
     }
 
     public Integer getCaseCount() {
+        if(caseCount==null || (caseCount!=null &&caseCount<0)){
+            return 0;
+        }
         return caseCount;
     }
 
@@ -80,6 +83,9 @@ public class TeamMember extends BmobObject {
     }
 
     public Integer getWorkAge() {
+        if(workAge==null || (workAge!=null &&workAge<0)){
+            return 0;
+        }
         return workAge;
     }
 

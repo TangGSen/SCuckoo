@@ -138,6 +138,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/SCityStyle" />
         <activity
+            android:name=".activity.user_class.UserTeamMemeberDetailActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.setting.SystemSettingActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />

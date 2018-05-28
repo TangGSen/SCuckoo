@@ -39,7 +39,7 @@ public class Constant {
      * 数量相关
      */
     //im 每页加加载10
-    public static final int IM_PAGESIZE = 20;
+    public static final int IM_PAGESIZE = 10;
 
     //添加好友时，捎一句话的数量
     public static final int MAX_ADD_FRIEND_MESSAGE = 20;
@@ -50,6 +50,10 @@ public class Constant {
     //    public static final String CACHE_DIR = MApplication.mContext.getCacheDir().getAbsolutePath()+ File.separator;
     public static final String CACHE_DIR = MApplication.mContext.getExternalCacheDir().getAbsolutePath() + File.separator;
     public static final java.lang.String BMOB_APPKEY = "2db1fc7ea509d3ea6639495a3a24066d";
+    //view pager 的size
+    public static final int VIEWPAGER_SIZE = 1;
+    //关闭加载更多的UI时间
+    public static final int CLOSE_LOAD_TIME = 500;
 
 
     public static LocationOption.MLocation CURRENT_CITY = null;
@@ -118,6 +122,8 @@ public class Constant {
     public static final int TEAM_TYPE_WORKER = 1;
     public static final String BMOB_CASECOUNT = "caseCount";
     public static final String BMOB_MEMBERTYPE = "memberType";
+
+    public static final String BMOB_USER_TEAM_MEMBER = "teamMember";
 
     /**
      * 下面是各种app 获取json 的查询key

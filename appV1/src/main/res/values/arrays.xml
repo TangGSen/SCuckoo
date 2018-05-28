@@ -45,6 +45,12 @@
         <item>成交量</item>
         <item>位置距离</item>
     </string-array>
+<!--Team case detail-->
+    <string-array name="tabUserTeamCaseDetailItems">
+        <item>主页</item>
+        <item>客服</item>
+        <item>收藏</item>
+    </string-array>
 
     <string-array name="tabUserClassifyDetailItems">
         <item>基础信息</item>

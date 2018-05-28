@@ -8,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ourcompany.utils.LogUtils;
-
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -39,23 +37,25 @@ public abstract class RecycleCommonAdapter<D> extends RecyclerView.Adapter<SView
 
     @Override
     public SViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mLayoutInflater.inflate(layoutId,parent,false);
+        View view = mLayoutInflater.inflate(layoutId, parent, false);
         return new SViewHolder(view);
     }
+
     private OnItemOnclickLinstener linstener;
-    public void setOnItemClickLinstener(OnItemOnclickLinstener linstener){
+
+    public void setOnItemClickLinstener(OnItemOnclickLinstener linstener) {
         this.linstener = linstener;
     }
 
     @Override
     public void onBindViewHolder(SViewHolder holder, final int position) {
-        bindItemData(holder,mData.get(position),position);
+        bindItemData(holder, mData.get(position), position);
         setOnItemClickBg(holder.itemView);
-        if (linstener !=null){
+        if (linstener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (linstener!=null){
+                    if (linstener != null) {
                         linstener.itemOnclickLinstener(position);
                     }
                 }
@@ -67,20 +67,18 @@ public abstract class RecycleCommonAdapter<D> extends RecyclerView.Adapter<SView
 
     }
 
-    public void addData(D data,int position){
-        mData.add(position,data);
+    public void addData(D data, int position) {
+        mData.add(position, data);
         notifyItemInserted(position);
     }
 
-    public void addDatasInLast(List<D> data){
+    public void addDatasInLast(List<D> data) {
         int size = mData.size();
-        LogUtils.e("sen","before："+size);
-        mData.addAll(size,data);
-        LogUtils.e("sen","after："+mData.size());
-        notifyItemRangeInserted(size,data.size());
+        mData.addAll(size, data);
+        notifyItemRangeInserted(size, data.size());
     }
 
-    public abstract void bindItemData(SViewHolder holder, D itemData, int position) ;
+    public abstract void bindItemData(SViewHolder holder, D itemData, int position);
 
 
     @Override
@@ -89,24 +87,24 @@ public abstract class RecycleCommonAdapter<D> extends RecyclerView.Adapter<SView
     }
 
     public void removeItemData(final D vote) {
-        if(vote==null){
+        if (vote == null) {
             return;
         }
         EXECUTOR.execute(new Runnable() {
             @Override
             public void run() {
 
-              final int position =   mData.indexOf(vote);
-              if(position<0){
-                  return;
-              }
-              mHandler.post(new Runnable() {
-                  @Override
-                  public void run() {
-                      mData.remove(position);
-                      notifyItemRemoved(position);
-                  }
-              });
+                final int position = mData.indexOf(vote);
+                if (position < 0) {
+                    return;
+                }
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mData.remove(position);
+                        notifyItemRemoved(position);
+                    }
+                });
             }
         });
     }

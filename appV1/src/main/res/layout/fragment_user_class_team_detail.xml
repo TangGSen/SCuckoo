@@ -14,7 +14,7 @@
         android:background="@drawable/bg_style_theme_v1"
         android:paddingBottom="@dimen/common_4dp"
         android:paddingLeft="@dimen/common_16dp"
-        android:paddingRight="@dimen/common_8dp"
+        android:paddingRight="@dimen/common_16dp"
         android:paddingTop="@dimen/common_4dp"
         android:text="设计团队"
         android:textColor="@color/whiles"

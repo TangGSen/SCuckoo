@@ -177,11 +177,7 @@ public class FoundNewsFragment extends MvpFragment<FoundNewsFragmentView, FoundN
     }
 
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
 
-    }
 
     @Override
     protected void initData() {

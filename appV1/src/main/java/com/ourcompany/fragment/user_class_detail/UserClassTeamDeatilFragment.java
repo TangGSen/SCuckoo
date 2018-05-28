@@ -10,10 +10,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ourcompany.R;
+import com.ourcompany.activity.user_class.UserTeamMemeberDetailActivity;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.bean.bmob.TeamMember;
 import com.ourcompany.presenter.activity.UserClassTeamDetailFragPresenter;
 import com.ourcompany.utils.Constant;
+import com.ourcompany.utils.LogUtils;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.ToastUtils;
 import com.ourcompany.view.fragment.UserClassTeamDetailFragView;
@@ -86,6 +88,7 @@ public class UserClassTeamDeatilFragment extends MvpFragment<UserClassTeamDetail
     @Override
     protected void initData() {
         super.initData();
+        LogUtils.e("sen","sen");
         getPresenter().getData(mCurrentIndex,teamType,mUserId);
     }
 
@@ -133,6 +136,7 @@ public class UserClassTeamDeatilFragment extends MvpFragment<UserClassTeamDetail
             @Override
             public void itemOnclickLinstener(int position) {
 
+                UserTeamMemeberDetailActivity.gotoThis(mActivity,mTeamMemberList.get(position));
             }
         });
     }
@@ -159,7 +163,9 @@ public class UserClassTeamDeatilFragment extends MvpFragment<UserClassTeamDetail
 
     @Override
     public void showDataView(List<TeamMember> list) {
+        LogUtils.e("sen","team menber before："+mTeamMemberList.size());
         recycleCommonAdapter.addDatasInLast(list);
+        LogUtils.e("sen","team menber after："+mTeamMemberList.size());
         layoutState.changeState(StateFrameLayout.SUCCESS);
     }
 }

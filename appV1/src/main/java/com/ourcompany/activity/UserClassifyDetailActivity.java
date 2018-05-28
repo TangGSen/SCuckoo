@@ -19,6 +19,7 @@ import com.ourcompany.app.MApplication;
 import com.ourcompany.bean.bmob.SUser;
 import com.ourcompany.fragment.user_class_detail.UserClassBaseInfoFragment;
 import com.ourcompany.fragment.user_class_detail.UserClassTeamFragment;
+import com.ourcompany.fragment.user_class_detail.UserTeamCaseFragment;
 import com.ourcompany.interfaces.MOnTabSelectedListener;
 import com.ourcompany.presenter.activity.UserDetailActPresenter;
 import com.ourcompany.utils.Constant;
@@ -122,26 +123,38 @@ public class UserClassifyDetailActivity extends MvpActivity<UserClassifyDetailAc
 
 
         mTiltes = ResourceUtils.getStringArray(R.array.tabUserClassifyDetailItems);
+
+        UserClassBaseInfoFragment infoFragment = new UserClassBaseInfoFragment();
+        Bundle bundle2 = new Bundle();
+        bundle2.putSerializable(KEY_BUNDLE_USER, mUser);
+        infoFragment.setArguments(bundle2);
+        fragments.add(infoFragment);
+
+        UserClassTeamFragment teamFragment = new UserClassTeamFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(Constant.BMOB_SUSER_ID, mUser.getObjectId());
+        teamFragment.setArguments(bundle);
+        fragments.add(teamFragment);
+
+
+
+        UserTeamCaseFragment teamCaseFragment = new UserTeamCaseFragment();
+        bundle.putString(Constant.BMOB_SUSER_ID, mUser.getObjectId());
+        teamCaseFragment.setArguments(bundle);
+        fragments.add(teamCaseFragment);
+
+        UserClassBaseInfoFragment infoFragment2 = new UserClassBaseInfoFragment();
+        infoFragment.setArguments(bundle2);
+        fragments.add(infoFragment2);
+
         for (int i = 0; i < mTiltes.length; i++) {
             mTablayout.addTab(mTablayout.newTab().setText(mTiltes[i]));
-            if (i == 1) {
-                UserClassTeamFragment teamFragment = new UserClassTeamFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString(Constant.BMOB_SUSER_ID, mUser.getObjectId());
-                teamFragment.setArguments(bundle);
-                fragments.add(teamFragment);
-            } else {
-                UserClassBaseInfoFragment infoFragment = new UserClassBaseInfoFragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(KEY_BUNDLE_USER, mUser);
-                infoFragment.setArguments(bundle);
-                fragments.add(infoFragment);
-            }
         }
 
         TabLayoutViewPagerAdapter viewPagerAdapter = new TabLayoutViewPagerAdapter(getSupportFragmentManager(), mTiltes, fragments);
         //tablayout 和viewpager 联动
         mViewPager.setAdapter(viewPagerAdapter);
+        mViewPager.setOffscreenPageLimit(Constant.VIEWPAGER_SIZE);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTablayout));
         mTablayout.addOnTabSelectedListener(new MOnTabSelectedListener(mViewPager));
         mViewPager.setCurrentItem(0);
