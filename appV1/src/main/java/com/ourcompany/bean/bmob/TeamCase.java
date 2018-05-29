@@ -23,6 +23,16 @@ public class TeamCase extends BmobObject {
     private List<String> styleLabel;
     //组装成字符串
     private String styleLabelString;
+    //所shu那个公司或这个人的案例
+    private String userId;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getStyleString() {
         if (TextUtils.isEmpty(styleLabelString)) {

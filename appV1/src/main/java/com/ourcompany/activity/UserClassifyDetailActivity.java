@@ -58,6 +58,7 @@ public class UserClassifyDetailActivity extends MvpActivity<UserClassifyDetailAc
     private String[] mTiltes;
     private ArrayList<Fragment> fragments;
     private SUser mUser = null;
+    private String mUserId;
 
     @Override
     public void showToastMsg(String string) {
@@ -75,8 +76,12 @@ public class UserClassifyDetailActivity extends MvpActivity<UserClassifyDetailAc
         Bundle res = getIntent().getBundleExtra(KEY_INTENT);
         if (res != null) {
             mUser = (SUser) res.getSerializable(KEY_BUNDLE_USER);
+            mUserId =  res.getString(Constant.BMOB_SUSER_ID);
             if (mUser == null) {
-                finish();
+                //在看看
+                if(TextUtils.isEmpty(mUserId)){
+                    finish();
+                }
             }
         } else {
             finish();
@@ -84,8 +89,18 @@ public class UserClassifyDetailActivity extends MvpActivity<UserClassifyDetailAc
         return super.initArgs(bundle);
 
     }
-
-
+    //从UserId 过来的
+    public static void gotoThis(Context context, String userId) {
+        if (context == null) {
+            return;
+        }
+        Intent intent = new Intent(context, UserClassifyDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(Constant.BMOB_SUSER_ID, userId);
+        intent.putExtra(KEY_INTENT, bundle);
+        context.startActivity(intent);
+    }
+    //从user 列表过来的
     public static void gotoThis(Context context, SUser sUser) {
         if (context == null) {
             return;
@@ -118,6 +133,11 @@ public class UserClassifyDetailActivity extends MvpActivity<UserClassifyDetailAc
     @Override
     protected void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
+        getPresenter().getUserData(mUser,mUserId);
+
+    }
+
+    private void initUserData(){
         TabLayoutIndicatorWith.resetWith(mTablayout);
         fragments = new ArrayList<>();
 
@@ -167,7 +187,6 @@ public class UserClassifyDetailActivity extends MvpActivity<UserClassifyDetailAc
             imageUser.setTag(R.id.loading_image_url, mUser.getImageUrl());
             ImageLoader.getImageLoader().loadImageRound(imageUser, "", DisplayUtils.dip2px(2));
         }
-
     }
 
     @Override
@@ -181,4 +200,15 @@ public class UserClassifyDetailActivity extends MvpActivity<UserClassifyDetailAc
     }
 
 
+    @Override
+    public void showContent(SUser user) {
+        if(user!=null){
+            mUser =user ;
+            initUserData();
+        }
+    }
+
+    @Override
+    public void getUserDataError() {
+    }
 }

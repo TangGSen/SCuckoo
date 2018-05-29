@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ourcompany.R;
+import com.ourcompany.activity.user_class.UserTeamCaseDetailActivity;
 import com.ourcompany.activity.user_class.UserTeamMemeberDetailActivity;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.bean.bmob.TeamCase;
@@ -106,7 +107,7 @@ public class UserTeamCaseFragment extends MvpFragment<UserTeamCaseFragView, User
                 }
 
                 //获取第一张来展示
-                holder.setImage(R.id.imageMain, itemData.getImageUrls() != null && itemData.getImageUrls().size() > 0 ? itemData.getImageUrls().get(0) : "");
+                holder.setImageWithErrorImage(R.id.imageMain, itemData.getImageUrls() != null && itemData.getImageUrls().size() > 0 ? itemData.getImageUrls().get(0) : "",R.drawable.ic_loading_defualt);
                 if (TextUtils.isEmpty(mTeamMemberId) && itemData.getTeamMember() != null) {
                     holder.setImage(R.id.imgUser, itemData.getTeamMember() != null ? itemData.getTeamMember().getMemberImage() : "");
                     holder.getView(R.id.imgUser).setTag(R.id.nine_layout_of_index, position);
@@ -128,7 +129,7 @@ public class UserTeamCaseFragment extends MvpFragment<UserTeamCaseFragView, User
             @Override
             public void itemOnclickLinstener(int position) {
 
-                //UserTeamMemeberDetailActivity.gotoThis(mActivity,mTeamCaseList.get(position));
+                UserTeamCaseDetailActivity.gotoThis(mActivity,mTeamCaseList.get(position),mTeamMemberId);
             }
         });
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -176,23 +177,7 @@ public class UserTeamCaseFragment extends MvpFragment<UserTeamCaseFragView, User
         layoutState.setEmptyView(emptyView);
         layoutState.changeState(StateFrameLayout.LOADING);
     }
-/*["http://b.hiphotos.baidu.com/zhidao/pic/item/8cb1cb13495409236419b1769358d109b3de4942.jpg",
-        "http://h.hiphotos.baidu.com/zhidao/pic/item/503d269759ee3d6d2a85075843166d224e4adee6.jpg",
-        "http://d.hiphotos.baidu.com/zhidao/pic/item/21a4462309f79052b31d635f0df3d7ca7bcbd554.jpg",
-        "http://g.hiphotos.baidu.com/zhidao/pic/item/38dbb6fd5266d016f7bd7445972bd40735fa3533.jpg",
-        "http://b.hiphotos.baidu.com/zhidao/wh%3D450%2C600/sign=db2edf85ce95d143da23ec2746c0ae34/dc54564e9258d1092a579a34d758ccbf6d814dfb.jpg",
-        "http://a.hiphotos.baidu.com/zhidao/pic/item/b3119313b07eca80cd9eb2ed902397dda1448325.jpg",
-        "http://d.hiphotos.baidu.com/zhidao/pic/item/86d6277f9e2f07080379f6bced24b899a901f20a.jpg",
-        "http://r.photo.store.qq.com/psb?/V13qsvnB34fx9j/7r0suge*9n2vuGNsx0vvJ.Fx3Vh0W7QotN6q18x9yUY%21/o/dHIBAAAAAAAA&bo=wQOAAkQFggMFAKM%21",
-        "http://pic1.shejiben.com/case/2015/04/08/20150408105755-fa51eb0f.jpg"]
-    ["唯美欧美风","现代简约风格"]
-    ["地中海风格","现代简约风格"]
-    ["中式风格","现代简约风格"]
-    ["日式风格","现代简约风格"]
-    ["欧式风格","现代简约风格"]
-    ["美式乡村","现代简约风格"]
-    ["田园风格","现代简约风格"]
-    ["现代简约风格"]*/
+
 
 
     @Override

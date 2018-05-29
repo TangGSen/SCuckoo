@@ -36,8 +36,8 @@ public class HomeActivity extends MvpActivity<HomeAcitityView,HomeActPresenter> 
     //tab item name
     String tabTiles[];
     //tab item drawable
-    int tabItemDrawableNormal[];
-    int tabItemDrawableSelected[];
+    private int tabItemDrawableNormal[];
+    private int tabItemDrawableSelected[];
     private int tabCount;
 
     android.support.v4.app.FragmentManager mFragmentManager;

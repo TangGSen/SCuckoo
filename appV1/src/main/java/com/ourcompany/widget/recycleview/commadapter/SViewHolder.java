@@ -81,6 +81,20 @@ public class SViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
+    /**
+     * 设置圆角image
+     * @param viewId
+     * @param url
+     * @return
+     */
+    public SViewHolder setImageWithErrorImage(int viewId, String url,int resid) {
+        ImageView imageView = getView(viewId);
+        imageView.setTag(R.id.loading_image_url, url);
+        ImageLoader.getImageLoader().loadImage(imageView, url,resid);
+        return this;
+    }
+
+
     public SViewHolder setViewEnable(int viewId, boolean able) {
         View view = getView(viewId);
         view.setEnabled(able);
@@ -104,6 +118,7 @@ public class SViewHolder extends RecyclerView.ViewHolder {
         }
 
         public abstract void loadImage(ImageView imageView, String path);
+        public abstract void loadImage(ImageView imageView, String path,int resId);
         public abstract void loadImage(Context context, ImageView imageView, String path);
 
         public String getPath() {

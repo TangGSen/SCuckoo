@@ -142,6 +142,10 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.user_class.UserTeamCaseDetailActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.setting.SystemSettingActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />

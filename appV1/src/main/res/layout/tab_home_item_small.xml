@@ -6,5 +6,4 @@
     android:drawableTop="@drawable/tab_main"
     android:text="主页"
     android:gravity="center"
-    android:textColor="@drawable/tab_text_color_selector"
     />

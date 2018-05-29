@@ -21,6 +21,7 @@
 
     <color name="colorFrist">#333333</color>
     <color name="colorSecond">#999999</color>
+    <color name="colorThrid">#eeeeeeee</color>
     <color name="divide">#e6e6e6</color>
     <color name="material_dark">#ff303030</color>
 
