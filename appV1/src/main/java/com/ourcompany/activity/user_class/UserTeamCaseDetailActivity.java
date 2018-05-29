@@ -157,27 +157,6 @@ public class UserTeamCaseDetailActivity extends MvpActivity<UserTeamCaseDetailVi
             tab.getCustomView().setOnTouchListener(onTabTouchListener);
         }
 
-
-
-        //不知为啥 0 的不会调用setOnTabSelectedListener 的方法
-        //  tabLayout.getTabAt(0).select();
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
         TextView textView = (TextView) tabLayout.getTabAt(0).getCustomView();
 
         changeSelecteTabColor(textView, tabItemDrawableSelected[0], true);
@@ -213,8 +192,8 @@ public class UserTeamCaseDetailActivity extends MvpActivity<UserTeamCaseDetailVi
                     switch (index) {
                         case 0:
                             LogUtils.e("sen", "index:" + index);
-                            if (!TextUtils.isEmpty(mMemberId)) {
-                                //不是空的话，那么是从主页过来的，那么直接关闭即可
+                            if (TextUtils.isEmpty(mMemberId)) {
+                                //是空的话，那么是从主页过来的，那么直接关闭即可
                                 finish();
                             } else {
                                 UserClassifyDetailActivity.gotoThis(UserTeamCaseDetailActivity.this, mTeamCase.getUserId());
