@@ -1,8 +1,15 @@
 package com.ourcompany.fragment;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.TabLayout;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ourcompany.R;
@@ -17,6 +24,8 @@ import com.ourcompany.bean.eventbus.UserLogout;
 import com.ourcompany.manager.MServiceManager;
 import com.ourcompany.presenter.fragment.MineFragPresenter;
 import com.ourcompany.utils.Constant;
+import com.ourcompany.utils.DisplayUtils;
+import com.ourcompany.utils.LogUtils;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.view.fragment.MineFragmentView;
 import com.ourcompany.widget.recycleview.commadapter.ImageLoader;
@@ -26,6 +35,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import company.com.commons.framework.view.impl.MvpFragment;
@@ -62,12 +72,81 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
     @BindView(R.id.btSetting)
     TextView btSetting;
     Unbinder unbinder1;
+    @BindView(R.id.btManager)
+    TextView btManager;
+    @BindView(R.id.tabLayout)
+    TabLayout tabLayout;
+    Unbinder unbinder2;
+    private String[] tabTiles;
 
 
     @Override
     protected void initView(View view) {
         super.initView(view);
         EventBus.getDefault().register(this);
+        //其实需要判断 除了业主不显示管理，其他都行显示管理
+        initManagerTabView();
+    }
+
+    /**
+     * tab 点击触摸事件
+     */
+
+
+    private View.OnTouchListener onTabTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            Integer index = (Integer) view.getTag(R.id.nine_layout_of_index);
+            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                if (index != null) {
+                    switch (index) {
+                        case 0:
+
+                            break;
+                    }
+                }
+
+            }
+            return true;
+        }
+    };
+
+    //自定义TabView
+    public View getTabView(int id, String text, int position) {
+        TextView view = (TextView) LayoutInflater.from(mActivity).inflate(R.layout.tab_textview_for_mine, null);
+        //设置图片
+        Drawable topDrawable = ResourceUtils.getDrawable(id);
+        topDrawable.setBounds(0, 0, topDrawable.getMinimumWidth(), topDrawable.getMinimumHeight());
+        view.setCompoundDrawables(topDrawable, null, null, null);
+        view.setTextColor(ResourceUtils.getResColor(R.color.whiles));
+        view.setText(text);
+        view.setTag(R.id.nine_layout_of_index, position);
+        return view;
+    }
+
+    private void initManagerTabView() {
+        tabTiles = ResourceUtils.getStringArray(R.array.tabMineManager);
+        int[] tabItemDrawableNormal = new int[]{R.drawable.ic_my_team, R.drawable.ic_my_case, R.drawable.ic_coupon};
+        int tabCount = tabTiles.length;
+        int height = DisplayUtils.dip2px(60);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, height);
+        if (tabLayout.getLayoutParams() == null) {
+            tabLayout.getLayoutParams().height = height;
+        } else {
+            tabLayout.setLayoutParams(params);
+        }
+
+        for (int i = 0; i < tabCount; i++) {
+            TabLayout.Tab tab = tabLayout.newTab();
+            View view = getTabView(tabItemDrawableNormal[i], tabTiles[i], i);
+            view.setBackgroundResource(R.drawable.bg_gradient_tab1);
+            view.setLayoutParams(params);
+            tab.setCustomView(view);
+            tabLayout.addTab(tab, i);
+            tab.getCustomView().setOnTouchListener(onTabTouchListener);
+        }
+
+
     }
 
     @Override
@@ -138,7 +217,7 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
         }
         strUserName.setText(Constant.CURRENT_USER.nickname.get());
         mUserImage.setTag(R.id.loading_image_url, MServiceManager.getInstance().getLocalUserImage());
-        ImageLoader.getImageLoader().loadImage(mUserImage,"");
+        ImageLoader.getImageLoader().loadImage(mUserImage, "");
     }
 
     /**
@@ -181,4 +260,17 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
         }
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder2 = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder2.unbind();
+    }
 }

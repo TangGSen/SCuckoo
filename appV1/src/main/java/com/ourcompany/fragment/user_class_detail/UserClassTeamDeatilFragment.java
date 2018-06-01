@@ -54,6 +54,9 @@ public class UserClassTeamDeatilFragment extends MvpFragment<UserClassTeamDetail
     private RecycleCommonAdapter<TeamMember> recycleCommonAdapter;
     private List<TeamMember> mTeamMemberList = new ArrayList<>();
     private String mUserId;
+    private LinearLayoutManager mLinearLayoutManager;
+    private boolean isLoadingMore;
+    private boolean isHasNotMoreData;
 
     @Override
     public void showToastMsg(String string) {
@@ -89,7 +92,7 @@ public class UserClassTeamDeatilFragment extends MvpFragment<UserClassTeamDetail
     protected void initData() {
         super.initData();
         LogUtils.e("sen","sen");
-        getPresenter().getData(mCurrentIndex,teamType,mUserId);
+        getPresenter().getData(mCurrentIndex,teamType,mUserId, false);
     }
 
     @Override
@@ -110,11 +113,11 @@ public class UserClassTeamDeatilFragment extends MvpFragment<UserClassTeamDetail
             text = ResourceUtils.getString(R.string.str_team_worker);
         }
         mTitle.setText(text);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MApplication.mContext);
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mLinearLayoutManager = new LinearLayoutManager(MApplication.mContext);
+        mLinearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         //解决嵌套在NestedScrollView 的滑动不顺的问题1
 
-        recycleview.setLayoutManager(linearLayoutManager);
+        recycleview.setLayoutManager(mLinearLayoutManager);
         recycleview.setHasFixedSize(true);
         recycleCommonAdapter = new RecycleCommonAdapter<TeamMember>(
                 MApplication.mContext, mTeamMemberList, R.layout.layout_item_user_team_meneber) {
@@ -137,6 +140,32 @@ public class UserClassTeamDeatilFragment extends MvpFragment<UserClassTeamDetail
             public void itemOnclickLinstener(int position) {
 
                 UserTeamMemeberDetailActivity.gotoThis(mActivity,mTeamMemberList.get(position));
+            }
+        });
+
+        recycleview.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int lastVisibleItemPosition = mLinearLayoutManager.findLastCompletelyVisibleItemPosition();
+                if (lastVisibleItemPosition  == recycleCommonAdapter.getItemCount()-1) {
+                    if(isHasNotMoreData){
+                        LogUtils.e("sen","不需要刷新了");
+                        return;
+                    }
+                    mCurrentIndex++;
+                    if (!isLoadingMore ) {
+                         isLoadingMore = true;
+                         LogUtils.e("sen","准备加载更多");
+                        getPresenter().getData(mCurrentIndex,teamType,mUserId, true);
+                    }else{
+                        LogUtils.e("sen","加载更多中");
+                    }
+                }
             }
         });
     }
@@ -167,5 +196,16 @@ public class UserClassTeamDeatilFragment extends MvpFragment<UserClassTeamDetail
         recycleCommonAdapter.addDatasInLast(list);
         LogUtils.e("sen","team menber after："+mTeamMemberList.size());
         layoutState.changeState(StateFrameLayout.SUCCESS);
+    }
+
+    @Override
+    public void showOnloadMoreNoData() {
+        isHasNotMoreData= true;
+        LogUtils.e("sen","没有更多数据了");
+    }
+
+    @Override
+    public void showOnLoadFinish() {
+        isLoadingMore = false;
     }
 }

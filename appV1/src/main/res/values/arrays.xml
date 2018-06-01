@@ -55,8 +55,14 @@
     <string-array name="tabUserClassifyDetailItems">
         <item>基础信息</item>
         <item>团队</item>
-        <item>案例</item>
+        <item>作品</item>
         <item>评价</item>
+    </string-array>
+
+    <string-array name="tabMineManager">
+        <item>我的团队</item>
+        <item>我的作品</item>
+        <item>我的优惠券</item>
     </string-array>
 
     <string-array name="tabSortItems">

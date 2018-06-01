@@ -54,7 +54,6 @@ public class UserTeamCaseDetailActivity extends MvpActivity<UserTeamCaseDetailVi
     TextView tvCoupon;
     private String[] tabTiles;
     private int tabItemDrawableNormal[];
-    private int tabItemDrawableSelected[];
     private int tabCount;
     private RecycleCommonAdapter<String> recycleCommonAdapter;
     private TeamCase mTeamCase;
@@ -145,8 +144,7 @@ public class UserTeamCaseDetailActivity extends MvpActivity<UserTeamCaseDetailVi
     private void initTabView() {
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabTiles = ResourceUtils.getStringArray(R.array.tabUserTeamCaseDetailItems);
-        tabItemDrawableNormal = new int[]{R.drawable.ic_main_normal_18dp, R.drawable.ic_chat_customer, R.drawable.ic_tab_collection};
-        tabItemDrawableSelected = new int[]{R.drawable.ic_main_selected_18dp, R.drawable.ic_chat_customer_theme, R.drawable.ic_tab_colection_theme};
+        tabItemDrawableNormal = new int[]{R.drawable.ic_home_small, R.drawable.ic_chat_customer, R.drawable.ic_collection_v2};
 
         tabCount = tabTiles.length;
         for (int i = 0; i < tabCount; i++) {
@@ -157,9 +155,7 @@ public class UserTeamCaseDetailActivity extends MvpActivity<UserTeamCaseDetailVi
             tab.getCustomView().setOnTouchListener(onTabTouchListener);
         }
 
-        TextView textView = (TextView) tabLayout.getTabAt(0).getCustomView();
 
-        changeSelecteTabColor(textView, tabItemDrawableSelected[0], true);
 
     }
 
@@ -171,7 +167,12 @@ public class UserTeamCaseDetailActivity extends MvpActivity<UserTeamCaseDetailVi
         topDrawable.setBounds(0, 0, topDrawable.getMinimumWidth(), topDrawable.getMinimumHeight());
         view.setCompoundDrawables(null, topDrawable, null, null);
         view.setTextSize(12);
-        view.setTextColor(ResourceUtils.getResColor(R.color.colorFrist));
+        if(position ==0){
+            view.setTextColor(ResourceUtils.getResColor(R.color.colorPrimary));
+        }else{
+            view.setTextColor(ResourceUtils.getResColor(R.color.colorFrist));
+        }
+
         view.setText(text);
         view.setTag(R.id.nine_layout_of_index, position);
         return view;
@@ -200,7 +201,7 @@ public class UserTeamCaseDetailActivity extends MvpActivity<UserTeamCaseDetailVi
                             }
                             break;
                     }
-                    tabLayout.getTabAt(index).select();
+                    //tabLayout.getTabAt(index).select();
                 }
 
             }

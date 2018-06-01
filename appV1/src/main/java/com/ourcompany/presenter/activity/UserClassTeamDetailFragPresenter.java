@@ -5,7 +5,6 @@ import android.text.TextUtils;
 
 import com.ourcompany.bean.bmob.TeamMember;
 import com.ourcompany.utils.Constant;
-import com.ourcompany.utils.LogUtils;
 import com.ourcompany.view.fragment.UserClassTeamDetailFragView;
 
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class UserClassTeamDetailFragPresenter extends MvpBasePresenter<UserClass
 
 
 
-    public void getData(int start,int dataType,String userId)  {
+    public void getData(final int start, int dataType, String userId, final boolean isLoadMore)  {
         if(TextUtils.isEmpty(userId)) {
             getView().showErrorView();
             return;
@@ -60,17 +59,33 @@ public class UserClassTeamDetailFragPresenter extends MvpBasePresenter<UserClass
             @Override
             public void done(final List<TeamMember> list, BmobException e) {
                 if (e == null) {
-                    if ((list!=null &&list.size() <= 0)|| list==null) {
-                        getEmptyData();
-                    } else if(list!=null &&list.size() > 0){
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    getView().showDataView(list);
-                                }
-                            });
+//                    if ((list!=null &&list.size() <= 0)|| list==null) {
+//                        getEmptyData();
+//                    } else if(list!=null &&list.size() > 0){
+//                            mHandler.post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    getView().showDataView(list);
+//                                }
+//                            });
+//
+//                    }
 
-                    }
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (start == 0 && list.size() <= 0) {
+                                showEmptyView();
+                            } else if (isLoadMore && list != null && list.size() == 0) {
+                                getView().showOnloadMoreNoData();
+                            } else {
+                                getView().showDataView(list);
+                                if (isLoadMore) {
+                                    getView().showOnLoadFinish();
+                                }
+                            }
+                        }
+                    });
 
                 } else {
                     mHandler.post(new Runnable() {
@@ -84,7 +99,9 @@ public class UserClassTeamDetailFragPresenter extends MvpBasePresenter<UserClass
         });
     }
 
-    private void getEmptyData() {
+
+
+    private void showEmptyView() {
         mHandler.post(new Runnable() {
             @Override
             public void run() {

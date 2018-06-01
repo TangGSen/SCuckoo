@@ -101,7 +101,36 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/common_16dp"
                     android:background="@color/whiles" />
+
                 <TextView
+                    android:id="@+id/btManager"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@color/whiles"
+                    android:drawableLeft="@drawable/ic_mine_manager"
+                    android:drawablePadding="@dimen/common_16dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/common_16dp"
+                    android:text="@string/str_my_manager"
+                    android:textColor="@color/colorFrist"
+                    android:textSize="@dimen/fragment_font_16sp" />
+
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    app:tabIndicatorHeight="0dp"
+                    app:tabMode="scrollable"
+                    app:tabBackground="@color/whiles"
+                    app:tabGravity="fill"
+                    />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/common_8dp"
+                    android:background="@color/whiles" />
+                <TextView
+                    android:layout_marginTop="@dimen/common_4dp"
                     android:id="@+id/btMyDynamic"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
@@ -113,6 +142,8 @@
                     android:text="@string/str_my_dynamic"
                     android:textColor="@color/colorFrist"
                     android:textSize="@dimen/fragment_font_16sp" />
+
+
 
                 <!--<View
                     android:layout_width="match_parent"

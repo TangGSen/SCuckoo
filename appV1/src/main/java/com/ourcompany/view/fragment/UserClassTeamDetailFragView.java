@@ -19,4 +19,8 @@ public interface UserClassTeamDetailFragView extends MvpView {
     void showEmptyView();
 
     void showDataView(List<TeamMember> list);
+
+    void showOnloadMoreNoData();
+
+    void showOnLoadFinish();
 }
