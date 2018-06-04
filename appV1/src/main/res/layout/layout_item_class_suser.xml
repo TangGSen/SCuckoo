@@ -55,6 +55,8 @@
         android:layout_marginTop="@dimen/common_8dp"
         app:canEdit="false"
         app:countSelected="2"
+        android:clickable="false"
+        android:focusable="false"
         app:differentSize="false"
         app:dividerWidth="0dp"
         app:layout_constraintLeft_toRightOf="@+id/imageUser"

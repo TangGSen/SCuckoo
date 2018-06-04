@@ -1,6 +1,7 @@
 package com.ourcompany.manager;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.mob.MobSDK;
 import com.mob.imsdk.MobIM;
@@ -80,7 +81,11 @@ public class MServiceManager {
 
     public boolean isUserLogin() {
         String userId = UMSSDK.getLoginUserId();
-        return false;
+        if(TextUtils.isEmpty(userId)){
+            return false;
+        }else{
+            return true;
+        }
     }
 
     public void getUserInfos() {
@@ -206,6 +211,7 @@ public class MServiceManager {
      * @return
      */
     public String getCurrentLoginUserId() {
+        LogUtils.e("sen",UMSSDK.getLoginUserId());
         return UMSSDK.getLoginUserId();
     }
 

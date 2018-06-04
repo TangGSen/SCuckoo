@@ -264,4 +264,5 @@
     <string name="str_appointment">预约</string>
     <string name="str_coupon">领券</string>
     <string name="str_my_manager">我的管理</string>
+    <string name="str_add_coupon">添加</string>
 </resources>

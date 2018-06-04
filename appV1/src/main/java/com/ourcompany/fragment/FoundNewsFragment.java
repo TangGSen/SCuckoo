@@ -15,6 +15,7 @@ import com.ourcompany.activity.PostDetailActivity;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.bean.bmob.Post;
 import com.ourcompany.presenter.fragment.FoundNewsFragPresenter;
+import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.TimeFormatUtil;
 import com.ourcompany.utils.ToastUtils;
@@ -252,7 +253,7 @@ public class FoundNewsFragment extends MvpFragment<FoundNewsFragmentView, FoundN
 
     @Override
     public void showOnReflsh(List<Post> list) {
-        refreshLayout.finishRefresh(0, true);
+        refreshLayout.finishRefresh(Constant.CLOSE_LOAD_TIME, true);
         recycleCommonAdapter.addDatasInFirst(0, list);
         recycleview.scrollToPosition(0);
 
@@ -261,19 +262,19 @@ public class FoundNewsFragment extends MvpFragment<FoundNewsFragmentView, FoundN
     @Override
     public void showOnReflshNoNewsData() {
         showToastMsg(ResourceUtils.getString(R.string.str_reflsh_no_new_data));
-        refreshLayout.finishRefresh(0, true);
+        refreshLayout.finishRefresh(Constant.CLOSE_LOAD_TIME, true);
     }
 
     @Override
     public void showOnReflshError() {
         showToastMsg(ResourceUtils.getString(R.string.str_reflesh_error));
-        refreshLayout.finishRefresh(0, false);
+        refreshLayout.finishRefresh(Constant.CLOSE_LOAD_TIME, false);
 
     }
 
     @Override
     public void showOnLoadError() {
-        refreshLayout.finishLoadMore(0, false, false);
+        refreshLayout.finishLoadMore(Constant.CLOSE_LOAD_TIME, false, false);
         showToastMsg(ResourceUtils.getString(R.string.str_onload_error));
 
     }
@@ -281,12 +282,12 @@ public class FoundNewsFragment extends MvpFragment<FoundNewsFragmentView, FoundN
     @Override
     public void showOnLoadFinish() {
         //如果是没有更新的数据时需要停止刷新半分钟，防止频繁的刷新
-        refreshLayout.finishLoadMore(0, true, false);
+        refreshLayout.finishLoadMore(Constant.CLOSE_LOAD_TIME, true, false);
     }
 
     @Override
     public void showOnloadMoreNoData() {
-        refreshLayout.finishLoadMore(0, true, true);
+        refreshLayout.finishLoadMore(Constant.CLOSE_LOAD_TIME, true, true);
     }
 
     @Override

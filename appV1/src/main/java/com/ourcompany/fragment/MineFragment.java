@@ -18,6 +18,8 @@ import com.ourcompany.activity.FeedbackActivity;
 import com.ourcompany.activity.MessageActivity;
 import com.ourcompany.activity.imui.UserInfoActivity;
 import com.ourcompany.activity.setting.SystemSettingActivity;
+import com.ourcompany.activity.tab_mine.CouponManagerActivity;
+import com.ourcompany.aop.annotation.CheckIsLogin;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.bean.UserAccoutLoginRes;
 import com.ourcompany.bean.eventbus.UserLogout;
@@ -78,7 +80,9 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
     TabLayout tabLayout;
     Unbinder unbinder2;
     private String[] tabTiles;
-
+    private final static int TAB_INDEX_TEAM = 0;
+    private final static int TAB_INDEX_CASE = 1;
+    private final static int TAB_INDEX_COUPON = 2;
 
     @Override
     protected void initView(View view) {
@@ -100,8 +104,15 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
             if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                 if (index != null) {
                     switch (index) {
-                        case 0:
-
+                        case TAB_INDEX_TEAM:
+                            //   getPresenter().gotoTeam();
+                            checkAndGotoTeam();
+                            break;
+                        case TAB_INDEX_CASE:
+                            checkAndGotoCase();
+                            break;
+                        case TAB_INDEX_COUPON:
+                            checkAndGotoCoupon();
                             break;
                     }
                 }
@@ -110,6 +121,22 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
             return true;
         }
     };
+    @CheckIsLogin
+    private void checkAndGotoCoupon() {
+        CouponManagerActivity.gotoThis(mActivity);
+    }
+
+    @CheckIsLogin
+    private void checkAndGotoCase() {
+         LogUtils.e("sen", "已经登录checkAndGotoCase");
+    }
+
+
+
+    @CheckIsLogin
+    private void checkAndGotoTeam() {
+
+    }
 
     //自定义TabView
     public View getTabView(int id, String text, int position) {

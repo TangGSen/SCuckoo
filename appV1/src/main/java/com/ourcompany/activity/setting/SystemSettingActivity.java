@@ -10,6 +10,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.ourcompany.R;
+import com.ourcompany.aop.annotation.CheckIsLogin;
 import com.ourcompany.bean.bmob.SAppVersion;
 import com.ourcompany.bean.eventbus.UserLogout;
 import com.ourcompany.manager.MServiceManager;
@@ -104,19 +105,13 @@ public class SystemSettingActivity extends MvpActivity<SystemSettingActView, Sys
 
     @OnClick({R.id.btEditexInfo, R.id.btAccountSetting, R.id.btCheckNewVersion, R.id.btLogout})
     public void onViewClicked(View view) {
-        if(view.getId()==R.id.btAccountSetting ||view.getId()==R.id.btEditexInfo){
-            if(!MServiceManager.getInstance().getUserIsLogin()){
-                showToastMsg(ResourceUtils.getString(R.string.str_user_not_login));
-                return;
-            }
-        }
+
         switch (view.getId()) {
             case R.id.btEditexInfo:
-
-                EditextUserInfoActivity.gotoThis(SystemSettingActivity.this);
+                checkGotoEditextUserInfo();
                 break;
             case R.id.btAccountSetting:
-                AccountSettingAcitivity.gotoThis(SystemSettingActivity.this);
+                checkGotoAccountSetting();
                 break;
             case R.id.btAccpetPush:
                 break;
@@ -133,6 +128,16 @@ public class SystemSettingActivity extends MvpActivity<SystemSettingActView, Sys
                 break;
         }
     }
+    @CheckIsLogin
+    private void checkGotoEditextUserInfo() {
+        EditextUserInfoActivity.gotoThis(SystemSettingActivity.this);
+    }
+
+    @CheckIsLogin
+    private void checkGotoAccountSetting() {
+        AccountSettingAcitivity.gotoThis(SystemSettingActivity.this);
+    }
+
 
     class MAppVersionUpdateListener implements AppVersionUpdate.AppVersionUpdateListener{
 

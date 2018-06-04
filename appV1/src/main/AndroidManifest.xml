@@ -96,6 +96,9 @@
             android:name=".activity.UserClassifyDetailActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.tab_mine.CouponManagerActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.imui.friends.FriendRequestActivity"
             android:screenOrientation="portrait" />
         <activity
