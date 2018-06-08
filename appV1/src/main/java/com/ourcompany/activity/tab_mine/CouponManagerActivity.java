@@ -67,7 +67,6 @@ public class CouponManagerActivity extends MvpActivity<EmptyMvpView, EmptyMvpPre
         super.initView();
         setSupportActionBar(commonToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        commonToolbar.setTitle(ResourceUtils.getString(R.string.str_change_password));
         commonToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,6 +147,11 @@ public class CouponManagerActivity extends MvpActivity<EmptyMvpView, EmptyMvpPre
 
 
     @OnClick(R.id.addCoupon)
-    public void onViewClicked() {
+    public void onViewClicked(View view) {
+        switch (view.getId()){
+            case R.id.addCoupon:
+                AddCouponActivity.gotoThis(CouponManagerActivity.this);
+                break;
+        }
     }
 }

@@ -265,4 +265,9 @@
     <string name="str_coupon">领券</string>
     <string name="str_my_manager">我的管理</string>
     <string name="str_add_coupon">添加</string>
+    <string name="str_get_coupon">点击领取</string>
+    <string name="str_input_counpon_name">请输入名称</string>
+    <string name="str_title_eidtext_coupon">编辑优惠券</string>
+    <string name="str_coupon_base_info">基本信息</string>
+    <string name="str_coupon_other_info">其他信息</string>
 </resources>
