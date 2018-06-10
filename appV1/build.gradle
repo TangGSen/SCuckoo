@@ -84,12 +84,11 @@ MobSDK {
 //    appSecret "b9997fb5f7bf7dbab1bf75af2157a2c2"
     appKey "24f4bb24e957e"
     appSecret "c3231bbab128056dd04a007b16f72d5a"
-
     SMSSDK {
         gui false
     }
     UMSSDK {
-        gui true
+        gui false
     }
     MobIM {}
 }
@@ -101,8 +100,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     //    compile "cn.bmob.android:http-legacy:$rootProject.ext.bmobHttpLegacyVersion"
     implementation "cn.bmob.android:bmob-sdk:$rootProject.ext.bmobSdkVersion"
-    implementation "com.jakewharton:butterknife:$rootProject.ext.butterknifeVersion"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterknifeVersion"
     implementation "de.hdodenhof:circleimageview:$rootProject.ext.circleViewVersion"
     implementation project(':commons')
     // compile "com.github.bumptech.glide:glide:$rootProject.ext.glideVersion"

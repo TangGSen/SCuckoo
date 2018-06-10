@@ -10,9 +10,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.mob.jimu.query.data.DataType;
-import com.mob.ums.OperationCallback;
-import com.mob.ums.User;
-import com.mob.ums.gui.UMSGUI;
 import com.ourcompany.R;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.manager.MServiceManager;
@@ -95,18 +92,18 @@ public class TestMobFragment extends MvpFragment<LoginFragmentView, LoginFragPre
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.test_login:
-                UMSGUI.showLogin(new OperationCallback<User>() {
-                    @Override
-                    public void onSuccess(User user) {
-                        super.onSuccess(user);
-                    }
-                });
+//                UMSGUI.showLogin(new OperationCallback<User>() {
+//                    @Override
+//                    public void onSuccess(User user) {
+//                        super.onSuccess(user);
+//                    }
+//                });
                 break;
             case R.id.test_my:
-                  UMSGUI.showProfilePage();
+                //  UMSGUI.showProfilePage();
                 break;
             case R.id.test_showRecommend:
-                  UMSGUI.showRecommendationPage();
+               //   UMSGUI.showRecommendationPage();
                 break;
             case R.id.test_add_bmob:
                 //   MServiceManager.getInstance().saveUserToBmob(Constant.CURRENT_USER);

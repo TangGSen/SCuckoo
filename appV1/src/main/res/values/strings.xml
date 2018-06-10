@@ -270,4 +270,9 @@
     <string name="str_title_eidtext_coupon">编辑优惠券</string>
     <string name="str_coupon_base_info">基本信息</string>
     <string name="str_coupon_other_info">其他信息</string>
+    <string name="str_input_counpon_money">请输入优惠金额</string>
+    <string name="str_input_counpon_strat_time">请选择开始时间</string>
+    <string name="str_input_counpon_end_time">请选择结束时间</string>
+    <string name="str_counpon_strat_time">开始时间</string>
+    <string name="str_counpon_end_time">结束时间</string>
 </resources>

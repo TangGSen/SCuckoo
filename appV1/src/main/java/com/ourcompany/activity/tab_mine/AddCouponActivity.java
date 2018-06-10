@@ -7,6 +7,7 @@ import android.support.constraint.Group;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
@@ -17,6 +18,7 @@ import com.ourcompany.R;
 import com.ourcompany.activity.animation.Rotate3DAnimation;
 import com.ourcompany.adapter.ViewPagerAdapter;
 import com.ourcompany.app.MApplication;
+import com.ourcompany.fragment.coupon.CouponDateFragment;
 import com.ourcompany.fragment.coupon.CouponNameFragment;
 import com.ourcompany.presenter.activity.AddCouponActPresenter;
 import com.ourcompany.utils.ResourceUtils;
@@ -28,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import company.com.commons.framework.view.impl.MvpActivity;
 
 /**
@@ -76,6 +77,16 @@ public class AddCouponActivity extends MvpActivity<AddCouponActView, AddCouponAc
     //从这开始为第二页
     private int middlePosition = 5;
 
+    private final int INDEX_COUPON_NAME = 1;
+    private final int INDEX_COUPON_MONEY = 2;
+
+    private final int INDEX_COUPON_STARTTIME = 3;
+    private final int INDEX_COUPON_ENDTIME = 4;
+    //fragemnet 的总数
+    private final int FRAGEMENT_SIZE = 4;
+    private String startTime = ResourceUtils.getString(R.string.str_counpon_strat_time);
+    private String endTime = ResourceUtils.getString(R.string.str_counpon_end_time);
+
     public static void gotoThis(Context context) {
         Intent intent = new Intent(context, AddCouponActivity.class);
         context.startActivity(intent);
@@ -105,34 +116,55 @@ public class AddCouponActivity extends MvpActivity<AddCouponActView, AddCouponAc
                 overridePendingTransition(0, 0);
             }
         });
+        initFragments();
+        tvTime.setText(startTime+" 至 "+endTime);
+    }
+
+    private void initFragments(){
         final List<Fragment> mFragment = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            Bundle bundle = new Bundle();
-            bundle.putInt(CouponNameFragment.KEY_CURRENT_INDEX, i + 1);
-            bundle.putInt(CouponNameFragment.KEY_COUNT, 10);
-            CouponNameFragment couponNameFragment = new CouponNameFragment();
-            couponNameFragment.setArguments(bundle);
-            mFragment.add(couponNameFragment);
-        }
+        //第一个 输入名称的
+        Bundle bundle = new Bundle();
+        bundle.putInt(CouponNameFragment.KEY_CURRENT_INDEX, INDEX_COUPON_NAME);
+        bundle.putInt(CouponNameFragment.KEY_COUNT, FRAGEMENT_SIZE);
+        bundle.putString(CouponNameFragment.KEY_INPUT_TITLE,ResourceUtils.getString(R.string.str_input_counpon_name));
+        bundle.putInt(CouponNameFragment.KEY_INTPUT_COUNT,14);
+        CouponNameFragment couponNameFragment = new CouponNameFragment();
+        couponNameFragment.setArguments(bundle);
+        mFragment.add(couponNameFragment);
+
+        //第二个 输入金额的
+        Bundle bundle1 = new Bundle();
+        bundle1.putInt(CouponNameFragment.KEY_CURRENT_INDEX, INDEX_COUPON_MONEY);
+        bundle1.putInt(CouponNameFragment.KEY_COUNT, FRAGEMENT_SIZE);
+        bundle1.putString(CouponNameFragment.KEY_INPUT_TITLE,ResourceUtils.getString(R.string.str_input_counpon_money));
+        bundle1.putInt(CouponNameFragment.KEY_INTPUT_COUNT,8);
+        bundle1.putInt(CouponNameFragment.KEY_INPUT_TYPE,CouponNameFragment.INPUT_TYPE_NUMBER);
+        CouponNameFragment couponNameFragment1 = new CouponNameFragment();
+        couponNameFragment1.setArguments(bundle1);
+        mFragment.add(couponNameFragment1);
 
 
-//
-//        CouponNameFragment couponNameFragment1 = new CouponNameFragment();
-//        mFragment.add(couponNameFragment1);
-//        CouponNameFragment couponNameFragment2 = new CouponNameFragment();
-//        mFragment.add(couponNameFragment2);
-//        CouponNameFragment couponNameFragment3 = new CouponNameFragment();
-//        mFragment.add(couponNameFragment3);
-//        CouponNameFragment couponNameFragment4 = new CouponNameFragment();
-//        mFragment.add(couponNameFragment4);
-//        CouponNameFragment couponNameFragment5 = new CouponNameFragment();
-//        mFragment.add(couponNameFragment5);
-//        CouponNameFragment couponNameFragment6 = new CouponNameFragment();
-//        mFragment.add(couponNameFragment6);
-//        CouponNameFragment couponNameFragment7 = new CouponNameFragment();
-//        mFragment.add(couponNameFragment7);
-//        CouponNameFragment couponNameFragment8 = new CouponNameFragment();
-//        mFragment.add(couponNameFragment8);
+        //第3个 输入开始时间
+        Bundle bundle2 = new Bundle();
+        bundle2.putInt(CouponDateFragment.KEY_CURRENT_INDEX, INDEX_COUPON_STARTTIME);
+        bundle2.putInt(CouponDateFragment.KEY_COUNT, FRAGEMENT_SIZE);
+        bundle2.putString(CouponDateFragment.KEY_INPUT_TITLE,ResourceUtils.getString(R.string.str_input_counpon_strat_time));
+        CouponDateFragment dateFragment = new CouponDateFragment();
+        dateFragment.setArguments(bundle2);
+        mFragment.add(dateFragment);
+
+        //第4个 输入结束时间
+        Bundle bundle3 = new Bundle();
+        bundle3.putInt(CouponDateFragment.KEY_CURRENT_INDEX, INDEX_COUPON_ENDTIME);
+        bundle3.putInt(CouponDateFragment.KEY_COUNT, FRAGEMENT_SIZE);
+        bundle3.putString(CouponDateFragment.KEY_INPUT_TITLE,ResourceUtils.getString(R.string.str_input_counpon_end_time));
+        CouponDateFragment dateFragment1 = new CouponDateFragment();
+        dateFragment1.setArguments(bundle3);
+        mFragment.add(dateFragment1);
+
+
+
+
 
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), mFragment);
@@ -171,7 +203,6 @@ public class AddCouponActivity extends MvpActivity<AddCouponActView, AddCouponAc
 
             }
         });
-
 
     }
 
@@ -286,11 +317,40 @@ public class AddCouponActivity extends MvpActivity<AddCouponActView, AddCouponAc
     }
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
+
+
+
+    public void setInputTextChanged(int currentIndex, String content) {
+        if(TextUtils.isEmpty(content)){
+            content ="";
+        }
+        switch (currentIndex){
+            case INDEX_COUPON_NAME:
+                tvName.setText(content);
+                break;
+            case INDEX_COUPON_MONEY:
+                if(TextUtils.isEmpty(content)){
+                    content ="0";
+                }
+                tvCouponMoney.setText("￥"+content);
+                break;
+        }
+    }
+
+    public void changeDate(int currentIndex, String date) {
+        if(TextUtils.isEmpty(date)){
+            return;
+        }
+        switch (currentIndex){
+            case INDEX_COUPON_STARTTIME:
+                this.startTime = date;
+                break;
+            case INDEX_COUPON_ENDTIME:
+                this.endTime = date;
+
+                break;
+        }
+        tvTime.setText(startTime+" 至 "+endTime);
     }
 
 //    @OnClick({R.id.tvAniation})
