@@ -13,8 +13,12 @@ import company.com.commons.framework.presenter.MvpBasePresenter;
 
 public class AddCouponActPresenter extends MvpBasePresenter<AddCouponActView> {
 
+
+
     public AddCouponActPresenter(Context context) {
         super(context);
     }
+
+
 
 }

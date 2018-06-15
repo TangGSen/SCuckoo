@@ -1,62 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.ourcompany.widget.CouponConstraintLayoutView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/common_16dp"
-    android:layout_marginRight="@dimen/common_16dp"
+    android:layout_marginLeft="@dimen/common_8dp"
+    android:layout_marginRight="@dimen/common_8dp"
     android:layout_marginTop="@dimen/common_16dp"
-    android:background="@drawable/bg_gradient_tab1"
-    android:padding="@dimen/common_16dp">
+    android:background="@drawable/bg_gradient_tab3">
 
     <TextView
         android:id="@+id/tvCouponMoney"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/common_16dp"
         android:text="￥888"
-        android:textStyle="bold"
         android:textColor="@color/whiles"
         android:textSize="14sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/tvName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/common_16dp"
-        android:text="开业十周年庆优惠1000元"
         android:layout_marginRight="@dimen/common_8dp"
+        android:gravity="left"
+        android:text="开业十周年庆优惠1000元"
         android:textColor="@color/whiles"
         android:textSize="14sp"
-        android:gravity="left"
         app:layout_constraintBottom_toTopOf="@+id/tvTime"
         app:layout_constraintLeft_toRightOf="@+id/tvCouponMoney"
-        app:layout_constraintRight_toLeftOf="@+id/tvStates"
+        app:layout_constraintRight_toLeftOf="@+id/couponLineView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvTime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/common_8dp"
-        android:text="2018-05-01~2018-06-02"
         android:layout_marginRight="@dimen/common_8dp"
+        android:layout_marginTop="@dimen/common_8dp"
         android:gravity="left"
-        app:layout_constraintRight_toLeftOf="@+id/tvStates"
+        android:text="2018-05-01~2018-06-02"
         android:textColor="@color/whiles"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@+id/tvName"
+        app:layout_constraintRight_toLeftOf="@+id/couponLineView"
         app:layout_constraintTop_toBottomOf="@+id/tvName" />
+
+    <android.support.constraint.Group
+        android:id="@+id/groupState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="tvStates,couponLineView" />
+
+    <com.ourcompany.widget.CouponLineView
+        android:id="@+id/couponLineView"
+        android:layout_width="8dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/common_8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginRight="@dimen/common_8dp"
+        app:layout_constraintRight_toLeftOf="@+id/tvStates"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
         android:id="@+id/tvStates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/common_16dp"
         android:ems="1"
         android:gravity="center"
+
+        android:paddingBottom="@dimen/common_16dp"
+        android:paddingTop="@dimen/common_16dp"
         android:text="点击领取"
         android:textColor="@color/whiles"
         android:textSize="14sp"

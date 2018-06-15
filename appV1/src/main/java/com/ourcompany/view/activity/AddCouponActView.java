@@ -9,4 +9,5 @@ import company.com.commons.framework.view.MvpView;
 
 public interface AddCouponActView extends MvpView {
 
+
 }

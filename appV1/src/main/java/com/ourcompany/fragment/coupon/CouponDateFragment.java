@@ -8,7 +8,6 @@ import android.widget.TextView;
 import com.ourcompany.EmptyMvpPresenter;
 import com.ourcompany.EmptyMvpView;
 import com.ourcompany.R;
-import com.ourcompany.activity.tab_mine.AddCouponActivity;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.ToastUtils;
@@ -99,7 +98,7 @@ public class CouponDateFragment extends MvpFragment<EmptyMvpView, EmptyMvpPresen
 
                 String date = getDate(time);
                 tvChooseDate.setText(date);
-                ((AddCouponActivity) mActivity).changeDate(currentIndex,date);
+              //  ((AddCouponActivity) mActivity).changeDate(currentIndex,date);
 
             }
         });

@@ -99,9 +99,6 @@
             android:name=".activity.tab_mine.CouponManagerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.tab_mine.AddCouponActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.imui.friends.FriendRequestActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -181,6 +178,10 @@
             android:configChanges="orientation|screenSize"
             android:exported="false"
             android:theme="@style/ImagePickerTheme" />
+        <activity
+            android:name=".activity.tab_mine.AddCouponActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name="imagepicker.ui.ImageCropActivity"
             android:configChanges="orientation|screenSize"

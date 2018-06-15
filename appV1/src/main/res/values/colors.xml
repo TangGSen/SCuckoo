@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF397FE5</color>
     <!--主题设色的80%透明度-->
     <color name="main_theme_80">#CC397FE5</color>
+    <color name="bule_300">#1E88E5</color>
     <color name="text_gray">#9b9b9b</color>
     <color name="bg_gray">#f0f0f0</color>
     <color name="bg_gray_stycle0">#e6e6e6</color>
@@ -21,6 +22,7 @@
 
     <color name="colorFrist">#333333</color>
     <color name="colorSecond">#999999</color>
+    <color name="colorFour">#bbbbbb</color>
     <color name="colorThrid">#eeeeeeee</color>
     <color name="divide">#e6e6e6</color>
     <color name="material_dark">#ff303030</color>
@@ -49,15 +51,22 @@
 
     <color name="gradient_start_violet">#7367F0</color>
     <color name="gradient_end_violet">#CE9FFC</color>
+    <color name="gradient_end_violet_v2">#7e9fff</color>
 
 
         <color name="gradient_start_blud">#FF397FE5</color>
       <!--  <color name="gradient_end_blud">#FF40C4FF</color>-->
       <color name="gradient_end_blud">#0acffe</color>
-    <!--
-           <color name="gradient_start_blud">#7367F0</color>
-           <color name="gradient_end_blud">#CE9FFC</color>
 
-           <color name="gradient_start_blud">#7367F0</color>
-           <color name="gradient_end_blud">#CE9FFC</color>-->
+    <color name="gradient_start_orange">#FDB33F</color>
+    <color name="gradient_middle_orange">#FFCD05</color>
+      <color name="gradient_end_orange">#FEE069</color>
+
+
+           <color name="gradient_start_red_v2">#F84C38</color>
+           <color name="gradient_middle_red_v2">#FB6A55</color>
+           <color name="gradient_end_red_v2">#F8834D</color>
+
+           <!--<color name="gradient_start_blud">#7367F0</color>-->
+           <!--<color name="gradient_end_blud">#CE9FFC</color>-->
 </resources>

@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.ourcompany.EmptyMvpPresenter;
 import com.ourcompany.EmptyMvpView;
 import com.ourcompany.R;
-import com.ourcompany.activity.tab_mine.AddCouponActivity;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.utils.ToastUtils;
 
@@ -87,7 +86,7 @@ public class CouponNameFragment extends MvpFragment<EmptyMvpView, EmptyMvpPresen
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String name = etName.getText().toString().trim();
                 tvInputCount.setText(name.length()+"/"+inputCount);
-                ( (AddCouponActivity) mActivity).setInputTextChanged(currentIndex,name);
+               // ( (AddCouponActivity) mActivity).setInputTextChanged(currentIndex,name);
             }
 
             @Override

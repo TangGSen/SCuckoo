@@ -14,7 +14,6 @@
             <option value="$PROJECT_DIR$/commons" />
             <option value="$PROJECT_DIR$/imagepicker" />
             <option value="$PROJECT_DIR$/libemoji" />
-            <option value="$PROJECT_DIR$/sen" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

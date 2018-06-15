@@ -30,6 +30,12 @@ public class MApplication extends Application {
         regMsgRev();
     }
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+      //  MultiDex.install(this);
+    }
+
     public void regMsgRev() {
         if (mobMsgRever == null) {
             mobMsgRever = new SimpleMobIMMessageReceiver(this);

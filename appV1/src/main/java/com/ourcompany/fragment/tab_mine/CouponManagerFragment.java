@@ -111,7 +111,9 @@ public class CouponManagerFragment extends MvpFragment<CouponManagerActView, Cou
                 holder.setText(R.id.tvTime, itemData.getTimeInfo());
                 if(currentType==TYPE_OVERDUE){
                     //不要设置为Gone, 因为有点击领取这个字，作为高度一致
-                    holder.getView(R.id.tvStates).setVisibility(View.INVISIBLE);
+                    //加载过期的
+                    holder.getView(R.id.rootView).setBackgroundResource(R.drawable.bg_gradient_tab4);
+                    holder.getView(R.id.groupState).setVisibility(View.INVISIBLE);
                     ((ImageView)holder.getView(R.id.imageOverdue)).setImageDrawable(ResourceUtils.getDrawable(R.drawable.ic_overdue));
                 }
             }

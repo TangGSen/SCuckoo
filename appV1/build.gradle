@@ -47,6 +47,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+       // multiDexEnabled false
         ndk {
             abiFilters "armeabi-v7a"
         }
@@ -98,6 +99,8 @@ dependencies {
     implementation "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintVersion"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation "com.jakewharton:butterknife:$rootProject.ext.butterknifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterknifeVersion"
     //    compile "cn.bmob.android:http-legacy:$rootProject.ext.bmobHttpLegacyVersion"
     implementation "cn.bmob.android:bmob-sdk:$rootProject.ext.bmobSdkVersion"
     implementation "de.hdodenhof:circleimageview:$rootProject.ext.circleViewVersion"
@@ -116,6 +119,7 @@ dependencies {
     implementation project(':citypicker')
     implementation files('libs/AMap_Location_V4.0.0_20180423.jar')
     implementation "org.aspectj:aspectjrt:$rootProject.ext.aspectjVersion"
+    //implementation "com.android.support:multidex:$rootProject.ext.multidexVersion"
 
 
 }

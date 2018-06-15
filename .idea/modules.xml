@@ -8,7 +8,6 @@
       <module fileurl="file://$PROJECT_DIR$/commons/commons.iml" filepath="$PROJECT_DIR$/commons/commons.iml" />
       <module fileurl="file://$PROJECT_DIR$/imagepicker/imagepicker.iml" filepath="$PROJECT_DIR$/imagepicker/imagepicker.iml" />
       <module fileurl="file://$PROJECT_DIR$/libemoji/libemoji.iml" filepath="$PROJECT_DIR$/libemoji/libemoji.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sen/sen.iml" filepath="$PROJECT_DIR$/sen/sen.iml" />
     </modules>
   </component>
 </project>

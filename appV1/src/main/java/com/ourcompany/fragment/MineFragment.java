@@ -121,6 +121,7 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
             return true;
         }
     };
+
     @CheckIsLogin
     private void checkAndGotoCoupon() {
         CouponManagerActivity.gotoThis(mActivity);
@@ -128,9 +129,8 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
 
     @CheckIsLogin
     private void checkAndGotoCase() {
-         LogUtils.e("sen", "已经登录checkAndGotoCase");
+        LogUtils.e("sen", "已经登录checkAndGotoCase");
     }
-
 
 
     @CheckIsLogin
@@ -154,6 +154,7 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
     private void initManagerTabView() {
         tabTiles = ResourceUtils.getStringArray(R.array.tabMineManager);
         int[] tabItemDrawableNormal = new int[]{R.drawable.ic_my_team, R.drawable.ic_my_case, R.drawable.ic_coupon};
+        int[] bgRes = new int[]{R.drawable.bg_gradient_tab3, R.drawable.bg_gradient_tab3, R.drawable.bg_gradient_tab3};
         int tabCount = tabTiles.length;
         int height = DisplayUtils.dip2px(60);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, height);
@@ -166,7 +167,7 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
         for (int i = 0; i < tabCount; i++) {
             TabLayout.Tab tab = tabLayout.newTab();
             View view = getTabView(tabItemDrawableNormal[i], tabTiles[i], i);
-            view.setBackgroundResource(R.drawable.bg_gradient_tab1);
+            view.setBackgroundResource(bgRes[i]);
             view.setLayoutParams(params);
             tab.setCustomView(view);
             tabLayout.addTab(tab, i);

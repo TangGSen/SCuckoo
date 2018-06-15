@@ -34,7 +34,10 @@ allprojects {
         resolutionStrategy {
             eachDependency { DependencyResolveDetails details ->
                 if (details.requested.group == 'com.android.support') {
-                    details.useVersion "27.1.1"
+                    if (!details.requested.name.startsWith("multidex")) {
+                        details.useVersion "27.1.1"
+                    }
+
                 }
             }
         }
@@ -69,5 +72,6 @@ ext{
     ratingBarVersion ='1.0.1'
     aspectjVersion ='1.8.9'
     constraintVersion ='1.1.0'
+    multidexVersion ='1.0.3'
 
 }

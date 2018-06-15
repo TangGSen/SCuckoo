@@ -208,6 +208,7 @@
     <string name="str_bindnew_step_2">请接收新号码%s的验证码</string>
     <string name="str_input_new_phone">请输入新手机号码</string>
     <string name="str_next_step">下一步</string>
+    <string name="str_pre_step">上一步</string>
     <string name="str_input_current_phone">请输入当前手机号码</string>
     <string name="str_input_current_phone_error">输入当前与登陆账号不一致</string>
     <string name="str_input_new_phone_error">输入新号码与当前号码相同</string>
