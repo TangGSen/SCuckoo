@@ -272,8 +272,12 @@
     <string name="str_coupon_base_info">基本信息</string>
     <string name="str_coupon_other_info">其他信息</string>
     <string name="str_input_counpon_money">请输入优惠金额</string>
+    <string name="str_input_counpon_useway">请输入使用方式</string>
+    <string name="str_input_counpon_count">请输入发行量</string>
+    <string name="str_input_counpon_count_hint">请输入大于0</string>
     <string name="str_input_counpon_strat_time">请选择开始时间</string>
     <string name="str_input_counpon_end_time">请选择结束时间</string>
     <string name="str_counpon_strat_time">开始时间</string>
     <string name="str_counpon_end_time">结束时间</string>
+    <string name="str_input_counpon_count_error">请输入发行量大于0</string>
 </resources>

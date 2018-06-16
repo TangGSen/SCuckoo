@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.constraint.Group;
 import android.text.InputFilter;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.MotionEvent;
 import android.view.View;
@@ -85,6 +86,7 @@ public class CouponEditextInfoFragment extends MvpFragment<EditextCouponInfoFrag
     private Rotate3DAnimation onOpenAnimationEnd;
     private Rotate3DAnimation onCloseAnimationEnd;
 
+
     @Override
     public void showToastMsg(String string) {
         ToastUtils.showSimpleToast(string);
@@ -142,9 +144,9 @@ public class CouponEditextInfoFragment extends MvpFragment<EditextCouponInfoFrag
         layoutLimit.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     return true;
-                }else if (event.getAction() == MotionEvent.ACTION_UP) {
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     InputMethodUtils.toggleSoftInputForEt(edLimit);
                     edLimit.setSelection(edLimit.getText().toString().length());
                     return true;
@@ -157,9 +159,9 @@ public class CouponEditextInfoFragment extends MvpFragment<EditextCouponInfoFrag
         tvCount.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     return true;
-                }else if (event.getAction() == MotionEvent.ACTION_UP) {
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     InputMethodUtils.toggleSoftInputForEt(edCount);
                     edCount.setSelection(edCount.getText().toString().length());
                     return true;
@@ -364,6 +366,96 @@ public class CouponEditextInfoFragment extends MvpFragment<EditextCouponInfoFrag
         });
     }
 
+    //提交信息
+    public void submitInfo() {
+
+//        EditText tvCouponMoney;
+//        EditText tvName;
+//        TextView tvTime;
+//        EditText edLimit;
+//        EditText tvUseWay;
+//        EditText edCount;
+
+        String useWay = tvUseWay.getText().toString();
+        String count = edCount.getText().toString();
+
+        String couponMoney = tvCouponMoney.getText().toString();
+        String name = tvName.getText().toString();
+        boolean isFristError = false;
+        boolean isSecondError = false;
+        String fristErrorMsg = "";
+        String secondErrorMsg = "";
+
+        //正面
+        if (TextUtils.isEmpty(startTime) || (!TextUtils.isEmpty(startTime) &&
+                startTime.equals(ResourceUtils.getString(R.string.str_counpon_strat_time)))) {
+            isFristError = true;
+            fristErrorMsg = ResourceUtils.getString(R.string.str_input_counpon_strat_time);
+        }
+        if (TextUtils.isEmpty(endTime) || (!TextUtils.isEmpty(endTime) &&
+                endTime.equals(ResourceUtils.getString(R.string.str_counpon_end_time)))) {
+            isFristError = true;
+            fristErrorMsg = ResourceUtils.getString(R.string.str_input_counpon_end_time);
+        }
+
+        if (TextUtils.isEmpty(couponMoney)) {
+            isFristError = true;
+            fristErrorMsg = ResourceUtils.getString(R.string.str_input_counpon_money);
+        }
+        if (TextUtils.isEmpty(name)) {
+            isFristError = true;
+            fristErrorMsg = ResourceUtils.getString(R.string.str_input_counpon_name);
+        }
+
+        //反面
+        if (TextUtils.isEmpty(useWay)) {
+            isSecondError = true;
+            secondErrorMsg = ResourceUtils.getString(R.string.str_input_counpon_useway);
+        }
+        if (TextUtils.isEmpty(count)) {
+            isSecondError = true;
+            secondErrorMsg = ResourceUtils.getString(R.string.str_input_counpon_count);
+        }
+        if (!TextUtils.isEmpty(count) && Integer.parseInt(count) <= 0) {
+            isSecondError = true;
+            secondErrorMsg = ResourceUtils.getString(R.string.str_input_counpon_count_error);
+        }
+
+        //应该先检查当前显示的页面
+        if (isFristError || isSecondError) {
+            ((AddCouponActivity) mActivity).submitEnd();
+            //第一个在显示，并且有错的话那么就直接显示错误信息
+            if (isFristError && groupBaseInfo.getVisibility() == View.VISIBLE) {
+                showToastMsg(fristErrorMsg);
+            } else if (isFristError && groupBaseInfo.getVisibility() != View.VISIBLE) {
+                //第一个不显示，并且有错的话
+                if (isSecondError) {
+                    //直接显示第二个的错误
+                    showToastMsg(secondErrorMsg);
+                } else {
+                    //
+                    starAnimation(false);
+                    showToastMsg(fristErrorMsg);
+                }
+            } else if (isSecondError && otherBaseInfo.getVisibility() == View.VISIBLE) {
+                showToastMsg(secondErrorMsg);
+            } else if (isSecondError && otherBaseInfo.getVisibility() != View.VISIBLE) {
+                //第一个不显示，并且有错的话
+                if (isFristError) {
+                    //直接显示第二个的错误
+                    showToastMsg(fristErrorMsg);
+                } else {
+                    //
+                    starAnimation(true);
+                    showToastMsg(secondErrorMsg);
+                }
+
+            }
+
+        } else {
+            showToastMsg("可以提交了");
+        }
 
 
+    }
 }

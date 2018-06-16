@@ -188,7 +188,7 @@
         android:layout_marginRight="@dimen/common_8dp"
         android:background="@null"
         android:gravity="left|center_vertical"
-        android:hint="1"
+        android:hint="@string/str_input_counpon_count_hint"
         android:textColor="@color/whiles"
         android:textColorHint="@color/whiles"
         android:textSize="14sp"

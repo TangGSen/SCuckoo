@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -18,6 +19,7 @@ import com.ourcompany.presenter.activity.AddCouponActPresenter;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.ToastUtils;
 import com.ourcompany.view.activity.AddCouponActView;
+import com.ourcompany.widget.LoadingViewAOV;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -134,11 +136,15 @@ public class AddCouponActivity extends MvpActivity<AddCouponActView, AddCouponAc
 
                 break;
             case R.id.tvFinish:
-
+                if(couponEditextInfo!=null){
+                    LoadingViewAOV.getInstance().with(AddCouponActivity.this, tvFinish,
+                            R.color.whiles, R.drawable.ic_loading_v4, Gravity.CENTER);
+                    couponEditextInfo.submitInfo();
+                }
                 break;
         }
     }
-
+    //提供给fragment 使用的
     public void changeAnimationState(String string) {
         if (!TextUtils.isEmpty(string)) {
             nextStep.setText(string);
@@ -146,7 +152,9 @@ public class AddCouponActivity extends MvpActivity<AddCouponActView, AddCouponAc
 
     }
 
-    @OnClick(R.id.tvFinish)
-    public void onViewClicked() {
+    public void submitEnd(){
+        LoadingViewAOV.getInstance().close(AddCouponActivity.this, tvFinish);
     }
+
+
 }
