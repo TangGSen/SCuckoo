@@ -46,9 +46,7 @@ public class AddCouponActivity extends MvpActivity<AddCouponActView, AddCouponAc
     Button nextStep;
     @BindView(R.id.tvFinish)
     TextView tvFinish;
-    private int lastPostion;
     //从这开始为第二页
-    private int middlePosition = 1;
     private CouponEditextInfoFragment couponEditextInfo;
 
 
@@ -128,7 +126,6 @@ public class AddCouponActivity extends MvpActivity<AddCouponActView, AddCouponAc
                     return;
                 }
                 if (nextStep.getText().toString().equals(ResourceUtils.getString(R.string.str_next_step))) {
-
                     couponEditextInfo.starAnimation(true);
                 } else if (nextStep.getText().toString().equals(ResourceUtils.getString(R.string.str_pre_step))) {
                     couponEditextInfo.starAnimation(false);

@@ -28,6 +28,10 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,6 +90,7 @@ public class CouponManagerFragment extends MvpFragment<CouponManagerActView, Cou
     protected void initView(View view) {
         super.initView(view);
         initRecycleView();
+        EventBus.getDefault().register(this);
     }
 
 
@@ -140,7 +145,7 @@ public class CouponManagerFragment extends MvpFragment<CouponManagerActView, Cou
                 if (mUserList != null && mUserList.size() > 0) {
                     getPresenter().getDataOnReFresh(mUserList.get(0).getCreatedAt(),
                             mUserList.get(0).getObjectId(),
-                            MServiceManager.getInstance().getCurrentLoginUserId(),currentType);
+                            MServiceManager.getInstance().getLocalThirdPartyId(),currentType);
                 }
             }
 
@@ -158,6 +163,13 @@ public class CouponManagerFragment extends MvpFragment<CouponManagerActView, Cou
         super.initData();
         getPresenter().getData(currentIndex, MServiceManager.getInstance().getLocalThirdPartyId(), false,currentType);
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCouponSubmit(Coupon coupon) {
+        layoutState.changeState(StateFrameLayout.SUCCESS);
+        recycleCommonAdapter.addData(coupon,0);
+    }
+
 
 
     @Override
@@ -238,6 +250,9 @@ public class CouponManagerFragment extends MvpFragment<CouponManagerActView, Cou
         refreshLayout.finishLoadMore(Constant.CLOSE_LOAD_TIME, true, true);
     }
 
-
-
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
 }

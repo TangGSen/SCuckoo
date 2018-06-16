@@ -59,6 +59,7 @@ public class CouponManagerActivity extends MvpActivity<EmptyMvpView, EmptyMvpPre
     public static void gotoThis(Context context) {
         Intent intent = new Intent(context, CouponManagerActivity.class);
         context.startActivity(intent);
+
     }
 
 

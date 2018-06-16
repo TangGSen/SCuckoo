@@ -19,6 +19,8 @@ import com.ourcompany.R;
 import com.ourcompany.activity.animation.Rotate3DAnimation;
 import com.ourcompany.activity.tab_mine.AddCouponActivity;
 import com.ourcompany.app.MApplication;
+import com.ourcompany.bean.bmob.Coupon;
+import com.ourcompany.manager.MServiceManager;
 import com.ourcompany.presenter.fragment.EditextCouponInfoFragPresenter;
 import com.ourcompany.utils.InputMethodUtils;
 import com.ourcompany.utils.ResourceUtils;
@@ -27,10 +29,15 @@ import com.ourcompany.view.fragment.EditextCouponInfoFragView;
 import com.ourcompany.widget.CouponConstraintLayoutView;
 import com.ourcompany.widget.calender.CalendarDialog;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.Unbinder;
+import cn.bmob.v3.datatype.BmobDate;
 import company.com.commons.framework.view.impl.MvpFragment;
 
 /**
@@ -75,6 +82,7 @@ public class CouponEditextInfoFragment extends MvpFragment<EditextCouponInfoFrag
     Unbinder unbinder1;
     private String startTime = ResourceUtils.getString(R.string.str_counpon_strat_time);
     private String endTime = ResourceUtils.getString(R.string.str_counpon_end_time);
+
     private AlertDialog calendarDialog;
     private int currentTimeType = -1;
     private int centerX;
@@ -103,6 +111,7 @@ public class CouponEditextInfoFragment extends MvpFragment<EditextCouponInfoFrag
     protected void initView(View view) {
         super.initView(view);
         initInputView();
+
     }
 
     @Override
@@ -335,6 +344,20 @@ public class CouponEditextInfoFragment extends MvpFragment<EditextCouponInfoFrag
         showTimeDialog();
     }
 
+    @Override
+    public void submitSuccess(Coupon coupon) {
+        EventBus.getDefault().post(coupon);
+        showToastMsg(ResourceUtils.getString(R.string.submit_success_v2));
+        ((AddCouponActivity) mActivity).submitEnd();
+        mActivity.finish();
+    }
+
+    @Override
+    public void submitError() {
+        showToastMsg(ResourceUtils.getString(R.string.submit_fail_v2));
+        ((AddCouponActivity) mActivity).submitEnd();
+    }
+
     private void showTimeDialog() {
         if (calendarDialog == null) {
             initCanlenderView();
@@ -366,7 +389,7 @@ public class CouponEditextInfoFragment extends MvpFragment<EditextCouponInfoFrag
         });
     }
 
-    //提交信息
+    //提交信息,需要检查信息的合法性
     public void submitInfo() {
 
 //        EditText tvCouponMoney;
@@ -381,6 +404,8 @@ public class CouponEditextInfoFragment extends MvpFragment<EditextCouponInfoFrag
 
         String couponMoney = tvCouponMoney.getText().toString();
         String name = tvName.getText().toString();
+        String limit = edLimit.getText().toString();
+
         boolean isFristError = false;
         boolean isSecondError = false;
         String fristErrorMsg = "";
@@ -398,7 +423,7 @@ public class CouponEditextInfoFragment extends MvpFragment<EditextCouponInfoFrag
             fristErrorMsg = ResourceUtils.getString(R.string.str_input_counpon_end_time);
         }
 
-        if (TextUtils.isEmpty(couponMoney)) {
+        if (TextUtils.isEmpty(couponMoney) || (!TextUtils.isEmpty(couponMoney) && Integer.parseInt(couponMoney) <= 0)) {
             isFristError = true;
             fristErrorMsg = ResourceUtils.getString(R.string.str_input_counpon_money);
         }
@@ -408,6 +433,10 @@ public class CouponEditextInfoFragment extends MvpFragment<EditextCouponInfoFrag
         }
 
         //反面
+        if (TextUtils.isEmpty(limit) || (!TextUtils.isEmpty(limit) && Integer.parseInt(limit) <= 0)) {
+            isSecondError = true;
+            secondErrorMsg = ResourceUtils.getString(R.string.str_input_counpon_limit);
+        }
         if (TextUtils.isEmpty(useWay)) {
             isSecondError = true;
             secondErrorMsg = ResourceUtils.getString(R.string.str_input_counpon_useway);
@@ -453,9 +482,27 @@ public class CouponEditextInfoFragment extends MvpFragment<EditextCouponInfoFrag
             }
 
         } else {
-            showToastMsg("可以提交了");
+            Coupon coupon = new Coupon();
+            coupon.setName(name);
+            coupon.setCouponMoney(Integer.parseInt(couponMoney));
+            coupon.setCount(Integer.parseInt(count));
+            coupon.setLimit(Integer.parseInt(limit));
+            coupon.setUserId(MServiceManager.getInstance().getLocalThirdPartyId());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            try {
+                coupon.setStartTime(new BmobDate(sdf.parse(startTime)));
+                coupon.setEndTime(new BmobDate(sdf.parse(endTime)));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            getPresenter().submitInfo(coupon);
         }
 
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

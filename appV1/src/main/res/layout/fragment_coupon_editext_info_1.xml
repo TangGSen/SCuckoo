@@ -187,6 +187,7 @@
         android:layout_marginLeft="@dimen/common_4dp"
         android:layout_marginRight="@dimen/common_8dp"
         android:background="@null"
+        android:inputType="number"
         android:gravity="left|center_vertical"
         android:hint="@string/str_input_counpon_count_hint"
         android:textColor="@color/whiles"

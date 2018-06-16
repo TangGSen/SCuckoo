@@ -79,7 +79,7 @@
         android:background="@drawable/bg_gradient_tab2"
         app:layout_constraintTop_toBottomOf="@+id/framelayout"
         android:enabled="true"
-        android:text="下一步"
+        android:text="@string/str_next_step"
         android:textColor="@color/whiles"
         android:textSize="14sp"/>
 

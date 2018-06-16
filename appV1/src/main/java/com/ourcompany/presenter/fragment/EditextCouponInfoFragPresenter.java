@@ -8,12 +8,15 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 
 import com.ourcompany.R;
+import com.ourcompany.bean.bmob.Coupon;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.view.fragment.EditextCouponInfoFragView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 import company.com.commons.framework.presenter.MvpBasePresenter;
 
 
@@ -103,5 +106,23 @@ public class EditextCouponInfoFragPresenter extends MvpBasePresenter<EditextCoup
         }
         Date d = new Date(time);
         return sdf.format(d);
+    }
+
+    //提交信息
+    public void submitInfo(final Coupon coupon) {
+       if(coupon ==null){
+           getView().submitError();
+           return;
+       }
+       coupon.save(new SaveListener<String>() {
+           @Override
+           public void done(String s, BmobException e) {
+               if(e ==null){
+                   getView().submitSuccess(coupon);
+               }else{
+                   getView().submitError();
+               }
+           }
+       });
     }
 }

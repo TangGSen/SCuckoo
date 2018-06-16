@@ -156,7 +156,9 @@
     <string name="str_love">喜欢</string>
     <string name="input_not_null">请输入内容</string>
     <string name="submit_success">发表成功</string>
+    <string name="submit_success_v2">保存成功</string>
     <string name="submit_fail">发表失败,请重试</string>
+    <string name="submit_fail_v2">保存失败,请重试</string>
     <string name="str_a_t">@</string>
     <string name="str_reflesh_error">刷新失败,请重试</string>
     <string name="str_onload_error">加载更多失败</string>
@@ -207,8 +209,8 @@
     <string name="str_bindnew_step_1">更换当前手机号码\n然后使用新手机号码及当前密码登陆</string>
     <string name="str_bindnew_step_2">请接收新号码%s的验证码</string>
     <string name="str_input_new_phone">请输入新手机号码</string>
-    <string name="str_next_step">下一步</string>
-    <string name="str_pre_step">上一步</string>
+    <string name="str_next_step">背面</string>
+    <string name="str_pre_step">正面</string>
     <string name="str_input_current_phone">请输入当前手机号码</string>
     <string name="str_input_current_phone_error">输入当前与登陆账号不一致</string>
     <string name="str_input_new_phone_error">输入新号码与当前号码相同</string>
@@ -280,4 +282,5 @@
     <string name="str_counpon_strat_time">开始时间</string>
     <string name="str_counpon_end_time">结束时间</string>
     <string name="str_input_counpon_count_error">请输入发行量大于0</string>
+    <string name="str_input_counpon_limit">请输入限领数量</string>
 </resources>
