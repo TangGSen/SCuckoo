@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ourcompany.R;
@@ -73,6 +74,7 @@ public class CalendarAdapter extends BaseAdapter {
             holder.calendarTv = (TextView) convertView
                     .findViewById(R.id.item_tv);
             holder.lunarTv = (TextView) convertView.findViewById(R.id.lunar_tv);
+            holder.rootItemView =  convertView.findViewById(R.id.rootItemView);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -94,11 +96,19 @@ public class CalendarAdapter extends BaseAdapter {
             if (calendar.get(Calendar.YEAR) == selectY
                     && calendar.get(Calendar.MONTH) == selectM
                     && calendar.get(Calendar.DAY_OF_MONTH) == selectD) {
-
-                convertView.setBackgroundResource(R.drawable.shape_canlender_rect_bule);
+                //已选中的
+                convertView.setBackgroundResource(R.drawable.shape_canlender_oval_bule);
                 holder.lunarTv.setTextColor(Color.WHITE);
                 holder.calendarTv.setTextColor(Color.WHITE);
-            } else {
+            } else if(calendar.get(Calendar.YEAR) < selectY
+                    || (calendar.get(Calendar.MONTH) < selectM && calendar.get(Calendar.YEAR)== selectY) ||
+                    (calendar.get(Calendar.DAY_OF_MONTH) < selectD && calendar.get(Calendar.MONTH) == selectM)){
+                //如果比当天小的话，那么久全部灰色，并且不能选择
+                convertView.setEnabled(false);
+                holder.lunarTv.setTextColor(ResourceUtils.getResColor(R.color.colorSecond));
+                holder.calendarTv.setTextColor(ResourceUtils.getResColor(R.color.colorSecond));
+
+            }else {
                 convertView.setBackgroundResource(R.drawable.selected_btn_rect_gray);
                 if (isShowLunar) {
                     //选择农历
@@ -138,7 +148,7 @@ public class CalendarAdapter extends BaseAdapter {
             }
 
         }
-//        holder.item_layout.setLayoutParams(new AbsListView.LayoutParams(38, 38));
+       // holder.rootItemView.setLayoutParams(new AbsListView.LayoutParams(38, 38));
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,5 +185,6 @@ public class CalendarAdapter extends BaseAdapter {
     private static class ViewHolder {
         TextView calendarTv;
         TextView lunarTv;
+        LinearLayout rootItemView;
     }
 }

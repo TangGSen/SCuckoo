@@ -60,8 +60,7 @@
             android:background="#ffffff"
             android:listSelector="@drawable/selected_btn_rect_gray"
             android:numColumns="4"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
+            android:padding="@dimen/common_16dp"
             android:scrollbarStyle="outsideOverlay"
             android:stretchMode="columnWidth"
             android:visibility="gone" />
