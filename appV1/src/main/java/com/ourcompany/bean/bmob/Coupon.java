@@ -38,7 +38,7 @@ public class Coupon extends BmobObject {
                     builder.append(startTimeStr.substring(0,startTimeStr.length()-3));
                 }
 
-                builder.append("至");
+                builder.append(" 至 ");
             }
             if(endTime!=null){
                 String endTimeStr = endTime.getDate();

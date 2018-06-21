@@ -87,7 +87,13 @@ public class AddCouponActivity extends MvpActivity<AddCouponActView, AddCouponAc
     @Override
     protected void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
-        initFragments();
+        getRootView().post(new Runnable() {
+            @Override
+            public void run() {
+                initFragments();
+            }
+        });
+
 
     }
 
@@ -148,7 +154,7 @@ public class AddCouponActivity extends MvpActivity<AddCouponActView, AddCouponAc
         }
 
     }
-
+    //提交失败或成功都调用
     public void submitEnd(){
         LoadingViewAOV.getInstance().close(AddCouponActivity.this, tvFinish);
     }

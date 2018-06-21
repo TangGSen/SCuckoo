@@ -283,4 +283,6 @@
     <string name="str_counpon_end_time">结束时间</string>
     <string name="str_input_counpon_count_error">请输入发行量大于0</string>
     <string name="str_input_counpon_limit">请输入限领数量</string>
+    <string name="str_click_see">点击查看</string>
+    <string name="str_click_edite">点击编辑</string>
 </resources>

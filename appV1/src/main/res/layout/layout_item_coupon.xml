@@ -80,7 +80,7 @@
 
         android:paddingBottom="@dimen/common_16dp"
         android:paddingTop="@dimen/common_16dp"
-        android:text="点击领取"
+
         android:textColor="@color/whiles"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"

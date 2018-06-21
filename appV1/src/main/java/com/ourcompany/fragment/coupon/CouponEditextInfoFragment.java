@@ -122,6 +122,7 @@ public class CouponEditextInfoFragment extends MvpFragment<EditextCouponInfoFrag
     }
 
     private void initInputView() {
+        tvStates.setVisibility(View.INVISIBLE);
         tvCouponMoney.setFocusable(false);
         tvCouponMoney.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MONEY_INPUT_SIZE)});
         View.OnTouchListener onTouchListener = new View.OnTouchListener() {
@@ -256,7 +257,7 @@ public class CouponEditextInfoFragment extends MvpFragment<EditextCouponInfoFrag
                 groupBaseInfo.setVisibility(View.GONE);
                 otherBaseInfo.setVisibility(View.VISIBLE);
 
-                tvStates.setText(ResourceUtils.getString(R.string.str_coupon_other_info));
+              //  tvStates.setText(ResourceUtils.getString(R.string.str_coupon_other_info));
                 ((AddCouponActivity) mActivity).changeAnimationState(ResourceUtils.getString(R.string.str_pre_step));
                 //从270到360度，顺时针旋转视图，此时reverse参数为false，达到360度动画结束时视图变得可见
                 if (onOpenAnimationEnd == null) {
@@ -305,7 +306,7 @@ public class CouponEditextInfoFragment extends MvpFragment<EditextCouponInfoFrag
                 groupBaseInfo.setVisibility(View.VISIBLE);
                 otherBaseInfo.setVisibility(View.GONE);
 
-                tvStates.setText(ResourceUtils.getString(R.string.str_coupon_base_info));
+              //  tvStates.setText(ResourceUtils.getString(R.string.str_coupon_base_info));
                 ((AddCouponActivity) mActivity).changeAnimationState(ResourceUtils.getString(R.string.str_next_step));
                 if (onCloseAnimationEnd == null) {
                     initCloseAnimationEnd();
@@ -333,13 +334,14 @@ public class CouponEditextInfoFragment extends MvpFragment<EditextCouponInfoFrag
 
     @Override
     public void showEndTimeDialog() {
-        InputMethodUtils.toggleSoftInput(mRootView);
+        InputMethodUtils.hideKeyboard(mRootView);
         currentTimeType = EditextCouponInfoFragPresenter.END_TIME_TAG;
         showTimeDialog();
     }
 
     @Override
     public void showStartTimeDialog() {
+        InputMethodUtils.hideKeyboard(mRootView);
         currentTimeType = EditextCouponInfoFragPresenter.START_TIME_TAG;
         showTimeDialog();
     }
@@ -482,6 +484,8 @@ public class CouponEditextInfoFragment extends MvpFragment<EditextCouponInfoFrag
             }
 
         } else {
+            //关闭输入法
+            InputMethodUtils.hideKeyboard(mRootView);
             Coupon coupon = new Coupon();
             coupon.setName(name);
             coupon.setCouponMoney(Integer.parseInt(couponMoney));

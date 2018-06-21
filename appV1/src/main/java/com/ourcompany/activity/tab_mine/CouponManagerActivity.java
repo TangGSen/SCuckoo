@@ -2,6 +2,7 @@ package com.ourcompany.activity.tab_mine;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -15,13 +16,19 @@ import com.ourcompany.EmptyMvpView;
 import com.ourcompany.R;
 import com.ourcompany.adapter.TabLayoutViewPagerAdapter;
 import com.ourcompany.app.MApplication;
+import com.ourcompany.bean.TypeSelect;
 import com.ourcompany.fragment.tab_mine.CouponManagerFragment;
 import com.ourcompany.interfaces.MOnTabSelectedListener;
+import com.ourcompany.utils.DisplayUtils;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.TabLayoutIndicatorWith;
 import com.ourcompany.utils.ToastUtils;
+import com.ourcompany.widget.popwindowns.CustomOperationPopWindow;
+import com.ourcompany.widget.recycleview.commadapter.RecycleCommonAdapter;
+import com.ourcompany.widget.recycleview.commadapter.SViewHolder;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -48,6 +55,7 @@ public class CouponManagerActivity extends MvpActivity<EmptyMvpView, EmptyMvpPre
     ViewPager mViewPager;
     private ArrayList<Fragment> fragments;
     private String[] mTiltes;
+    private String[] tabTiles;
     //所属的公司的，或者是个人的优惠券，如果为空那么直接就为加载失败或者为空
 
 
@@ -90,13 +98,13 @@ public class CouponManagerActivity extends MvpActivity<EmptyMvpView, EmptyMvpPre
         //需要加个标识是未过期，已过期的类型标识,0 代表未过期，1代表已过期
         CouponManagerFragment notOverdueFrag = new CouponManagerFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(CouponManagerFragment.KEY_TYPE,CouponManagerFragment.TYPE_NOT_OVERDUE);
+        bundle.putInt(CouponManagerFragment.KEY_TYPE, CouponManagerFragment.TYPE_NOT_OVERDUE);
         notOverdueFrag.setArguments(bundle);
         fragments.add(notOverdueFrag);
 
         CouponManagerFragment overdueFrag = new CouponManagerFragment();
         Bundle bundle2 = new Bundle();
-        bundle2.putInt(CouponManagerFragment.KEY_TYPE,CouponManagerFragment.TYPE_OVERDUE);
+        bundle2.putInt(CouponManagerFragment.KEY_TYPE, CouponManagerFragment.TYPE_OVERDUE);
         overdueFrag.setArguments(bundle2);
         fragments.add(overdueFrag);
 
@@ -149,9 +157,53 @@ public class CouponManagerActivity extends MvpActivity<EmptyMvpView, EmptyMvpPre
 
     @OnClick(R.id.addCoupon)
     public void onViewClicked(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.addCoupon:
-                AddCouponActivity.gotoThis(CouponManagerActivity.this);
+
+                tabTiles = ResourceUtils.getStringArray(R.array.tabAddCouponType);
+                int resid[] = new int[]{R.drawable.ic_new_coupon, R.drawable.ic_history, R.drawable.ic_template};
+                int size = tabTiles.length;
+                List<TypeSelect> typeSelects = new ArrayList<>();
+                for (int i = 0; i < size; i++) {
+                    TypeSelect select = new TypeSelect();
+                    select.setName(tabTiles[i]);
+                    select.setResDrawable(resid[i]);
+                    typeSelects.add(select);
+                }
+                CustomOperationPopWindow customOperationPopWindow = new CustomOperationPopWindow(this,typeSelects);
+
+                RecycleCommonAdapter<TypeSelect> recycleCommonAdapter = new RecycleCommonAdapter<TypeSelect>(MApplication.mContext, typeSelects, R.layout.layout_item_popup_for_coupon) {
+                    @Override
+                    public void bindItemData(SViewHolder holder, TypeSelect itemData, int position) {
+
+                        holder.setText(R.id.titles, itemData.getName());
+                        if (itemData.getResDrawable() > 0) {
+                            Drawable dra = getResources().getDrawable(itemData.getResDrawable());
+                            dra.setBounds(0, 0, dra.getMinimumWidth(), dra.getMinimumHeight());
+                            ((TextView) holder.getView(R.id.titles)).setCompoundDrawables(dra, null, null, null);
+                            ((TextView) holder.getView(R.id.titles)).setCompoundDrawablePadding(DisplayUtils.dip2px(4));
+                        }
+
+                    }
+
+                };
+
+                customOperationPopWindow.setOnItemListener(new CustomOperationPopWindow.OnItemListener() {
+                    @Override
+                    public void OnItemListener(int position, TypeSelect typeSelect) {
+                        //此处实现列表点击所要进行的操作
+                        switch (position) {
+                            case 0:
+                                AddCouponActivity.gotoThis(CouponManagerActivity.this);
+                                break;
+
+                        }
+                    }
+                });
+                customOperationPopWindow.setRecycleAdapter(recycleCommonAdapter);
+                customOperationPopWindow.showPopupWindow(addCoupon);//可以传个半透明view v_background过去根据业务需要显示隐藏
+
+
                 break;
         }
     }

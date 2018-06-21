@@ -114,12 +114,15 @@ public class CouponManagerFragment extends MvpFragment<CouponManagerActView, Cou
                 holder.setText(R.id.tvCouponMoney, "￥" + itemData.getCouponMoney());
 
                 holder.setText(R.id.tvTime, itemData.getTimeInfo());
+                holder.getView(R.id.groupState).setVisibility(View.VISIBLE);
                 if(currentType==TYPE_OVERDUE){
                     //不要设置为Gone, 因为有点击领取这个字，作为高度一致
                     //加载过期的
                     holder.getView(R.id.rootView).setBackgroundResource(R.drawable.bg_gradient_tab4);
-                    holder.getView(R.id.groupState).setVisibility(View.INVISIBLE);
+                    holder.setText(R.id.tvStates, ResourceUtils.getString(R.string.str_click_see));
                     ((ImageView)holder.getView(R.id.imageOverdue)).setImageDrawable(ResourceUtils.getDrawable(R.drawable.ic_overdue));
+                }else{
+                    holder.setText(R.id.tvStates, ResourceUtils.getString(R.string.str_click_edite));
                 }
             }
         };

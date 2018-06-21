@@ -45,6 +45,8 @@ public class CouponConstraintLayoutView  extends ConstraintLayout {
         mPaint.setDither(true);
         mPaint.setColor(Color.WHITE);
         mPaint.setStyle(Paint.Style.FILL);
+
+       // mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.XOR));
     }
 
 
@@ -62,15 +64,19 @@ public class CouponConstraintLayoutView  extends ConstraintLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
         for (int i=0;i<circleNum;i++){
             float x = gap+radius+remain/2+((gap+radius*2)*i);
             //画横向的凹凸
 //            canvas.drawCircle(x,0,radius,mPaint);
 //            canvas.drawCircle(x,getHeight(),radius,mPaint);
             //画纵向的凹凸
+
             canvas.drawCircle(0,x,radius,mPaint);
             canvas.drawCircle(getWidth(),x,radius,mPaint);
+
         }
+
     }
 
 }

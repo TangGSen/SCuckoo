@@ -70,6 +70,12 @@
         <item>我的优惠券</item>
     </string-array>
 
+    <string-array name="tabAddCouponType">
+        <item>新建</item>
+        <item>历史导入</item>
+        <item>查看模板</item>
+    </string-array>
+
     <string-array name="tabSortItems">
         <item>综合排序</item>
         <item>评论从高到低</item>

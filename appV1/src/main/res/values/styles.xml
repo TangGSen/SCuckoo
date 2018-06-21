@@ -112,4 +112,16 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="operation_popwindow_anim_style_up">
+        <item name="android:windowEnterAnimation">@anim/popshow_operation_anim_down</item>
+       <!-- <item name="android:windowExitAnimation">@anim/popshow_operation_anim_down</item>-->
+    </style>
+
+
+
+    <style name="operation_popwindow_anim_style_down">
+        <item name="android:windowEnterAnimation">@anim/popshow_operation_anim_down</item>
+       <!-- <item name="android:windowExitAnimation">@anim/popshow_operation_anim_down</item>-->
+    </style>
+
 </resources>
