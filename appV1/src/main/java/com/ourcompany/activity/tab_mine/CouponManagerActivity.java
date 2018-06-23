@@ -17,6 +17,7 @@ import com.ourcompany.R;
 import com.ourcompany.adapter.TabLayoutViewPagerAdapter;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.bean.TypeSelect;
+import com.ourcompany.fragment.HistoryCouponListDialog;
 import com.ourcompany.fragment.tab_mine.CouponManagerFragment;
 import com.ourcompany.interfaces.MOnTabSelectedListener;
 import com.ourcompany.utils.DisplayUtils;
@@ -195,6 +196,12 @@ public class CouponManagerActivity extends MvpActivity<EmptyMvpView, EmptyMvpPre
                         switch (position) {
                             case 0:
                                 AddCouponActivity.gotoThis(CouponManagerActivity.this);
+                                break;
+                            case 1:
+                                HistoryCouponListDialog dialog = HistoryCouponListDialog.newInstance();
+                                dialog.show(getSupportFragmentManager(), "dialog");
+
+
                                 break;
 
                         }

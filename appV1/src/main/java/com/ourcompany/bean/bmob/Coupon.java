@@ -12,6 +12,7 @@ import cn.bmob.v3.datatype.BmobDate;
  * Des    : 优惠券
  */
 public class Coupon extends BmobObject {
+
     private String name;
 
     private BmobDate startTime;
@@ -27,6 +28,25 @@ public class Coupon extends BmobObject {
     private String userId;
     //本地使用，将开始时间和结束时间拼接
     private String timeInfo;
+    //本地使用，如果是选择模式的话，那么就
+    private boolean isChooseType =true;
+    private boolean isChoose =false;
+
+    public boolean isChoose() {
+        return isChoose;
+    }
+
+    public void setChoose(boolean choose) {
+        isChoose = choose;
+    }
+
+    public boolean isChooseType() {
+        return isChooseType;
+    }
+
+    public void setChooseType(boolean chooseType) {
+        isChooseType = chooseType;
+    }
 
     public String getTimeInfo() {
         if (TextUtils.isEmpty(timeInfo)) {

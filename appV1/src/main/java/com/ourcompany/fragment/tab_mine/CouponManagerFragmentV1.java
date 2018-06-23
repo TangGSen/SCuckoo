@@ -45,7 +45,7 @@ import company.com.commons.framework.view.impl.MvpFragment;
  * On     :2018/6/1 下午2:08
  * Des    :CouponManagerFragment 包含了已过期的和未过期的，
  */
-public class CouponManagerFragment extends MvpFragment<CouponManagerActView, CouponManagerActPresenter> implements CouponManagerActView {
+public class CouponManagerFragmentV1 extends MvpFragment<CouponManagerActView, CouponManagerActPresenter> implements CouponManagerActView {
 
 
     @BindView(R.id.recycleview)
@@ -57,10 +57,10 @@ public class CouponManagerFragment extends MvpFragment<CouponManagerActView, Cou
 
     Unbinder unbinder;
     private RecycleCommonAdapter<Coupon> recycleCommonAdapter;
-    private List<Coupon> mCouponList = new ArrayList<>();
+    private List<Coupon> mUserList = new ArrayList<>();
     private int currentIndex;
-    public static final int TYPE_NOT_OVERDUE = 0;
-    public static final int TYPE_OVERDUE = 1;
+    public static final int TYPE_NOT_OVERDUE=0;
+    public static final int TYPE_OVERDUE=1;
     public static final String KEY_TYPE = "type";
     public int currentType = -1;
     //所属的公司的，或者是个人的优惠券，如果为空那么直接就为加载失败或者为空
@@ -74,7 +74,7 @@ public class CouponManagerFragment extends MvpFragment<CouponManagerActView, Cou
     @Override
     protected void initArgs(Bundle bundle) {
         super.initArgs(bundle);
-        currentType = bundle.getInt(KEY_TYPE, currentType);
+        currentType = bundle.getInt(KEY_TYPE,currentType);
     }
 
     @Override
@@ -103,30 +103,27 @@ public class CouponManagerFragment extends MvpFragment<CouponManagerActView, Cou
         //解决嵌套在NestedScrollView 的滑动不顺的问题2
         recycleview.setNestedScrollingEnabled(true);
 
-        refreshLayout.setEnableRefresh(false);
+        refreshLayout.setEnableRefresh(true);
         recycleview.addItemDecoration(new SimpleDecoration(MApplication.mContext, R.drawable.recycle_line_divider_padding, 1));
 
         recycleCommonAdapter = new RecycleCommonAdapter<Coupon>(
-                MApplication.mContext, mCouponList, R.layout.layout_item_coupon) {
+                MApplication.mContext, mUserList, R.layout.layout_item_coupon) {
             @Override
             public void bindItemData(SViewHolder holder, final Coupon itemData, int position) {
                 holder.setText(R.id.tvName, itemData.getName());
                 holder.setText(R.id.tvCouponMoney, "￥" + itemData.getCouponMoney());
 
                 holder.setText(R.id.tvTime, itemData.getTimeInfo());
-                if (currentType == TYPE_OVERDUE) {
+              //  holder.getView(R.id.groupState).setVisibility(View.VISIBLE);
+                if(currentType==TYPE_OVERDUE){
                     //不要设置为Gone, 因为有点击领取这个字，作为高度一致
                     //加载过期的
                     holder.getView(R.id.rootView).setBackgroundResource(R.drawable.bg_gradient_tab4);
                     holder.setText(R.id.tvStates, ResourceUtils.getString(R.string.str_click_see));
-                    ((ImageView) holder.getView(R.id.imageOverdue)).setImageDrawable(ResourceUtils.getDrawable(R.drawable.ic_overdue));
-                } else {
+                    ((ImageView)holder.getView(R.id.imageOverdue)).setImageDrawable(ResourceUtils.getDrawable(R.drawable.ic_overdue));
+                }else{
                     holder.setText(R.id.tvStates, ResourceUtils.getString(R.string.str_click_edite));
                 }
-
-//
-
-
             }
         };
         recycleview.setItemAnimator(null);
@@ -135,7 +132,6 @@ public class CouponManagerFragment extends MvpFragment<CouponManagerActView, Cou
             @Override
             public void itemOnclickLinstener(int position) {
                 //  UserClassifyDetailActivity.gotoThis(CouponManagerActivity.this,mUserList.get(position));
-//
             }
         });
 
@@ -149,17 +145,17 @@ public class CouponManagerFragment extends MvpFragment<CouponManagerActView, Cou
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 //按照时间来加载，刷新是加载比第一个更晚的时间，
-                if (mCouponList != null && mCouponList.size() > 0) {
-                    getPresenter().getDataOnReFresh(mCouponList.get(0).getCreatedAt(),
-                            mCouponList.get(0).getObjectId(),
-                            MServiceManager.getInstance().getLocalThirdPartyId(), currentType);
+                if (mUserList != null && mUserList.size() > 0) {
+                    getPresenter().getDataOnReFresh(mUserList.get(0).getCreatedAt(),
+                            mUserList.get(0).getObjectId(),
+                            MServiceManager.getInstance().getLocalThirdPartyId(),currentType);
                 }
             }
 
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
                 ++currentIndex;
-                getPresenter().getDataOnLoadMore(currentIndex, MServiceManager.getInstance().getLocalThirdPartyId(), currentType);
+                getPresenter().getDataOnLoadMore(currentIndex, MServiceManager.getInstance().getLocalThirdPartyId(),currentType);
             }
         });
 
@@ -168,14 +164,15 @@ public class CouponManagerFragment extends MvpFragment<CouponManagerActView, Cou
     @Override
     protected void initData() {
         super.initData();
-        getPresenter().getData(currentIndex, MServiceManager.getInstance().getLocalThirdPartyId(), false, currentType);
+        getPresenter().getData(currentIndex, MServiceManager.getInstance().getLocalThirdPartyId(), false,currentType);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCouponSubmit(Coupon coupon) {
         layoutState.changeState(StateFrameLayout.SUCCESS);
-        recycleCommonAdapter.addData(coupon, 0);
+        recycleCommonAdapter.addData(coupon,0);
     }
+
 
 
     @Override

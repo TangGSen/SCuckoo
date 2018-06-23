@@ -48,7 +48,7 @@ public class LoginActivity extends MvpActivity<LoginActvityView, LoginActPresent
     protected void initView() {
         super.initView();
         etUserName.setText("15915311453");
-        etPassword.setText("12345678sen");
+        etPassword.setText("12345678");
         btLogin.setEnabled(true);
         setSupportActionBar(commonToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
