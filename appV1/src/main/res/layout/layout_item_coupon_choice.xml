@@ -28,7 +28,6 @@
         android:id="@+id/tvName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/common_16dp"
         android:layout_marginRight="@dimen/common_8dp"
         android:gravity="left"
         android:text="开业十周年庆优惠1000元"
