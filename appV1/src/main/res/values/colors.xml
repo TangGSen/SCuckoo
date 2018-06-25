@@ -17,7 +17,8 @@
 
     <color name="half_transparent">#00FFFFFF</color>
     <color name="colorWhite">#FFFFFF</color>
-    <color name="colorBg">#F3F6F8</color>
+    <!--<color name="colorBg">#F3F6F8</color>-->
+    <color name="colorBg">#F2F8FE</color>
     <color name="colorBlack33">#333333</color>
 
     <color name="colorFrist">#333333</color>

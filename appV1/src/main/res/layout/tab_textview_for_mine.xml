@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:drawablePadding="@dimen/common_4dp"
     android:gravity="center"
-    android:paddingLeft="@dimen/common_16dp"
-    android:paddingRight="@dimen/common_16dp"
+    android:paddingLeft="@dimen/common_8dp"
+    android:paddingRight="@dimen/common_8dp"
     android:text="@string/str_class_personal"
     android:textSize="12sp" />

@@ -67,7 +67,7 @@
     <string-array name="tabMineManager">
         <item>我的团队</item>
         <item>我的作品</item>
-        <item>我的优惠券</item>
+        <item>我的卡券</item>
     </string-array>
 
     <string-array name="tabAddCouponType">

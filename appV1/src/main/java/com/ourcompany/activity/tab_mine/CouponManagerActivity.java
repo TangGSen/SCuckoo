@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -14,15 +13,13 @@ import android.widget.TextView;
 import com.ourcompany.EmptyMvpPresenter;
 import com.ourcompany.EmptyMvpView;
 import com.ourcompany.R;
-import com.ourcompany.adapter.TabLayoutViewPagerAdapter;
+import com.ourcompany.adapter.ViewPagerAdapter;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.bean.TypeSelect;
 import com.ourcompany.fragment.HistoryCouponListDialog;
 import com.ourcompany.fragment.tab_mine.CouponManagerFragment;
-import com.ourcompany.interfaces.MOnTabSelectedListener;
 import com.ourcompany.utils.DisplayUtils;
 import com.ourcompany.utils.ResourceUtils;
-import com.ourcompany.utils.TabLayoutIndicatorWith;
 import com.ourcompany.utils.ToastUtils;
 import com.ourcompany.widget.popwindowns.CustomOperationPopWindow;
 import com.ourcompany.widget.recycleview.commadapter.RecycleCommonAdapter;
@@ -32,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import company.com.commons.framework.view.impl.MvpActivity;
 
@@ -44,8 +42,6 @@ import company.com.commons.framework.view.impl.MvpActivity;
 public class CouponManagerActivity extends MvpActivity<EmptyMvpView, EmptyMvpPresenter> implements EmptyMvpView {
 
 
-    @BindView(R.id.tabLayout)
-    TabLayout mTablayout;
     @BindView(R.id.addCoupon)
     TextView addCoupon;
     @BindView(R.id.common_toolbar)
@@ -54,8 +50,11 @@ public class CouponManagerActivity extends MvpActivity<EmptyMvpView, EmptyMvpPre
     View line;
     @BindView(R.id.mViewPager)
     ViewPager mViewPager;
+    @BindView(R.id.titleName)
+    TextView titleName;
+    @BindView(R.id.checkOverdueCoupon)
+    TextView checkOverdueCoupon;
     private ArrayList<Fragment> fragments;
-    private String[] mTiltes;
     private String[] tabTiles;
     //所属的公司的，或者是个人的优惠券，如果为空那么直接就为加载失败或者为空
 
@@ -88,14 +87,7 @@ public class CouponManagerActivity extends MvpActivity<EmptyMvpView, EmptyMvpPre
     }
 
     private void initTabView() {
-        TabLayoutIndicatorWith.resetWith(mTablayout);
         fragments = new ArrayList<>();
-
-        mTiltes = ResourceUtils.getStringArray(R.array.tabCouponItems);
-        for (int i = 0; i < mTiltes.length; i++) {
-            mTablayout.addTab(mTablayout.newTab().setText(mTiltes[i]));
-
-        }
         //需要加个标识是未过期，已过期的类型标识,0 代表未过期，1代表已过期
         CouponManagerFragment notOverdueFrag = new CouponManagerFragment();
         Bundle bundle = new Bundle();
@@ -109,12 +101,30 @@ public class CouponManagerActivity extends MvpActivity<EmptyMvpView, EmptyMvpPre
         overdueFrag.setArguments(bundle2);
         fragments.add(overdueFrag);
 
-
-        TabLayoutViewPagerAdapter viewPagerAdapter = new TabLayoutViewPagerAdapter(getSupportFragmentManager(), mTiltes, fragments);
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragments);
         //tablayout 和viewpager 联动
         mViewPager.setAdapter(viewPagerAdapter);
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTablayout));
-        mTablayout.addOnTabSelectedListener(new MOnTabSelectedListener(mViewPager));
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    checkOverdueCoupon.setText(ResourceUtils.getString(R.string.str_check_overdue_coupon));
+                }else{
+                    checkOverdueCoupon.setText(ResourceUtils.getString(R.string.str_check_effective_coupon));
+                }
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         mViewPager.setCurrentItem(0);
     }
 
@@ -156,7 +166,7 @@ public class CouponManagerActivity extends MvpActivity<EmptyMvpView, EmptyMvpPre
     }
 
 
-    @OnClick(R.id.addCoupon)
+    @OnClick({R.id.addCoupon,R.id.checkOverdueCoupon})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.addCoupon:
@@ -171,7 +181,7 @@ public class CouponManagerActivity extends MvpActivity<EmptyMvpView, EmptyMvpPre
                     select.setResDrawable(resid[i]);
                     typeSelects.add(select);
                 }
-                CustomOperationPopWindow customOperationPopWindow = new CustomOperationPopWindow(this,typeSelects);
+                CustomOperationPopWindow customOperationPopWindow = new CustomOperationPopWindow(this, typeSelects);
 
                 RecycleCommonAdapter<TypeSelect> recycleCommonAdapter = new RecycleCommonAdapter<TypeSelect>(MApplication.mContext, typeSelects, R.layout.layout_item_popup_for_coupon) {
                     @Override
@@ -208,10 +218,23 @@ public class CouponManagerActivity extends MvpActivity<EmptyMvpView, EmptyMvpPre
                     }
                 });
                 customOperationPopWindow.setRecycleAdapter(recycleCommonAdapter);
-                customOperationPopWindow.showPopupWindow(addCoupon);//可以传个半透明view v_background过去根据业务需要显示隐藏
-
+                customOperationPopWindow.showPopupWindows(commonToolbar, addCoupon);//可以传个半透明view v_background过去根据业务需要显示隐藏
 
                 break;
+            case R.id.checkOverdueCoupon:
+                if(mViewPager.getCurrentItem()==0){
+                    mViewPager.setCurrentItem(1);
+                }else if(mViewPager.getCurrentItem()==1){
+                    mViewPager.setCurrentItem(0);
+                }
+                break;
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

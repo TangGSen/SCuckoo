@@ -285,4 +285,8 @@
     <string name="str_input_counpon_limit">请输入限领数量</string>
     <string name="str_click_see">点击查看</string>
     <string name="str_click_edite">点击编辑</string>
+    <string name="str_coupon_name">卡券</string>
+    <string name="str_check_overdue_coupon">查看过期卡券</string>
+    <string name="str_use_overdue_coupon">使用过期卡券</string>
+    <string name="str_check_effective_coupon">返回有效卡券</string>
 </resources>

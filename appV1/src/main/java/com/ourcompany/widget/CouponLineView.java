@@ -8,7 +8,9 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.ourcompany.R;
 import com.ourcompany.utils.DisplayUtils;
+import com.ourcompany.utils.ResourceUtils;
 
 /**
  * Author : 唐家森
@@ -39,7 +41,7 @@ public class CouponLineView extends View {
         mCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mCirclePaint.setDither(true);
         mCirclePaint.setStyle(Paint.Style.FILL);
-        mCirclePaint.setColor(Color.WHITE);
+        mCirclePaint.setColor(ResourceUtils.getResColor(R.color.colorBg));
 
     }
 

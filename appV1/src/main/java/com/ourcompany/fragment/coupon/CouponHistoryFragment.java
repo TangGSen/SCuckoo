@@ -16,11 +16,11 @@ import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.ToastUtils;
 import com.ourcompany.view.activity.CouponManagerActView;
+import com.ourcompany.widget.CouponConstraintLayoutViewV2;
 import com.ourcompany.widget.StateFrameLayout;
 import com.ourcompany.widget.recycleview.commadapter.OnItemOnclickLinstener;
 import com.ourcompany.widget.recycleview.commadapter.RecycleCommonAdapter;
 import com.ourcompany.widget.recycleview.commadapter.SViewHolder;
-import com.ourcompany.widget.recycleview.commadapter.SimpleDecoration;
 import com.ourcompany.widget.recycleview.headfooter.MFooter;
 import com.ourcompany.widget.recycleview.headfooter.MHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -105,7 +105,6 @@ public class CouponHistoryFragment extends MvpFragment<CouponManagerActView, Cou
         recycleview.setNestedScrollingEnabled(true);
 
         refreshLayout.setEnableRefresh(false);
-        recycleview.addItemDecoration(new SimpleDecoration(MApplication.mContext, R.drawable.recycle_line_divider_padding, 1));
 
         recycleCommonAdapter = new RecycleCommonAdapter<Coupon>(
                 MApplication.mContext, mCouponList, R.layout.layout_item_coupon_choice) {
@@ -121,9 +120,13 @@ public class CouponHistoryFragment extends MvpFragment<CouponManagerActView, Cou
                     //加载过期的
                     holder.getView(R.id.rootView).setBackgroundResource(R.drawable.bg_gradient_tab4);
                     //holder.setText(R.id.tvStates, ResourceUtils.getString(R.string.str_click_see));
+                    ((CouponConstraintLayoutViewV2)holder.getView(R.id.rootView)).setTypeClassColor(ResourceUtils.getResColor(R.color.colorSecond));
+                    holder.getView(R.id.tvCouponMoney).setBackgroundColor(ResourceUtils.getResColor(R.color.colorSecond));
                 } else {
                     //  holder.setText(R.id.tvStates, ResourceUtils.getString(R.string.str_click_edite));
                 }
+
+
 
                 if (itemData.isChooseType()) {
 //                    //在选择模式
@@ -216,6 +219,7 @@ public class CouponHistoryFragment extends MvpFragment<CouponManagerActView, Cou
     @Override
     public void showEmptyView() {
         layoutState.changeState(StateFrameLayout.EMPTY);
+        ((ImageView)layoutState.findViewById(R.id.image_id_empty_retry)).setImageDrawable(ResourceUtils.getDrawable(R.drawable.ic_null_coupon));
     }
 
     @Override

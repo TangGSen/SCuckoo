@@ -115,15 +115,13 @@
                     android:textColor="@color/colorFrist"
                     android:textSize="@dimen/fragment_font_16sp" />
 
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/tabLayout"
+                <LinearLayout
+                    android:id="@+id/managerLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
-                    app:tabIndicatorHeight="0dp"
-                    app:tabMode="scrollable"
-                    app:tabBackground="@color/whiles"
-                    app:tabGravity="fill"
+                    android:background="@color/whiles"
+                    android:orientation="horizontal"
                     />
                 <View
                     android:layout_width="match_parent"

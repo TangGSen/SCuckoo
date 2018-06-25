@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.TabLayout;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -76,8 +74,8 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
     Unbinder unbinder1;
     @BindView(R.id.btManager)
     TextView btManager;
-    @BindView(R.id.tabLayout)
-    TabLayout tabLayout;
+    @BindView(R.id.managerLayout)
+    LinearLayout managerLayout;
     Unbinder unbinder2;
     private String[] tabTiles;
     private final static int TAB_INDEX_TEAM = 0;
@@ -95,13 +93,11 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
     /**
      * tab 点击触摸事件
      */
-
-
-    private View.OnTouchListener onTabTouchListener = new View.OnTouchListener() {
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
+        public void onClick(View view) {
             Integer index = (Integer) view.getTag(R.id.nine_layout_of_index);
-            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+
                 if (index != null) {
                     switch (index) {
                         case TAB_INDEX_TEAM:
@@ -115,12 +111,12 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
                             checkAndGotoCoupon();
                             break;
                     }
-                }
 
             }
-            return true;
         }
     };
+
+
 
     @CheckIsLogin
     private void checkAndGotoCoupon() {
@@ -157,21 +153,21 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
         int[] bgRes = new int[]{R.drawable.bg_gradient_tab3, R.drawable.bg_gradient_tab3, R.drawable.bg_gradient_tab3};
         int tabCount = tabTiles.length;
         int height = DisplayUtils.dip2px(60);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, height);
-        if (tabLayout.getLayoutParams() == null) {
-            tabLayout.getLayoutParams().height = height;
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
+        if (managerLayout.getLayoutParams() == null) {
+            managerLayout.getLayoutParams().height = height;
         } else {
-            tabLayout.setLayoutParams(params);
+            managerLayout.setLayoutParams(params);
         }
-
+        params.leftMargin = DisplayUtils.dip2px(8);
+        params.rightMargin = DisplayUtils.dip2px(8);
+        params.weight =1;
         for (int i = 0; i < tabCount; i++) {
-            TabLayout.Tab tab = tabLayout.newTab();
             View view = getTabView(tabItemDrawableNormal[i], tabTiles[i], i);
             view.setBackgroundResource(bgRes[i]);
             view.setLayoutParams(params);
-            tab.setCustomView(view);
-            tabLayout.addTab(tab, i);
-            tab.getCustomView().setOnTouchListener(onTabTouchListener);
+            managerLayout.addView(view, i);
+            view.setOnClickListener(onClickListener);
         }
 
 

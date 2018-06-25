@@ -16,11 +16,11 @@ import com.ourcompany.utils.Constant;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.ToastUtils;
 import com.ourcompany.view.activity.CouponManagerActView;
+import com.ourcompany.widget.CouponConstraintLayoutViewV2;
 import com.ourcompany.widget.StateFrameLayout;
 import com.ourcompany.widget.recycleview.commadapter.OnItemOnclickLinstener;
 import com.ourcompany.widget.recycleview.commadapter.RecycleCommonAdapter;
 import com.ourcompany.widget.recycleview.commadapter.SViewHolder;
-import com.ourcompany.widget.recycleview.commadapter.SimpleDecoration;
 import com.ourcompany.widget.recycleview.headfooter.MFooter;
 import com.ourcompany.widget.recycleview.headfooter.MHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -83,6 +83,7 @@ public class CouponManagerFragment extends MvpFragment<CouponManagerActView, Cou
         //初始化状态的布局
         layoutState.setLoadingViewLayoutId(R.layout.layout_loading_cencter);
         layoutState.setEmptyViewLayoutId(R.layout.layout_state_empty_with_retry);
+
         layoutState.changeState(StateFrameLayout.LOADING);
     }
 
@@ -103,8 +104,8 @@ public class CouponManagerFragment extends MvpFragment<CouponManagerActView, Cou
         //解决嵌套在NestedScrollView 的滑动不顺的问题2
         recycleview.setNestedScrollingEnabled(true);
 
-        refreshLayout.setEnableRefresh(false);
-        recycleview.addItemDecoration(new SimpleDecoration(MApplication.mContext, R.drawable.recycle_line_divider_padding, 1));
+        refreshLayout.setEnableRefresh(true);
+      //  recycleview.addItemDecoration(new SimpleDecoration(MApplication.mContext, R.drawable.recycle_line_divider_padding, 1));
 
         recycleCommonAdapter = new RecycleCommonAdapter<Coupon>(
                 MApplication.mContext, mCouponList, R.layout.layout_item_coupon) {
@@ -113,6 +114,7 @@ public class CouponManagerFragment extends MvpFragment<CouponManagerActView, Cou
                 holder.setText(R.id.tvName, itemData.getName());
                 holder.setText(R.id.tvCouponMoney, "￥" + itemData.getCouponMoney());
 
+
                 holder.setText(R.id.tvTime, itemData.getTimeInfo());
                 if (currentType == TYPE_OVERDUE) {
                     //不要设置为Gone, 因为有点击领取这个字，作为高度一致
@@ -120,11 +122,11 @@ public class CouponManagerFragment extends MvpFragment<CouponManagerActView, Cou
                     holder.getView(R.id.rootView).setBackgroundResource(R.drawable.bg_gradient_tab4);
                     holder.setText(R.id.tvStates, ResourceUtils.getString(R.string.str_click_see));
                     ((ImageView) holder.getView(R.id.imageOverdue)).setImageDrawable(ResourceUtils.getDrawable(R.drawable.ic_overdue));
+                    ((CouponConstraintLayoutViewV2)holder.getView(R.id.rootView)).setTypeClassColor(ResourceUtils.getResColor(R.color.colorSecond));
+                    holder.getView(R.id.tvCouponMoney).setBackgroundColor(ResourceUtils.getResColor(R.color.colorSecond));
                 } else {
                     holder.setText(R.id.tvStates, ResourceUtils.getString(R.string.str_click_edite));
                 }
-
-//
 
 
             }
@@ -196,6 +198,7 @@ public class CouponManagerFragment extends MvpFragment<CouponManagerActView, Cou
     @Override
     public void showEmptyView() {
         layoutState.changeState(StateFrameLayout.EMPTY);
+        ((ImageView)layoutState.findViewById(R.id.image_id_empty_retry)).setImageDrawable(ResourceUtils.getDrawable(R.drawable.ic_null_coupon));
     }
 
     @Override

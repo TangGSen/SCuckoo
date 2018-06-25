@@ -18,7 +18,6 @@ import com.ourcompany.R;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.bean.TypeSelect;
 import com.ourcompany.utils.DisplayUtils;
-import com.ourcompany.utils.LogUtils;
 import com.ourcompany.widget.drawable.CouponAddBgDrawable;
 import com.ourcompany.widget.recycleview.commadapter.OnItemOnclickLinstener;
 import com.ourcompany.widget.recycleview.commadapter.RecycleCommonAdapter;
@@ -134,15 +133,21 @@ public class CustomOperationPopWindow extends PopupWindow {
      *
      * @param
      */
-    public void showPopupWindow(View v) {
+    public void showPopupWindows(View v,View view2) {
         v.getLocationOnScreen(location);  //获取控件的位置坐标
+        int[] locationView2 = new int[2];
+        view2.getLocationOnScreen(locationView2);
+
         //获取自身的长宽高
         //  conentView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        LogUtils.e("sen", "show " + DisplayUtils.getWindowHeight());
+
         if (location[1] > DisplayUtils.getWindowHeight() / 2 + 100) {  // DisplayUtils.getWindowHeight() / 2 为屏幕的高度，方法可以自己写
             this.setAnimationStyle(R.style.operation_popwindow_anim_style_up);
             this.showAtLocation(v, Gravity.NO_GRAVITY, (location[0]), location[1] - conentView.getMeasuredHeight());
         } else {
+           LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) recycleview.getLayoutParams();
+           layoutParams.topMargin = locationView2[1];
+
             this.showAsDropDown(v, 0, -v.getHeight());
             mHandler.postDelayed(new Runnable() {
                 @Override
