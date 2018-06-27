@@ -115,7 +115,7 @@ public class CouponConstraintLayoutViewV2 extends ConstraintLayout {
         for (int i=0;i<circleNum;i++){
             float x = gap+mCicleRadiusWidth+remain/2+((gap+mCicleRadiusWidth*2)*i);
             canvas.drawCircle(0,x,mCicleRadiusWidth,mPaint);
-            canvas.drawCircle(getWidth(),x,mCicleRadiusWidth,mPaint);
+          //  canvas.drawCircle(getWidth(),x,mCicleRadiusWidth,mPaint);
         }
 
     }

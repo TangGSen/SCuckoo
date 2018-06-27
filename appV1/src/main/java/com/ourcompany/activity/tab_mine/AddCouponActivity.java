@@ -3,6 +3,7 @@ package com.ourcompany.activity.tab_mine;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -14,16 +15,20 @@ import android.widget.TextView;
 
 import com.ourcompany.R;
 import com.ourcompany.app.MApplication;
+import com.ourcompany.bean.bmob.Coupon;
 import com.ourcompany.fragment.coupon.CouponEditextInfoFragment;
 import com.ourcompany.presenter.activity.AddCouponActPresenter;
+import com.ourcompany.utils.DisplayUtils;
 import com.ourcompany.utils.ResourceUtils;
 import com.ourcompany.utils.ToastUtils;
 import com.ourcompany.view.activity.AddCouponActView;
 import com.ourcompany.widget.LoadingViewAOV;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import company.com.commons.framework.view.impl.MvpActivity;
+import company.com.commons.util.Utils;
 
 /**
  * Author : 唐家森
@@ -34,8 +39,6 @@ import company.com.commons.framework.view.impl.MvpActivity;
 public class AddCouponActivity extends MvpActivity<AddCouponActView, AddCouponActPresenter> implements AddCouponActView {
 
 
-    @BindView(R.id.tvAddCoupon)
-    TextView tvAddCoupon;
     @BindView(R.id.common_toolbar)
     Toolbar commonToolbar;
     @BindView(R.id.viewLine)
@@ -46,11 +49,15 @@ public class AddCouponActivity extends MvpActivity<AddCouponActView, AddCouponAc
     Button nextStep;
     @BindView(R.id.tvFinish)
     TextView tvFinish;
+    @BindView(R.id.titleName)
+    TextView titleName;
+    @BindView(R.id.tvInstruction)
+    TextView tvInstruction;
     //从这开始为第二页
     private CouponEditextInfoFragment couponEditextInfo;
 
 
-    public static void gotoThis(Context context) {
+    public static void gotoThis(Context context, Coupon coupon) {
         Intent intent = new Intent(context, AddCouponActivity.class);
         context.startActivity(intent);
     }
@@ -66,6 +73,14 @@ public class AddCouponActivity extends MvpActivity<AddCouponActView, AddCouponAc
     }
 
     @Override
+    protected void windowsSetting() {
+        super.windowsSetting();
+        Utils.setStatusBar(this, false, false);
+        Utils.setStatusTextColor(true, AddCouponActivity.this);
+
+    }
+
+    @Override
     protected void initView() {
         super.initView();
         getWindow().setBackgroundDrawable(null);
@@ -77,6 +92,13 @@ public class AddCouponActivity extends MvpActivity<AddCouponActView, AddCouponAc
             public void onClick(View v) {
                 finish();
                 overridePendingTransition(0, 0);
+            }
+        });
+        getRootView().post(new Runnable() {
+            @Override
+            public void run() {
+                ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) tvInstruction.getLayoutParams();
+                layoutParams.rightMargin = tvFinish.getWidth()+ DisplayUtils.dip2px(16);
             }
         });
 
@@ -121,10 +143,7 @@ public class AddCouponActivity extends MvpActivity<AddCouponActView, AddCouponAc
     }
 
 
-
-
-
-    @OnClick({R.id.nextStep,R.id.tvFinish})
+    @OnClick({R.id.nextStep, R.id.tvFinish})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.nextStep:
@@ -139,7 +158,7 @@ public class AddCouponActivity extends MvpActivity<AddCouponActView, AddCouponAc
 
                 break;
             case R.id.tvFinish:
-                if(couponEditextInfo!=null){
+                if (couponEditextInfo != null) {
                     LoadingViewAOV.getInstance().with(AddCouponActivity.this, tvFinish,
                             R.color.whiles, R.drawable.ic_loading_v4, Gravity.CENTER);
                     couponEditextInfo.submitInfo();
@@ -147,6 +166,7 @@ public class AddCouponActivity extends MvpActivity<AddCouponActView, AddCouponAc
                 break;
         }
     }
+
     //提供给fragment 使用的
     public void changeAnimationState(String string) {
         if (!TextUtils.isEmpty(string)) {
@@ -154,10 +174,17 @@ public class AddCouponActivity extends MvpActivity<AddCouponActView, AddCouponAc
         }
 
     }
+
     //提交失败或成功都调用
-    public void submitEnd(){
+    public void submitEnd() {
         LoadingViewAOV.getInstance().close(AddCouponActivity.this, tvFinish);
     }
 
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

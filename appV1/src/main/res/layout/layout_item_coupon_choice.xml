@@ -64,22 +64,14 @@
         app:layout_constraintRight_toLeftOf="@+id/tvStates"
         app:layout_constraintTop_toBottomOf="@+id/tvName" />
 
-    <com.ourcompany.widget.CouponLineView
-        android:id="@+id/couponLineView"
-        android:layout_width="8dp"
-        android:layout_height="0dp"
-        android:layout_marginLeft="@dimen/common_8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginRight="@dimen/common_8dp"
-        app:layout_constraintRight_toLeftOf="@+id/tvStates"
-        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/imageChoose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/common_8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/couponLineView"
+        app:layout_constraintLeft_toLeftOf="@+id/tvStates"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

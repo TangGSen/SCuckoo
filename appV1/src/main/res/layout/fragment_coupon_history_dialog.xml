@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/whiles">
+    android:background="@drawable/bg_style_while_top_radius">
 
 
     <ImageView
@@ -15,7 +15,6 @@
         android:paddingBottom="@dimen/common_16dp"
         android:paddingTop="@dimen/common_8dp"
         android:src="@drawable/ic_close_x_v3"
-        android:text="@string/str_coupon_name"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

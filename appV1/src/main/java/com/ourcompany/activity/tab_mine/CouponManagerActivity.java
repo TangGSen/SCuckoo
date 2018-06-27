@@ -32,6 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import company.com.commons.framework.view.impl.MvpActivity;
+import company.com.commons.util.Utils;
 
 /**
  * Author : 唐家森
@@ -46,8 +47,7 @@ public class CouponManagerActivity extends MvpActivity<EmptyMvpView, EmptyMvpPre
     TextView addCoupon;
     @BindView(R.id.common_toolbar)
     Toolbar commonToolbar;
-    @BindView(R.id.line)
-    View line;
+
     @BindView(R.id.mViewPager)
     ViewPager mViewPager;
     @BindView(R.id.titleName)
@@ -150,6 +150,14 @@ public class CouponManagerActivity extends MvpActivity<EmptyMvpView, EmptyMvpPre
 //        imageView.setCompoundDrawables(vectorDrawableCompat,null,null,null);
 //    }
 
+
+    @Override
+    protected void windowsSetting() {
+        super.windowsSetting();
+        Utils.setStatusBar(this, false, false);
+        Utils.setStatusTextColor(true, CouponManagerActivity.this);
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_coupon_manager;
@@ -172,7 +180,7 @@ public class CouponManagerActivity extends MvpActivity<EmptyMvpView, EmptyMvpPre
             case R.id.addCoupon:
 
                 tabTiles = ResourceUtils.getStringArray(R.array.tabAddCouponType);
-                int resid[] = new int[]{R.drawable.ic_new_coupon, R.drawable.ic_history, R.drawable.ic_template};
+                int resid[] = new int[]{R.drawable.ic_coupon_add_new, R.drawable.ic_coupon_history, R.drawable.ic_coupon_template};
                 int size = tabTiles.length;
                 List<TypeSelect> typeSelects = new ArrayList<>();
                 for (int i = 0; i < size; i++) {
@@ -205,7 +213,7 @@ public class CouponManagerActivity extends MvpActivity<EmptyMvpView, EmptyMvpPre
                         //此处实现列表点击所要进行的操作
                         switch (position) {
                             case 0:
-                                AddCouponActivity.gotoThis(CouponManagerActivity.this);
+                                AddCouponActivity.gotoThis(CouponManagerActivity.this, null);
                                 break;
                             case 1:
                                 HistoryCouponListDialog dialog = HistoryCouponListDialog.newInstance();

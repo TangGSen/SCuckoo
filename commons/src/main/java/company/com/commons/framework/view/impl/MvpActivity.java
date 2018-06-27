@@ -15,6 +15,7 @@ import butterknife.Unbinder;
 import company.com.commons.app.BaseFragment;
 import company.com.commons.framework.presenter.MvpPresenter;
 import company.com.commons.framework.view.MvpView;
+import company.com.commons.util.Utils;
 
 
 /**
@@ -30,7 +31,7 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter<V>> 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        windowsSetting();
+
         //初始化参数
         if(initArgs(getIntent().getExtras())){
             //初始化相关参数正确才能进入界面
@@ -57,6 +58,7 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter<V>> 
         }
 
         initData(savedInstanceState);
+        windowsSetting();
     }
 
     public void initLinstener() {
@@ -79,6 +81,7 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter<V>> 
      * 窗口的设置
      */
     protected void windowsSetting(){
+
 
     }
 

@@ -49,6 +49,15 @@ public  abstract class BaseSheetDialogFragment<V extends MvpView, P extends MvpP
             return super.onCreateDialog(savedInstanceState);
         }
         return new BottomSheetDialog(getContext(), R.style.TransparentBottomSheetStyle);
+
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //设置背景透明，才能显示出layout中诸如圆角的布局，否则会有白色底（框）
+        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme);
+
     }
 
     @Override

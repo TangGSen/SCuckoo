@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.ourcompany.R;
+import com.ourcompany.activity.tab_mine.AddCouponActivity;
 import com.ourcompany.app.MApplication;
 import com.ourcompany.bean.bmob.Coupon;
 import com.ourcompany.manager.MServiceManager;
@@ -136,7 +137,7 @@ public class CouponManagerFragment extends MvpFragment<CouponManagerActView, Cou
         recycleCommonAdapter.setOnItemClickLinstener(new OnItemOnclickLinstener() {
             @Override
             public void itemOnclickLinstener(int position) {
-                //  UserClassifyDetailActivity.gotoThis(CouponManagerActivity.this,mUserList.get(position));
+                  AddCouponActivity.gotoThis(mActivity,mCouponList.get(position));
 //
             }
         });

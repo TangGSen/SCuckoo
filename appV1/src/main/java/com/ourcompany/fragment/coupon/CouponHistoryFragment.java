@@ -28,10 +28,6 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +61,8 @@ public class CouponHistoryFragment extends MvpFragment<CouponManagerActView, Cou
     public int currentType = -1;
     private int currentSeleted = -1;
     //所属的公司的，或者是个人的优惠券，如果为空那么直接就为加载失败或者为空
-
+    private boolean isDownAction;
+    private boolean isUpAction;
 
     @Override
     public void showToastMsg(String string) {
@@ -91,7 +88,6 @@ public class CouponHistoryFragment extends MvpFragment<CouponManagerActView, Cou
     protected void initView(View view) {
         super.initView(view);
         initRecycleView();
-        EventBus.getDefault().register(this);
     }
 
 
@@ -120,12 +116,11 @@ public class CouponHistoryFragment extends MvpFragment<CouponManagerActView, Cou
                     //加载过期的
                     holder.getView(R.id.rootView).setBackgroundResource(R.drawable.bg_gradient_tab4);
                     //holder.setText(R.id.tvStates, ResourceUtils.getString(R.string.str_click_see));
-                    ((CouponConstraintLayoutViewV2)holder.getView(R.id.rootView)).setTypeClassColor(ResourceUtils.getResColor(R.color.colorSecond));
+                    ((CouponConstraintLayoutViewV2) holder.getView(R.id.rootView)).setTypeClassColor(ResourceUtils.getResColor(R.color.colorSecond));
                     holder.getView(R.id.tvCouponMoney).setBackgroundColor(ResourceUtils.getResColor(R.color.colorSecond));
                 } else {
                     //  holder.setText(R.id.tvStates, ResourceUtils.getString(R.string.str_click_edite));
                 }
-
 
 
                 if (itemData.isChooseType()) {
@@ -152,8 +147,8 @@ public class CouponHistoryFragment extends MvpFragment<CouponManagerActView, Cou
             @Override
             public void itemOnclickLinstener(int position) {
                 //  UserClassifyDetailActivity.gotoThis(CouponManagerActivity.this,mUserList.get(position));
-                if (currentSeleted!=position && currentSeleted != -1 && currentSeleted >= 0 && currentSeleted < mCouponList.size()) {
-                    mCouponList.get(currentSeleted).setChoose(!mCouponList.get(currentSeleted).isChoose());
+                if (currentSeleted != position && currentSeleted >= 0 && currentSeleted < mCouponList.size()) {
+                    mCouponList.get(currentSeleted).setChoose(false);
                     recycleCommonAdapter.notifyItemChanged(currentSeleted);
                 }
                 mCouponList.get(position).setChoose(!mCouponList.get(position).isChoose());
@@ -168,6 +163,8 @@ public class CouponHistoryFragment extends MvpFragment<CouponManagerActView, Cou
         refreshLayout.setEnableOverScrollDrag(false);
         refreshLayout.setEnableFooterFollowWhenLoadFinished(false);
         refreshLayout.setEnableOverScrollBounce(false);
+
+
         refreshLayout.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
@@ -194,11 +191,7 @@ public class CouponHistoryFragment extends MvpFragment<CouponManagerActView, Cou
         getPresenter().getData(currentIndex, MServiceManager.getInstance().getLocalThirdPartyId(), false, currentType);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onCouponSubmit(Coupon coupon) {
-        layoutState.changeState(StateFrameLayout.SUCCESS);
-        recycleCommonAdapter.addData(coupon, 0);
-    }
+
 
 
     @Override
@@ -219,7 +212,7 @@ public class CouponHistoryFragment extends MvpFragment<CouponManagerActView, Cou
     @Override
     public void showEmptyView() {
         layoutState.changeState(StateFrameLayout.EMPTY);
-        ((ImageView)layoutState.findViewById(R.id.image_id_empty_retry)).setImageDrawable(ResourceUtils.getDrawable(R.drawable.ic_null_coupon));
+        ((ImageView) layoutState.findViewById(R.id.image_id_empty_retry)).setImageDrawable(ResourceUtils.getDrawable(R.drawable.ic_null_coupon));
     }
 
     @Override
@@ -282,7 +275,6 @@ public class CouponHistoryFragment extends MvpFragment<CouponManagerActView, Cou
 
     @Override
     public void onDestroy() {
-        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 }

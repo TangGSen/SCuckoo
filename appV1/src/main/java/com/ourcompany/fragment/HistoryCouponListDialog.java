@@ -119,6 +119,8 @@ public class HistoryCouponListDialog extends BaseSheetDialogFragment<EmptyMvpVie
         setTopOffset(DisplayUtils.getWindowHeight() / 3);
     }
 
+
+
     @OnClick({R.id.useCouponWay, R.id.btFinish, R.id.imageClose})
     public void onViewClicked(View view) {
         switch (view.getId()) {

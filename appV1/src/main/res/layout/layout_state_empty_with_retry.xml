@@ -19,7 +19,7 @@
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:layout_gravity="center_horizontal"
-            android:src="@mipmap/null_data" />
+            android:src="@drawable/ic_null_data" />
 
         <TextView
             android:layout_width="wrap_content"
