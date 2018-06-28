@@ -291,4 +291,5 @@
     <string name="str_check_effective_coupon">返回有效卡券</string>
     <string name="str_edite_coupon">编辑卡券</string>
     <string name="str_coupon_add_rule">使用规则</string>
+    <string name="str_personal_center">个人中心</string>
 </resources>

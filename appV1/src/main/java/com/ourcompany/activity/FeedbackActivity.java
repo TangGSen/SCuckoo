@@ -10,8 +10,8 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.ourcompany.R;
 import com.ourcompany.app.MApplication;
@@ -25,6 +25,7 @@ import com.ourcompany.widget.LoadingViewAOV;
 import butterknife.BindView;
 import butterknife.OnClick;
 import company.com.commons.framework.view.impl.MvpActivity;
+import company.com.commons.util.Utils;
 
 /**
  * Author : 唐家森
@@ -36,7 +37,7 @@ import company.com.commons.framework.view.impl.MvpActivity;
 public class FeedbackActivity extends MvpActivity<FeedbackView, FeedbackActPresenter> implements FeedbackView {
 
     @BindView(R.id.btPublish)
-    Button btPublish;
+    TextView btPublish;
     @BindView(R.id.common_toolbar)
     Toolbar commonToolbar;
     @BindView(R.id.etContent)
@@ -45,6 +46,13 @@ public class FeedbackActivity extends MvpActivity<FeedbackView, FeedbackActPrese
     public static void gotoThis(Context context) {
         Intent intent = new Intent(context, FeedbackActivity.class);
         context.startActivity(intent);
+    }
+    @Override
+    protected void windowsSetting() {
+        super.windowsSetting();
+        Utils.setStatusBar(this, false, false);
+        Utils.setStatusTextColor(true, FeedbackActivity.this);
+
     }
 
     @Override
@@ -62,6 +70,8 @@ public class FeedbackActivity extends MvpActivity<FeedbackView, FeedbackActPrese
         super.initView();
         setSupportActionBar(commonToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        commonToolbar.setTitle(ResourceUtils.getString(R.string.str_feedback));
+
         commonToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

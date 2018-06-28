@@ -28,6 +28,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import company.com.commons.framework.view.impl.MvpActivity;
+import company.com.commons.util.Utils;
 
 /**
  * Author : 唐家森
@@ -49,6 +50,14 @@ public class BindNewPhoneAcitivity extends MvpActivity<BindNewPhoneActView, Bind
     public static void gotoThis(Context context) {
         Intent intent = new Intent(context, BindNewPhoneAcitivity.class);
         context.startActivity(intent);
+    }
+
+    @Override
+    protected void windowsSetting() {
+        super.windowsSetting();
+        Utils.setStatusBar(this, false, false);
+        Utils.setStatusTextColor(true, BindNewPhoneAcitivity.this);
+
     }
 
     @Override

@@ -46,6 +46,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import company.com.commons.framework.view.impl.MvpActivity;
+import company.com.commons.util.Utils;
 import de.hdodenhof.circleimageview.CircleImageView;
 import imagepicker.ImagePicker;
 import imagepicker.bean.ImageItem;
@@ -89,7 +90,13 @@ public class EditextUserInfoActivity extends MvpActivity<EditextUserInfoActView,
         Intent intent = new Intent(context, EditextUserInfoActivity.class);
         context.startActivity(intent);
     }
+    @Override
+    protected void windowsSetting() {
+        super.windowsSetting();
+        Utils.setStatusBar(this, false, false);
+        Utils.setStatusTextColor(true, EditextUserInfoActivity.this);
 
+    }
 
     @Override
     protected int getLayoutId() {

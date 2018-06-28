@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@null"
-    android:fitsSystemWindows="false">
+    android:background="@color/whiles"
+    android:fitsSystemWindows="true">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorBg"
         android:layout_marginTop="48dp">
 
 
@@ -16,12 +17,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="?actionBarSize"
-            android:background="@color/colorBg"
            >
             <View
                 android:id="@+id/emptyView"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/common_8dp"
+                android:layout_marginTop="1dp"
                 android:background="@color/whiles" />
             <TextView
                 android:layout_below="@+id/emptyView"
@@ -145,14 +146,14 @@
         android:id="@+id/common_toolbar"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/colorPrimary"
+        android:background="@color/whiles"
         android:padding="0dp"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
         app:contentInsetStartWithNavigation="0dp"
-        app:navigationIcon="@drawable/ic_back"
+        app:navigationIcon="@drawable/ic_back_v3"
         app:titleTextAppearance="@style/Toolbar.TitleText"
-        app:titleTextColor="@color/colorWhite" />
+        app:titleTextColor="@color/colorFrist" />
 
 
-</android.support.design.widget.CoordinatorLayout>
+</android.support.constraint.ConstraintLayout>

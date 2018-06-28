@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-android:width="24dp"
-android:height="24dp"
+android:width="16dp"
+android:height="16dp"
 android:viewportWidth="1024"
 android:viewportHeight="1024">
 
 <path
     android:strokeColor="#333333"
-    android:strokeWidth="40"
+    android:strokeWidth="50"
     android:strokeMiterLimit="10"
     android:pathData="M429.907,976.854c0,0,19.643-0.572,37.147-8.033
 c17.505-7.461,54.522-26.115,68.297-33.576c13.773-7.461,51.365-33.574,68.871-48.783c17.504-15.209,66.287-63.705,83.791-97.566
@@ -17,7 +17,7 @@ s-22.956,61.793-25.061,67.914c-2.105,6.121-2.105,6.121-2.105,6.121s-15.878,43.04
 c-0.574,4.018-6.696,32.33-0.766,45.148C398.375,965.375,405.96,976.471,429.907,976.854z" />
 <path
     android:strokeColor="#333333"
-    android:strokeWidth="40"
+    android:strokeWidth="50"
     android:strokeMiterLimit="10"
     android:pathData="M892.521,626.764c0,0,46.297,17.217,71.549,1.912
 c23.531-13.582,14.156-48.209,13.008-53.564c-1.146-5.357-6.695-20.854-7.842-23.723c-1.148-2.871-19.705-39.793-19.705-39.793
@@ -29,7 +29,7 @@ c-8.896,18.078-11.479,39.888-7.604,60.979c3.873,21.092,17.646,46.775,30.848,62.2
 c13.775,7.174,43.762,18.365,55.527,22.67s65.57,24.391,79.488,28.982S883.818,623.752,892.521,626.764z" />
 <path
     android:strokeColor="#333333"
-    android:strokeWidth="40"
+    android:strokeWidth="50"
     android:strokeMiterLimit="10"
     android:pathData="M497.472,398.915c0,0,31.95-21.426,51.844-56.626
 c9.852-16.548,15.305-36.923,19.322-46.68c4.018-9.756,18.652-50.505,22.67-61.983s33-88.384,36.443-97.854
@@ -38,7 +38,7 @@ c-24.392,24.965-44.192,53.949-57.679,76.618c-13.487,22.67-22.67,58.253-12.914,94
 C431.471,422.732,465.046,420.724,497.472,398.915z" />
 <path
     android:strokeColor="#333333"
-    android:strokeWidth="40"
+    android:strokeWidth="50"
     android:strokeMiterLimit="10"
     android:pathData="M232.847,683.533c0,0,14.587,7.986,15.974,8.607
 c1.387,0.623,14.396,6.266,17.504,7.365c3.109,1.1,16.744,5.967,38.479,6.381c21.735,0.412,52.057-7.814,76.592-27.758

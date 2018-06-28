@@ -15,7 +15,6 @@ import butterknife.Unbinder;
 import company.com.commons.app.BaseFragment;
 import company.com.commons.framework.presenter.MvpPresenter;
 import company.com.commons.framework.view.MvpView;
-import company.com.commons.util.Utils;
 
 
 /**
@@ -81,7 +80,7 @@ public abstract class MvpActivity<V extends MvpView, P extends MvpPresenter<V>> 
      * 窗口的设置
      */
     protected void windowsSetting(){
-
+        getWindow().setBackgroundDrawable(null);
 
     }
 

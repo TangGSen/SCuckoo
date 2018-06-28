@@ -17,6 +17,7 @@ import com.ourcompany.view.fragment.LoginFragmentView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import company.com.commons.framework.view.impl.MvpActivity;
+import company.com.commons.util.Utils;
 
 public class AboutCuckooActivity extends MvpActivity<LoginFragmentView, LoginFragPresenter> implements LoginFragmentView {
 
@@ -44,11 +45,20 @@ public class AboutCuckooActivity extends MvpActivity<LoginFragmentView, LoginFra
     }
 
     @Override
+    protected void windowsSetting() {
+        super.windowsSetting();
+        Utils.setStatusBar(this, false, false);
+        Utils.setStatusTextColor(true, AboutCuckooActivity.this);
+
+    }
+
+    @Override
     protected void initView() {
         super.initView();
         setSupportActionBar(commonToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         commonToolbar.setTitle(ResourceUtils.getString(R.string.str_about_cuckoo));
+
         commonToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

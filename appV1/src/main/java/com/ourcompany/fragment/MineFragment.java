@@ -2,11 +2,11 @@ package com.ourcompany.fragment;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -35,9 +35,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 import company.com.commons.framework.view.impl.MvpFragment;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -49,18 +47,25 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresenter> implements MineFragmentView {
+
+    @BindView(R.id.common_toolbar)
+    Toolbar commonToolbar;
+    @BindView(R.id.viewLine)
+    View viewLine;
     @BindView(R.id.img_user)
     CircleImageView mUserImage;
     @BindView(R.id.str_user_name)
     TextView strUserName;
-
-    @BindView(R.id.personal_rootLayout)
-    CoordinatorLayout personalRootLayout;
-    @BindView(R.id.btnMessage)
-    TextView btnMessage;
-    Unbinder unbinder;
     @BindView(R.id.btCollection)
     TextView btCollection;
+    @BindView(R.id.btnMessage)
+    TextView btnMessage;
+    @BindView(R.id.layoutTab)
+    LinearLayout layoutTab;
+    @BindView(R.id.btManager)
+    TextView btManager;
+    @BindView(R.id.managerLayout)
+    LinearLayout managerLayout;
     @BindView(R.id.btMyDynamic)
     TextView btMyDynamic;
     @BindView(R.id.btMyVote)
@@ -70,13 +75,7 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
     @BindView(R.id.btAboutCuckoo)
     TextView btAboutCuckoo;
     @BindView(R.id.btSetting)
-    TextView btSetting;
-    Unbinder unbinder1;
-    @BindView(R.id.btManager)
-    TextView btManager;
-    @BindView(R.id.managerLayout)
-    LinearLayout managerLayout;
-    Unbinder unbinder2;
+    ImageView btSetting;
     private String[] tabTiles;
     private final static int TAB_INDEX_TEAM = 0;
     private final static int TAB_INDEX_CASE = 1;
@@ -98,24 +97,23 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
         public void onClick(View view) {
             Integer index = (Integer) view.getTag(R.id.nine_layout_of_index);
 
-                if (index != null) {
-                    switch (index) {
-                        case TAB_INDEX_TEAM:
-                            //   getPresenter().gotoTeam();
-                            checkAndGotoTeam();
-                            break;
-                        case TAB_INDEX_CASE:
-                            checkAndGotoCase();
-                            break;
-                        case TAB_INDEX_COUPON:
-                            checkAndGotoCoupon();
-                            break;
-                    }
+            if (index != null) {
+                switch (index) {
+                    case TAB_INDEX_TEAM:
+                        //   getPresenter().gotoTeam();
+                        checkAndGotoTeam();
+                        break;
+                    case TAB_INDEX_CASE:
+                        checkAndGotoCase();
+                        break;
+                    case TAB_INDEX_COUPON:
+                        checkAndGotoCoupon();
+                        break;
+                }
 
             }
         }
     };
-
 
 
     @CheckIsLogin
@@ -161,7 +159,7 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
         }
         params.leftMargin = DisplayUtils.dip2px(8);
         params.rightMargin = DisplayUtils.dip2px(8);
-        params.weight =1;
+        params.weight = 1;
         for (int i = 0; i < tabCount; i++) {
             View view = getTabView(tabItemDrawableNormal[i], tabTiles[i], i);
             view.setBackgroundResource(bgRes[i]);
@@ -284,17 +282,5 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder2 = ButterKnife.bind(this, rootView);
-        return rootView;
-    }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder2.unbind();
-    }
 }

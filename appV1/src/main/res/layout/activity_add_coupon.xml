@@ -17,6 +17,8 @@
         app:contentInsetStart="0dp"
         app:contentInsetStartWithNavigation="0dp"
         app:navigationIcon="@drawable/ic_back_v3"
+        app:layout_constraintTop_toTopOf="parent"
+
         app:titleTextAppearance="@style/Toolbar.TitleText"
         app:titleTextColor="@color/colorWhite" />
 
@@ -33,6 +35,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
+
         app:layout_constraintTop_toBottomOf="@+id/common_toolbar" />
 
     <TextView

@@ -23,6 +23,7 @@ import com.ourcompany.widget.LoadingViewAOV;
 import butterknife.BindView;
 import butterknife.OnClick;
 import company.com.commons.framework.view.impl.MvpActivity;
+import company.com.commons.util.Utils;
 
 /**
  * Author : 唐家森
@@ -55,7 +56,13 @@ public class ResetPasswordAcitivity extends MvpActivity<ResetPasswordActView, Re
     public void showToastMsg(String string) {
         ToastUtils.showSimpleToast(string);
     }
+    @Override
+    protected void windowsSetting() {
+        super.windowsSetting();
+        Utils.setStatusBar(this, false, false);
+        Utils.setStatusTextColor(true, ResetPasswordAcitivity.this);
 
+    }
     @Override
     protected int getLayoutId() {
         return R.layout.activity_layout_reset_password;

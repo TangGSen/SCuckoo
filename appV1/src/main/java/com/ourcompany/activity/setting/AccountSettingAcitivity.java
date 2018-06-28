@@ -17,6 +17,7 @@ import com.ourcompany.view.activity.AccountSetingActView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import company.com.commons.framework.view.impl.MvpActivity;
+import company.com.commons.util.Utils;
 
 /**
  * Author : 唐家森
@@ -50,6 +51,13 @@ public class AccountSettingAcitivity extends MvpActivity<AccountSetingActView, A
     public static void gotoThis(Context context) {
         Intent intent = new Intent(context, AccountSettingAcitivity.class);
         context.startActivity(intent);
+    }
+    @Override
+    protected void windowsSetting() {
+        super.windowsSetting();
+        Utils.setStatusBar(this, false, false);
+        Utils.setStatusTextColor(true, AccountSettingAcitivity.this);
+
     }
 
     @Override

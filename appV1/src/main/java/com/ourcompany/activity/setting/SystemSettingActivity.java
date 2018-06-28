@@ -26,6 +26,7 @@ import org.greenrobot.eventbus.EventBus;
 import butterknife.BindView;
 import butterknife.OnClick;
 import company.com.commons.framework.view.impl.MvpActivity;
+import company.com.commons.util.Utils;
 
 public class SystemSettingActivity extends MvpActivity<SystemSettingActView, SystemSettingActPresenter> implements SystemSettingActView {
 
@@ -63,6 +64,7 @@ public class SystemSettingActivity extends MvpActivity<SystemSettingActView, Sys
         setSupportActionBar(commonToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         commonToolbar.setTitle(ResourceUtils.getString(R.string.str_system_setting));
+        commonToolbar.setTitleTextColor(ResourceUtils.getResColor(R.color.colorFrist));
         commonToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,6 +77,14 @@ public class SystemSettingActivity extends MvpActivity<SystemSettingActView, Sys
            btLogout.setVisibility(View.GONE);
         }
 
+
+    }
+
+    @Override
+    protected void windowsSetting() {
+        super.windowsSetting();
+        Utils.setStatusBar(this, false, false);
+        Utils.setStatusTextColor(true, SystemSettingActivity.this);
 
     }
 
