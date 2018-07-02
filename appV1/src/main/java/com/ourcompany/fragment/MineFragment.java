@@ -2,6 +2,7 @@ package com.ourcompany.fragment;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.ourcompany.R;
 import com.ourcompany.activity.AboutCuckooActivity;
 import com.ourcompany.activity.FeedbackActivity;
 import com.ourcompany.activity.MessageActivity;
+import com.ourcompany.activity.certification.CertificationCentreActivity;
 import com.ourcompany.activity.imui.UserInfoActivity;
 import com.ourcompany.activity.setting.SystemSettingActivity;
 import com.ourcompany.activity.tab_mine.CouponManagerActivity;
@@ -35,7 +37,9 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import company.com.commons.framework.view.impl.MvpFragment;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -43,19 +47,29 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Author : 唐家森
  * Version: 1.0
  * On     : 2018/1/18 16:11
- * Des    :
+ * Des    :1.tvCertification
+ *           除了业主，其他都需要认证
  */
 
 public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresenter> implements MineFragmentView {
 
+
+    @BindView(R.id.btSetting)
+    ImageView btSetting;
     @BindView(R.id.common_toolbar)
     Toolbar commonToolbar;
     @BindView(R.id.viewLine)
     View viewLine;
+    @BindView(R.id.layoutInfo)
+    View layoutInfo;
     @BindView(R.id.img_user)
     CircleImageView mUserImage;
     @BindView(R.id.str_user_name)
     TextView strUserName;
+    @BindView(R.id.tvCertification)
+    TextView tvCertification;
+    @BindView(R.id.enterPersional)
+    ImageView enterPersional;
     @BindView(R.id.btCollection)
     TextView btCollection;
     @BindView(R.id.btnMessage)
@@ -74,8 +88,7 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
     TextView btFeedback;
     @BindView(R.id.btAboutCuckoo)
     TextView btAboutCuckoo;
-    @BindView(R.id.btSetting)
-    ImageView btSetting;
+    Unbinder unbinder;
     private String[] tabTiles;
     private final static int TAB_INDEX_TEAM = 0;
     private final static int TAB_INDEX_CASE = 1;
@@ -186,12 +199,12 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
         return new MineFragPresenter(MApplication.mContext);
     }
 
-    @OnClick({R.id.img_user, R.id.btnMessage, R.id.btCollection, R.id.btMyDynamic,
-            R.id.btMyVote, R.id.btFeedback, R.id.btAboutCuckoo, R.id.btSetting})
+    @OnClick({R.id.layoutInfo, R.id.btnMessage, R.id.btCollection, R.id.btMyDynamic,
+            R.id.btMyVote, R.id.btFeedback, R.id.btAboutCuckoo, R.id.btSetting, R.id.tvCertification})
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-            case R.id.img_user:
+            case R.id.layoutInfo:
                 //需要判断是否登录
                 getPresenter().onClickUserImage(mActivity, this);
                 break;
@@ -215,6 +228,9 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
                 break;
             case R.id.btSetting:
                 SystemSettingActivity.gotoThis(mActivity);
+                break;
+            case R.id.tvCertification:
+                CertificationCentreActivity.gotoThis(mActivity);
                 break;
         }
     }
@@ -283,4 +299,17 @@ public class MineFragment extends MvpFragment<MineFragmentView, MineFragPresente
     }
 
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }

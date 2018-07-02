@@ -175,6 +175,7 @@ public class PublishPostActivity extends MvpActivity<PublishPostActView, Publish
                 ImagePicker.getInstance().setSelectLimit(
                         Constant.MAX_IMAGE_COUNT);
 
+
                 Intent intent = new Intent(PublishPostActivity.this,
                         ImageGridActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_SELECT);

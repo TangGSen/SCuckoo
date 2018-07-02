@@ -4,12 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@color/whiles"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/common_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
+        android:layout_height="48dp"
         android:background="@color/whiles"
         android:padding="0dp"
         app:contentInsetLeft="0dp"

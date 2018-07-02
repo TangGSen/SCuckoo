@@ -155,6 +155,9 @@
         <activity
             android:name=".activity.setting.AccountSettingAcitivity"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait" />  <activity
+            android:name=".activity.certification.CertificationCentreActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.setting.ResetPasswordAcitivity"

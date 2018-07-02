@@ -137,7 +137,7 @@ public class CouponManagerFragment extends MvpFragment<CouponManagerActView, Cou
         recycleCommonAdapter.setOnItemClickLinstener(new OnItemOnclickLinstener() {
             @Override
             public void itemOnclickLinstener(int position) {
-                  AddCouponActivity.gotoThis(mActivity,mCouponList.get(position));
+                  AddCouponActivity.gotoThis(mActivity,mCouponList.get(position),true);
 //
             }
         });

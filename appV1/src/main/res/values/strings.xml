@@ -210,6 +210,7 @@
     <string name="str_bindnew_step_2">请接收新号码%s的验证码</string>
     <string name="str_input_new_phone">请输入新手机号码</string>
     <string name="str_next_step">背面</string>
+    <string name="str_next_step_style1">下一步</string>
     <string name="str_pre_step">正面</string>
     <string name="str_input_current_phone">请输入当前手机号码</string>
     <string name="str_input_current_phone_error">输入当前与登陆账号不一致</string>
@@ -292,4 +293,10 @@
     <string name="str_edite_coupon">编辑卡券</string>
     <string name="str_coupon_add_rule">使用规则</string>
     <string name="str_personal_center">个人中心</string>
+    <string name="str_user_apply_certification">申请认证</string>
+    <string name="str_certification">申请认证V</string>
+    <string name="str_certification_centre">认证中心</string>
+    <string name="str_upload_id_tip">请上传本人真实并清晰可见的身份证照片,否则无法通过审核</string>
+    <string name="str_add_uplad_frist_pic">添加身份证正面</string>
+    <string name="str_add_uplad_second_pic">添加身份证反面</string>
 </resources>

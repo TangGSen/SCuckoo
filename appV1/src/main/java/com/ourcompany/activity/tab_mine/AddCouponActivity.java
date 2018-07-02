@@ -57,8 +57,9 @@ public class AddCouponActivity extends MvpActivity<AddCouponActView, AddCouponAc
     private CouponEditextInfoFragment couponEditextInfo;
 
 
-    public static void gotoThis(Context context, Coupon coupon) {
+    public static void gotoThis(Context context, Coupon coupon,boolean isCanEdi) {
         Intent intent = new Intent(context, AddCouponActivity.class);
+        Bundle bundle = new Bundle();
         context.startActivity(intent);
     }
 

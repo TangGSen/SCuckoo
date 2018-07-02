@@ -213,7 +213,7 @@ public class CouponManagerActivity extends MvpActivity<EmptyMvpView, EmptyMvpPre
                         //此处实现列表点击所要进行的操作
                         switch (position) {
                             case 0:
-                                AddCouponActivity.gotoThis(CouponManagerActivity.this, null);
+                                AddCouponActivity.gotoThis(CouponManagerActivity.this, null,true);
                                 break;
                             case 1:
                                 HistoryCouponListDialog dialog = HistoryCouponListDialog.newInstance();
