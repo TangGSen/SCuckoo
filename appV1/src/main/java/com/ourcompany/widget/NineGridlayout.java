@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.ourcompany.R;
+import com.ourcompany.utils.DisplayUtils;
 import com.ourcompany.utils.LogUtils;
-import com.ourcompany.utils.ScreenTools;
 
 import java.util.List;
 
@@ -35,8 +35,8 @@ public class NineGridlayout extends ViewGroup {
 
     public NineGridlayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        ScreenTools screenTools = ScreenTools.instance(getContext());
-        totalWidth = screenTools.getScreenWidth() - screenTools.dip2px(80);
+
+        totalWidth = DisplayUtils.getWindowWidth() - DisplayUtils.dip2px(80);
     }
 
     @Override

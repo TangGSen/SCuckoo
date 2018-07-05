@@ -49,6 +49,11 @@ public class DisplayUtils {
         return dm.heightPixels;
     }
 
+    public final static int getWindowWidth() {
+        DisplayMetrics dm=MApplication.mContext.getResources().getDisplayMetrics();
+        return dm.widthPixels;
+    }
+
 
 
     /**
